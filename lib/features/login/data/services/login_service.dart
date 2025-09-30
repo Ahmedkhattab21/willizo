@@ -1,0 +1,46 @@
+// import 'dart:convert';
+//
+// import 'package:smart_app/core/api/api_consumer.dart';
+// import 'package:smart_app/core/api/status_code.dart';
+// import 'package:smart_app/core/exceptions/exceptions.dart';
+// import 'package:smart_app/core/exceptions/failure.dart';
+// import 'package:smart_app/core/services/cache_helper.dart';
+// import 'package:smart_app/core/utils/constant_keys.dart';
+// import 'package:smart_app/features/user/login/data/models/login_request_model.dart';
+// import 'package:smart_app/features/user/login/data/models/login_response_model.dart';
+// import 'package:smart_app/features/user/login/data/services/login_api_end_points.dart';
+//
+// class LoginService {
+//   ApiConsumer apiConsumer;
+//
+//   LoginService({required this.apiConsumer});
+//
+//   Future<LoginResponseModel> login(
+//     bool isClient,
+//     LoginRequestModel parameter,
+//   ) async {
+//     final response = await apiConsumer.post(
+//       isClient
+//           ? LoginApiEndPoints.loginClientUrl
+//           : LoginApiEndPoints.loginSponsorUrl,
+//       LoginRequestModel(
+//         email: parameter.email,
+//         password: parameter.password,
+//         fcm: parameter.fcm,
+//       ).toJson(),
+//       {
+//         ConstantKeys.appAuthorization:
+//             "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+//       },
+//     );
+// print(response.statusCode);
+// print(response.body);
+//     if (response.statusCode == StatusCode.ok) {
+//       return LoginResponseModel.fromJson(jsonDecode(response.body),isClient);
+//     } else {
+//       throw ServerException(
+//         serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+//       );
+//     }
+//   }
+// }
