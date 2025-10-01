@@ -8,7 +8,7 @@ class OfflineAlertDialog {
 
   static getDialog() {
     showDialog(
-      context: navigatorKey.currentContext!,
+      context: MyApp.navigatorKey.currentContext!,
       barrierDismissible: false,
       builder: (context) {
         return CupertinoAlertDialog(

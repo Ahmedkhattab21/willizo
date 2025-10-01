@@ -1,22 +1,19 @@
-import 'package:willizo/config/routes/routes.dart';
-import 'package:willizo/core/services/check_network.dart';
-import 'package:willizo/core/services/firebase_notification_service.dart';
+import 'package:willizo/core/theme/app_theme.dart';
 import 'package:willizo/core/widgets/offline_alert_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'config/routes/app_routes.dart';
-import 'config/themes/app_white_theme.dart';
 import 'core/utils/app_colors_white_theme.dart';
-import 'core/utils/app_constant.dart';
-
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
   final String navigateWidget;
 
   const MyApp({required this.navigateWidget, super.key});
+
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -26,7 +23,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
     _listenToNetwork();
   }
 
@@ -39,7 +35,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _showOfflineDialog() {
-    if (navigatorKey.currentContext == null) return;
+    if (MyApp.navigatorKey.currentContext == null) return;
     OfflineAlertDialog.getDialog();
   }
 
@@ -59,9 +55,9 @@ class _MyAppState extends State<MyApp> {
             supportedLocales: context.supportedLocales,
             locale: context.locale,
             debugShowCheckedModeBanner: false,
-            navigatorKey: navigatorKey,
+            navigatorKey: MyApp.navigatorKey,
             title: "smart_app",
-            theme: themeData(),
+            theme: AppThemes.darkTheme(context),
             initialRoute: widget.navigateWidget,
             onGenerateRoute: RouteGenerator.generateRoute,
           ),
