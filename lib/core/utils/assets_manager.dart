@@ -18,6 +18,8 @@ class ImageAsset {
   ///icons
   static const String appLogoImage = 'assets/icons/app_logo_image.png';
 
+  static const String boxIcon = 'assets/icons/box_icon.svg';
+  static const String selectedBoxIcon = 'assets/icons/selected_box_icon.svg';
   static const String emailIcon = 'assets/icons/email_icon.svg';
   static const String birthDateIcon = 'assets/icons/birth_date_icon.svg';
   static const String nameIcon = 'assets/icons/name_icon.svg';

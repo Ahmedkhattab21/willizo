@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:willizo/config/routes/routes.dart';
- import 'package:willizo/features/onboarding/logic/onboarding_cubit.dart';
+import 'package:willizo/features/create_new_password/logic/create_new_password_cubit.dart';
+import 'package:willizo/features/create_new_password/ui/create_new_password_screen.dart';
+import 'package:willizo/features/create_new_password_done/ui/create_new_password_done_screen.dart';
+import 'package:willizo/features/forget_password/logic/forget_password_cubit.dart';
+import 'package:willizo/features/forget_password/ui/forget_password_screen.dart';
+import 'package:willizo/features/forget_password_code/logic/forget_password_code_cubit.dart';
+import 'package:willizo/features/forget_password_code/ui/forget_password_code_screen.dart';
+import 'package:willizo/features/forget_password_done/logic/forget_password_done_cubit.dart';
+import 'package:willizo/features/forget_password_done/ui/forget_password_done_screen.dart';
+import 'package:willizo/features/onboarding/logic/onboarding_cubit.dart';
 import 'package:willizo/features/onboarding/ui/onboarding_screen.dart';
 import 'package:willizo/features/sign_in/logic/sign_in_cubit.dart';
 import 'package:willizo/features/sign_in/ui/sign_in_screen.dart';
@@ -29,6 +38,36 @@ class RouteGenerator {
             child: SignInScreen(),
           ),
         );
+      case Routes.forgetPasswordScreen:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => ForgetPasswordCubit(),
+            child: ForgetPasswordScreen(),
+          ),
+        );
+      case Routes.forgetPasswordCodeScreen:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => ForgetPasswordCodeCubit(),
+            child: ForgetPasswordCodeScreen(),
+          ),
+        );
+      case Routes.forgetPasswordDoneScreen:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => ForgetPasswordDoneCubit(),
+            child: ForgetPasswordDoneScreen(),
+          ),
+        );
+      case Routes.createNewPasswordScreen:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => CreateNewPasswordCubit(),
+            child: CreateNewPasswordScreen(),
+          ),
+        );
+      case Routes.createNewPasswordDoneScreen:
+        return MaterialPageRoute(builder: (_) => CreateNewPasswordDoneScreen());
 
       // ///user routes
       // case Routes.loginScreen:

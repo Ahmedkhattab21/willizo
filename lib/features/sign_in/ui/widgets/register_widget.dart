@@ -16,8 +16,8 @@ class RegisterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         verticalSpace(24),
 
@@ -32,38 +32,23 @@ class RegisterWidget extends StatelessWidget {
           controller: SignInCubit.get(context).registerNameController,
           backgroundColor: AppColors.blackColor,
           prefixIcon: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10.w,
-              vertical: 10.h,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             child: SvgPicture.asset(ImageAsset.nameIcon),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.primaryColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.primaryColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.redColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.redColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.redColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.redColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           validator: (String? value) {
@@ -85,39 +70,24 @@ class RegisterWidget extends StatelessWidget {
           textStyle: TextStyles.font14whiteColorColorW400,
           controller: SignInCubit.get(context).registerPhoneController,
           prefixIcon: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10.w,
-              vertical: 10.h,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             child: SvgPicture.asset(ImageAsset.phoneIcon),
           ),
           backgroundColor: AppColors.blackColor,
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.primaryColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.primaryColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.redColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.redColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.redColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.redColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           validator: (String? value) {
@@ -139,39 +109,24 @@ class RegisterWidget extends StatelessWidget {
           textStyle: TextStyles.font14whiteColorColorW400,
           controller: SignInCubit.get(context).registerEmailController,
           prefixIcon: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10.w,
-              vertical: 10.h,
-            ),
-            child: SvgPicture.asset(ImageAsset.phoneIcon),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+            child: SvgPicture.asset(ImageAsset.emailIcon),
           ),
           backgroundColor: AppColors.blackColor,
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.primaryColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.primaryColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.redColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.redColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.redColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.redColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           validator: (String? value) {
@@ -193,39 +148,24 @@ class RegisterWidget extends StatelessWidget {
           textStyle: TextStyles.font14whiteColorColorW400,
           controller: SignInCubit.get(context).registerBirthDateController,
           prefixIcon: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10.w,
-              vertical: 10.h,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             child: SvgPicture.asset(ImageAsset.birthDateIcon),
           ),
           backgroundColor: AppColors.blackColor,
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.primaryColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.primaryColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.redColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.redColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.redColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.redColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           validator: (String? value) {
@@ -249,39 +189,24 @@ class RegisterWidget extends StatelessWidget {
           textStyle: TextStyles.font14whiteColorColorW400,
           controller: SignInCubit.get(context).registerPasswordController,
           prefixIcon: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10.w,
-              vertical: 10.h,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             child: SvgPicture.asset(ImageAsset.passwordIcon),
           ),
           backgroundColor: AppColors.blackColor,
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.primaryColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.primaryColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.redColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.redColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.redColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.redColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           validator: (String? value) {
@@ -292,17 +217,62 @@ class RegisterWidget extends StatelessWidget {
           },
           keyboardType: TextInputType.visiblePassword,
         ),
+        verticalSpace(24),
+        BlocBuilder<SignInCubit, SignInState>(
+          buildWhen: (previous, current) {
+            return current is OnChangeAgreeForTermsState;
+          },
+          builder: (context, state) {
+            return Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    SignInCubit.get(context).changeAgreeForTerms();
+                  },
+                  child: SvgPicture.asset(
+                    SignInCubit.get(context).isAgreeForTerms
+                        ? ImageAsset.selectedBoxIcon
+                        : ImageAsset.boxIcon,
+                  ),
+                ),
+                horizontalSpace(12),
+                Expanded(
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'I agree to the ',
+                          style: TextStyles.font13primaryColorW400.copyWith(
+                            color: AppColors.whiteColor,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'Terms of Service ',
+                          style: TextStyles.font13primaryColorW400.copyWith(
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'and',
+                          style: TextStyles.font13primaryColorW400
+                            ..copyWith(color: AppColors.whiteColor),
+                        ),
+                        TextSpan(
+                          text: ' Privacy Policy.',
+                          style: TextStyles.font13primaryColorW400.copyWith(
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
 
-
-        verticalSpace(16),
-
-
-        ///
-        ///
-
-
-
-
+        verticalSpace(40),
 
         BlocConsumer<SignInCubit, SignInState>(
           // buildWhen: (previous, current) {
@@ -345,7 +315,7 @@ class RegisterWidget extends StatelessWidget {
               isLoading: false,
               borderRadius: 10,
               buttonHeight: 46.h,
-              buttonText: "Sign in",
+              buttonText: "Sign up",
               backGroundColor: AppColors.primaryColor,
               borderColor: AppColors.primaryColor,
               textStyle: TextStyles.font18blackColorW600,
@@ -355,15 +325,14 @@ class RegisterWidget extends StatelessWidget {
             );
           },
         ),
-        verticalSpace(24),
+
+        verticalSpace(32),
         Row(
           children: [
             Expanded(
               child: Container(
                 height: 2,
-                decoration: BoxDecoration(
-                  color: AppColors.whiteColor,
-                ),
+                decoration: BoxDecoration(color: AppColors.whiteColor),
               ),
             ),
             horizontalSpace(20),
@@ -375,14 +344,12 @@ class RegisterWidget extends StatelessWidget {
             Expanded(
               child: Container(
                 height: 2,
-                decoration: BoxDecoration(
-                  color: AppColors.whiteColor,
-                ),
+                decoration: BoxDecoration(color: AppColors.whiteColor),
               ),
             ),
           ],
         ),
-        verticalSpace(24),
+        verticalSpace(32),
 
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -425,17 +392,16 @@ class RegisterWidget extends StatelessWidget {
           TextSpan(
             children: [
               TextSpan(
-                text: 'Don’t have an account?\t',
+                text: 'Already have an account? \t',
                 style: TextStyles.font14greyColorColorA0W400,
               ),
               TextSpan(
-                text: '\t Sign Up',
+                text: 'Sign In',
                 style: TextStyles.font14primaryColorW600,
               ),
             ],
           ),
         ),
-
       ],
     );
   }
