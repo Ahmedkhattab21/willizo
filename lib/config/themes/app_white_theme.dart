@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 
-ThemeData themeData() => ThemeData(
+ThemeData whiteThemeData() => ThemeData(
       // fontFamily: "Mosquich",
       useMaterial3: true,
       appBarTheme: AppBarTheme(

@@ -1,3 +1,4 @@
+import 'package:willizo/config/themes/app_black_theme.dart';
 import 'package:willizo/core/theme/app_theme.dart';
 import 'package:willizo/core/widgets/offline_alert_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -56,8 +57,8 @@ class _MyAppState extends State<MyApp> {
             locale: context.locale,
             debugShowCheckedModeBanner: false,
             navigatorKey: MyApp.navigatorKey,
-            title: "smart_app",
-            theme: AppThemes.darkTheme(context),
+            title: "willizo",
+            theme: blackThemeData(),
             initialRoute: widget.navigateWidget,
             onGenerateRoute: RouteGenerator.generateRoute,
           ),

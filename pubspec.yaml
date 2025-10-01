@@ -106,17 +106,23 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Gotham
+    - family: BebasNeue
       fonts:
-        - asset: assets/fonts/Gotham-Book.otf
+        - asset: assets/fonts/BebasNeue-Regular.ttf
 
-    - family: Mosquich
+    - family: Lato
       fonts:
-        - asset: assets/fonts/mosquichdemobold.otf
+        - asset: assets/fonts/Lato-Regular.ttf
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter_18pt-SemiBold.ttf
 
-    - family: Rubik
+    - family: Montserrat
       fonts:
-        - asset: assets/fonts/Rubik-Regular.ttf
+        - asset: assets/fonts/Montserrat-Regular.ttf
+        - asset: assets/fonts/Montserrat-SemiBold.ttf
+
+
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

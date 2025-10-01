@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:willizo/config/routes/routes.dart';
+ import 'package:willizo/features/onboarding/logic/onboarding_cubit.dart';
 import 'package:willizo/features/onboarding/ui/onboarding_screen.dart';
+import 'package:willizo/features/sign_in/logic/sign_in_cubit.dart';
+import 'package:willizo/features/sign_in/ui/sign_in_screen.dart';
 import 'package:willizo/features/splash/ui/splash_video_screen.dart';
 
 class RouteGenerator {
@@ -12,7 +15,20 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => SplashVideoScreen());
 
       case Routes.onBoardingScreen:
-        return MaterialPageRoute(builder: (_) => OnBoardingScreen());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => OnboardingCubit(),
+            child: OnBoardingScreen(),
+          ),
+        );
+
+      case Routes.signInScreen:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => SignInCubit(),
+            child: SignInScreen(),
+          ),
+        );
 
       // ///user routes
       // case Routes.loginScreen:

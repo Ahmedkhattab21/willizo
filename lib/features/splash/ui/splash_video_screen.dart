@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:willizo/config/routes/routes.dart';
+import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/extentions.dart';
 
 class SplashVideoScreen extends StatefulWidget {
@@ -26,6 +27,7 @@ class _SplashVideoScreenState extends State<SplashVideoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.blackColor,
       body: Center(
         child: SvgPicture.asset('assets/svgs/willizo_logo_splash.svg'),
       ),

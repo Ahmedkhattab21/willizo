@@ -8,7 +8,7 @@ class AppThemes {
     return ThemeData(
       extensions: const <ThemeExtension<dynamic>>[ColorsExtension.dark],
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: AppColors.darkColor,
+      scaffoldBackgroundColor: AppColors.blackColor,
       primaryColor: AppColors.primaryColor,
       colorScheme: const ColorScheme.dark(primary: AppColors.primaryColor),
       appBarTheme: AppBarTheme(
