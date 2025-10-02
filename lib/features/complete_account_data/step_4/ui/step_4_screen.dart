@@ -11,11 +11,11 @@ import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/core/widgets/app_text_field.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
-import 'package:willizo/features/complete_account_data/step_3/logic/step_3_cubit.dart';
-import 'package:willizo/features/complete_account_data/step_3/logic/step_3_state.dart';
+import 'package:willizo/features/complete_account_data/step_4/logic/step_4_cubit.dart';
+import 'package:willizo/features/complete_account_data/step_4/logic/step_4_state.dart';
 
-class Step3Screen extends StatelessWidget {
-  const Step3Screen({super.key});
+class Step4Screen extends StatelessWidget {
+  const Step4Screen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +117,7 @@ class Step3Screen extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: 'gender ',
+                      text: 'height ',
                       style: TextStyles.font24w600.copyWith(
                         color: AppColors.primaryColor,
                       ),
@@ -134,93 +134,12 @@ class Step3Screen extends StatelessWidget {
             ),
             verticalSpace(24),
 
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Please select only one option below.",
-                    style: TextStyles.font14greyColorColor79W400,
-                  ),
-                ],
-              ),
-            ),
+
+
             verticalSpace(6),
 
-            BlocBuilder<Step3Cubit, Step3State>(
-              buildWhen: (previous, current) {
-                return current is OnChangeSelectedState;
-              },
-              builder: (context, state) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Step3Cubit.get(context).changeSelectedGender(1);
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                            vertical: 16.w,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.greyColorColor00,
-                            borderRadius: BorderRadius.circular(8.r),
-                            border: Border.all(
-                              color: Step3Cubit.get(context).selectedGender == 1
-                                  ? AppColors.primaryColor
-                                  : AppColors.greyColorColor00,
-                              width: 2,
-                            ),
-                          ),
-                          child: Text(
-                            'Male',
-                            style: Step3Cubit.get(context).selectedGender == 1
-                                ? TextStyles.font16primaryColorW600
-                                : TextStyles.font16WhiteColorW600,
-                          ),
-                        ),
-                      ),
-                      verticalSpace(8),
-                      GestureDetector(
-                        onTap: () {
-                          Step3Cubit.get(context).changeSelectedGender(2);
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                            vertical: 16.w,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.greyColorColor00,
-                            borderRadius: BorderRadius.circular(8.r),
-                            border: Border.all(
-                              color: Step3Cubit.get(context).selectedGender == 2
-                                  ? AppColors.primaryColor
-                                  : AppColors.greyColorColor00,
-                              width: 2,
-                            ),
-                          ),
-                          child: Text(
-                            'Female',
-                            style: Step3Cubit.get(context).selectedGender == 2
-                                ? TextStyles.font16primaryColorW600
-                                : TextStyles.font16WhiteColorW600,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
             Spacer(),
-            BlocConsumer<Step3Cubit, Step3State>(
+            BlocConsumer<Step4Cubit, Step4State>(
               // buildWhen: (previous, current) {
               //   return current is OnRegisterLoadingState ||
               //       current is OnRegisterSuccessState ||
@@ -274,7 +193,7 @@ class Step3Screen extends StatelessWidget {
                     borderColor: AppColors.primaryColor,
                     textStyle: TextStyles.font18blackColorW600,
                     onPressed: () {
-                      context.pushNamed(Routes.step4Screen);
+                      context.pushNamed(Routes.forgetPasswordCodeScreen);
                       // validateRegister(context);
                     },
                   ),

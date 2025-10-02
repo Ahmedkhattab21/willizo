@@ -7,6 +7,8 @@ import 'package:willizo/features/complete_account_data/step_2/logic/step_2_cubit
 import 'package:willizo/features/complete_account_data/step_2/ui/step_2_screen.dart';
 import 'package:willizo/features/complete_account_data/step_3/logic/step_3_cubit.dart';
 import 'package:willizo/features/complete_account_data/step_3/ui/step_3_screen.dart';
+import 'package:willizo/features/complete_account_data/step_4/logic/step_4_cubit.dart';
+import 'package:willizo/features/complete_account_data/step_4/ui/step_4_screen.dart';
 import 'package:willizo/features/create_new_password/logic/create_new_password_cubit.dart';
 import 'package:willizo/features/create_new_password/ui/create_new_password_screen.dart';
 import 'package:willizo/features/create_new_password_done/ui/create_new_password_done_screen.dart';
@@ -95,6 +97,12 @@ class RouteGenerator {
           builder: (_) => BlocProvider(
             create: (context) => Step3Cubit(),
             child: Step3Screen(),
+          ),
+        );      case Routes.step4Screen:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => Step4Cubit(),
+            child: Step4Screen(),
           ),
         );
       // ///user routes
