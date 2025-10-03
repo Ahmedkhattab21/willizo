@@ -31,7 +31,7 @@ class TextStyles {
   );
   static TextStyle font24w600 = TextStyle(
     fontSize: 24.sp,
-     fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w600,
     fontFamily: 'Lato',
   );
   static TextStyle font40WhiteColorBold = TextStyle(
@@ -54,6 +54,18 @@ class TextStyles {
 
     fontWeight: FontWeight.w400,
     fontFamily: 'BebasNeue',
+  );
+  static TextStyle font12GreenColorW400 = TextStyle(
+    color: AppColors.greenColorC82,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+  );
+
+  static TextStyle font12WhiteColorW500 = TextStyle(
+    color: Color(0xFFc4ff0e),
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Inter',
   );
 
   ///Inter font
@@ -119,14 +131,12 @@ class TextStyles {
     fontFamily: 'Inter',
   );
 
-
   static TextStyle font14greyColorColor80W400 = TextStyle(
     fontSize: 14.sp,
     color: AppColors.greyColorColor80,
     fontWeight: FontWeight.w400,
     fontFamily: 'Inter',
   );
-
 
   static TextStyle font14greyColorColorA0W400 = TextStyle(
     fontSize: 14.sp,
@@ -135,15 +145,12 @@ class TextStyles {
     fontFamily: 'Inter',
   );
 
-
-
   static TextStyle font14greyColorColorEDW400 = TextStyle(
     fontSize: 14.sp,
     color: AppColors.greyColorColorED,
     fontWeight: FontWeight.w400,
     fontFamily: 'Inter',
   );
-
 
   static TextStyle font12W700 = TextStyle(
     fontSize: 12.sp,
@@ -157,13 +164,11 @@ class TextStyles {
     fontFamily: 'Inter',
   );
 
-
   static TextStyle font24W600 = TextStyle(
     fontSize: 20.sp,
     fontWeight: FontWeight.w600,
     fontFamily: 'Inter',
   );
-
 
   static TextStyle font20primaryColorW600 = TextStyle(
     fontSize: 20.sp,
@@ -185,10 +190,7 @@ class TextStyles {
     fontFamily: 'Inter',
   );
 
-
-
   ///Montserrat
-
 
   static TextStyle font18blackColorW600 = TextStyle(
     fontSize: 18.sp,
@@ -197,14 +199,7 @@ class TextStyles {
     fontFamily: 'Montserrat',
   );
 
-
-
-
-
-
-
   ///remove
-
 
   ///
   ///
@@ -214,23 +209,23 @@ class TextStyles {
     fontSize: 14.sp,
     color: AppColors.blackColor,
     fontWeight: FontWeight.bold,
-   );
+  );
 
   static TextStyle font16BlackColorWeight600 = TextStyle(
     fontSize: 16.sp,
     color: AppColors.blackColor.withValues(alpha: .87),
     fontWeight: FontWeight.w400,
-   );
+  );
   static TextStyle font16BlackColor2Weight600 = TextStyle(
     fontSize: 16.sp,
     color: AppColors.blackColor,
     fontWeight: FontWeight.w400,
-   );
+  );
   static TextStyle font16BlackColorWeight400 = TextStyle(
     fontSize: 16.sp,
     color: AppColors.blackColor,
     fontWeight: FontWeight.w400,
-   );
+  );
 
   ///
 }
