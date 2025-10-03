@@ -31,11 +31,6 @@ class ImageAsset {
   static const String instagramIcon = 'assets/icons/instagram_icon.svg';
   static const String youtubeIcon = 'assets/icons/youtube_icon.svg';
 
-
-
-
-
-          }
   static const String profileIcon = 'assets/svgs/profile_icon.svg';
   static const String homeIcon = 'assets/svgs/home.svg';
   static const String dumbleIcon = 'assets/svgs/dumble_icon.svg';
