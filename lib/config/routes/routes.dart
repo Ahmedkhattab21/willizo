@@ -11,4 +11,5 @@ class Routes {
   static const step2Screen = "/Step2Screen";
   static const step3Screen = "/Step3Screen";
   static const step4Screen = "/Step4Screen";
+  static const homeScreen = "/HomeScreen";
 }

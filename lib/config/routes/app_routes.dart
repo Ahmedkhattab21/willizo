@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:willizo/config/routes/routes.dart';
+import 'package:willizo/features/button_nav_bar/logic/cubit/button_nav_bar_cubit.dart';
+import 'package:willizo/features/button_nav_bar/ui/button_nav_bar.dart';
 import 'package:willizo/features/complete_account_data/step_1/logic/step_1_cubit.dart';
 import 'package:willizo/features/complete_account_data/step_1/ui/step_1_screen.dart';
 import 'package:willizo/features/complete_account_data/step_2/logic/step_2_cubit.dart';
@@ -18,6 +20,7 @@ import 'package:willizo/features/forget_password_code/logic/forget_password_code
 import 'package:willizo/features/forget_password_code/ui/forget_password_code_screen.dart';
 import 'package:willizo/features/forget_password_done/logic/forget_password_done_cubit.dart';
 import 'package:willizo/features/forget_password_done/ui/forget_password_done_screen.dart';
+import 'package:willizo/features/home/ui/home_screen.dart';
 import 'package:willizo/features/onboarding/logic/onboarding_cubit.dart';
 import 'package:willizo/features/onboarding/ui/onboarding_screen.dart';
 import 'package:willizo/features/sign_in/logic/sign_in_cubit.dart';
@@ -98,11 +101,20 @@ class RouteGenerator {
             create: (context) => Step3Cubit(),
             child: Step3Screen(),
           ),
-        );      case Routes.step4Screen:
+        );
+      case Routes.step4Screen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => Step4Cubit(),
             child: Step4Screen(),
+          ),
+        );
+
+      case Routes.homeScreen:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => ButtonNavBarCubit(),
+            child: const ButtonNavBarWidget(),
           ),
         );
       // ///user routes
