@@ -267,7 +267,7 @@ class RouteGenerator {
         );
 
 
-      case Routes.homeScreen:
+      case Routes.buttonNavBarWidget:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => ButtonNavBarCubit(),

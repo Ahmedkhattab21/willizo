@@ -163,6 +163,7 @@ class LoginWidget extends StatelessWidget {
               borderColor: AppColors.primaryColor,
               textStyle: TextStyles.font18blackColorW600,
               onPressed: () {
+                context.pushNamed(Routes.buttonNavBarWidget);
                 // validateRegister(context);
               },
             );
