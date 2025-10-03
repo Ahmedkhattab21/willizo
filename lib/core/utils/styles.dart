@@ -15,6 +15,14 @@ class TextStyles {
     fontFamily: 'Lato',
   );
 
+  static TextStyle font16White2ColorW600 = TextStyle(
+    fontSize: 16.sp,
+    color: AppColors.whiteColor,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Lato',
+  );
+
+
   static TextStyle font16WhiteColorW400 = TextStyle(
     fontSize: 16.sp,
     color: AppColors.whiteColor,
@@ -24,6 +32,12 @@ class TextStyles {
   static TextStyle font24w600 = TextStyle(
     fontSize: 24.sp,
      fontWeight: FontWeight.w600,
+    fontFamily: 'Lato',
+  );
+  static TextStyle font40WhiteColorBold = TextStyle(
+    fontSize: 40.sp,
+    color:AppColors.whiteColor,
+     fontWeight: FontWeight.bold,
     fontFamily: 'Lato',
   );
 

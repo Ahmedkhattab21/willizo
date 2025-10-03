@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:percent_indicator/flutter_percent_indicator.dart';
 import 'package:willizo/config/routes/routes.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
-import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/extentions.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
-import 'package:willizo/core/widgets/app_text_field.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
-import 'package:willizo/features/complete_account_data/step_3/logic/step_3_cubit.dart';
-import 'package:willizo/features/complete_account_data/step_3/logic/step_3_state.dart';
+import 'package:willizo/features/complete_account_data/step_13/logic/step_13_cubit.dart';
+import 'package:willizo/features/complete_account_data/step_13/logic/step_13_state.dart';
 
-class Step3Screen extends StatelessWidget {
-  const Step3Screen({super.key});
+class Step13Screen extends StatelessWidget {
+  const Step13Screen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -58,15 +55,15 @@ class Step3Screen extends StatelessWidget {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: 'personal ',
+                              text: 'Goals ',
                               style: TextStyles.font12W700.copyWith(
-                                color: AppColors.whiteColor,
+                                color: AppColors.primaryColor,
                               ),
                             ),
                             TextSpan(
-                              text: 'Data',
+                              text: '/ Plans',
                               style: TextStyles.font12W700.copyWith(
-                                color: AppColors.primaryColor,
+                                color: AppColors.whiteColor,
                               ),
                             ),
                           ],
@@ -78,12 +75,12 @@ class Step3Screen extends StatelessWidget {
                         lineWidth: 7.r,
                         backgroundColor: AppColors.greyColorColor79,
                         progressColor: AppColors.primaryColor,
-                        percent: 3 / 21,
+                        percent: 13 / 21,
                         center: Text.rich(
                           TextSpan(
                             children: [
                               TextSpan(
-                                text: '3 ',
+                                text: '13 ',
                                 style: TextStyles.font14W700.copyWith(
                                   color: AppColors.whiteColor,
                                 ),
@@ -108,22 +105,23 @@ class Step3Screen extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: Text.rich(
+                textAlign: TextAlign.center,
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: 'What’s your ',
+                      text: 'What’s the best ',
                       style: TextStyles.font24w600.copyWith(
                         color: AppColors.whiteColor,
                       ),
                     ),
                     TextSpan(
-                      text: 'gender ',
+                      text: 'Time ',
                       style: TextStyles.font24w600.copyWith(
                         color: AppColors.primaryColor,
                       ),
                     ),
                     TextSpan(
-                      text: '?',
+                      text: 'for you to workout? ',
                       style: TextStyles.font24w600.copyWith(
                         color: AppColors.whiteColor,
                       ),
@@ -146,9 +144,9 @@ class Step3Screen extends StatelessWidget {
                 ],
               ),
             ),
-            verticalSpace(6),
+            verticalSpace(8),
 
-            BlocBuilder<Step3Cubit, Step3State>(
+            BlocBuilder<Step13Cubit, Step13State>(
               buildWhen: (previous, current) {
                 return current is OnChangeSelectedState;
               },
@@ -156,13 +154,13 @@ class Step3Screen extends StatelessWidget {
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
                   child: Column(
-                    children: Step3Cubit.get(context).genders
+                    children: Step13Cubit.get(context).timesItems
                         .map(
                           (item) => GestureDetector(
                             onTap: () {
-                              Step3Cubit.get(
+                              Step13Cubit.get(
                                 context,
-                              ).changeSelectedGender(item.id);
+                              ).changeSelectedWeightId(item.id);
                             },
                             child: Container(
                               width: double.infinity,
@@ -176,7 +174,9 @@ class Step3Screen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8.r),
                                 border: Border.all(
                                   color:
-                                      Step3Cubit.get(context).selectedGender ==
+                                  Step13Cubit.get(
+                                            context,
+                                          ).selectedWeightId ==
                                           item.id
                                       ? AppColors.primaryColor
                                       : AppColors.greyColorColor00,
@@ -186,7 +186,7 @@ class Step3Screen extends StatelessWidget {
                               child: Text(
                                 item.name,
                                 style:
-                                    Step3Cubit.get(context).selectedGender ==
+                                Step13Cubit.get(context).selectedWeightId ==
                                         item.id
                                     ? TextStyles.font16primaryColorW600
                                     : TextStyles.font16WhiteColorW600,
@@ -199,8 +199,9 @@ class Step3Screen extends StatelessWidget {
                 );
               },
             ),
+
             Spacer(),
-            BlocConsumer<Step3Cubit, Step3State>(
+            BlocConsumer<Step13Cubit, Step13State>(
               // buildWhen: (previous, current) {
               //   return current is OnRegisterLoadingState ||
               //       current is OnRegisterSuccessState ||
@@ -254,7 +255,7 @@ class Step3Screen extends StatelessWidget {
                     borderColor: AppColors.primaryColor,
                     textStyle: TextStyles.font18blackColorW600,
                     onPressed: () {
-                      context.pushNamed(Routes.step4Screen);
+                      context.pushNamed(Routes.step14Screen);
                       // validateRegister(context);
                     },
                   ),

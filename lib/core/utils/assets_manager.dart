@@ -29,6 +29,12 @@ class ImageAsset {
   static const String facebookIcon = 'assets/icons/facebook_icon.svg';
   static const String googleIcon = 'assets/icons/google_icon.svg';
 
+  static const String appStoreIcon = 'assets/icons/app_store_icon.svg';
+  static const String facebook2Icon = 'assets/icons/facebook2_icon.svg';
+  static const String friendsIcon = 'assets/icons/frindes_icon.svg';
+  static const String instagramIcon = 'assets/icons/instagram_icon.svg';
+  static const String youtubeIcon = 'assets/icons/youtube_icon.svg';
+
 
 
 

@@ -80,7 +80,7 @@ class Step2Screen extends StatelessWidget {
                           lineWidth: 7.r,
                           backgroundColor: AppColors.greyColorColor79,
                           progressColor: AppColors.primaryColor,
-                          percent: 1 / 21,
+                          percent: 2 / 21,
                           center: Text.rich(
                             TextSpan(
                               children: [

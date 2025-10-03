@@ -78,12 +78,12 @@ class Step4Screen extends StatelessWidget {
                         lineWidth: 7.r,
                         backgroundColor: AppColors.greyColorColor79,
                         progressColor: AppColors.primaryColor,
-                        percent: 1 / 21,
+                        percent: 4 / 21,
                         center: Text.rich(
                           TextSpan(
                             children: [
                               TextSpan(
-                                text: '3 ',
+                                text: '4 ',
                                 style: TextStyles.font14W700.copyWith(
                                   color: AppColors.whiteColor,
                                 ),
@@ -132,12 +132,79 @@ class Step4Screen extends StatelessWidget {
                 ),
               ),
             ),
-            verticalSpace(24),
-
-
-
+            verticalSpace(34),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 8.h,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.r),
+                      border: Border.all(color: AppColors.primaryColor),
+                    ),
+                    child: Text('Cm', style: TextStyles.font16White2ColorW600),
+                  ),
+                ],
+              ),
+            ),
+            verticalSpace(34),
+            BlocBuilder<Step4Cubit, Step4State>(
+              buildWhen: (previous, current) {
+                return current is OnChangeSelectedState;
+              },
+              builder: (context, state) {
+                return SizedBox(
+                  height: 250.h,
+                  width: 150.w,
+                  child: ListWheelScrollView.useDelegate(
+                    itemExtent: 95.h,
+                    perspective: 0.003,
+                    diameterRatio: 3.0,
+                    overAndUnderCenterOpacity: .4,
+                    physics: const FixedExtentScrollPhysics(),
+                    onSelectedItemChanged: (index) {
+                      Step4Cubit.get(context).onChangeSelectedHeight(index);
+                    },
+                    childDelegate: ListWheelChildBuilderDelegate(
+                      builder: (context, index) {
+                        if (index > 250) return null; // stop at 250 cm
+                        return Center(
+                          child: Column(
+                            children: [
+                              Text.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: '$index \t',
+                                      style: TextStyles.font40WhiteColorBold,
+                                    ),
+                                    TextSpan(
+                                      text: 'cm',
+                                      style: TextStyles.font40WhiteColorBold
+                                          .copyWith(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(color: AppColors.primaryColor),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
             verticalSpace(6),
-
             Spacer(),
             BlocConsumer<Step4Cubit, Step4State>(
               // buildWhen: (previous, current) {
@@ -193,7 +260,7 @@ class Step4Screen extends StatelessWidget {
                     borderColor: AppColors.primaryColor,
                     textStyle: TextStyles.font18blackColorW600,
                     onPressed: () {
-                      context.pushNamed(Routes.forgetPasswordCodeScreen);
+                      context.pushNamed(Routes.step5Screen);
                       // validateRegister(context);
                     },
                   ),

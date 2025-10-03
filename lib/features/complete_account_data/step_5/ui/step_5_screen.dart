@@ -11,11 +11,11 @@ import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/core/widgets/app_text_field.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
-import 'package:willizo/features/complete_account_data/step_3/logic/step_3_cubit.dart';
-import 'package:willizo/features/complete_account_data/step_3/logic/step_3_state.dart';
+import 'package:willizo/features/complete_account_data/step_5/logic/step_5_cubit.dart';
+import 'package:willizo/features/complete_account_data/step_5/logic/step_5_state.dart';
 
-class Step3Screen extends StatelessWidget {
-  const Step3Screen({super.key});
+class Step5Screen extends StatelessWidget {
+  const Step5Screen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -78,12 +78,12 @@ class Step3Screen extends StatelessWidget {
                         lineWidth: 7.r,
                         backgroundColor: AppColors.greyColorColor79,
                         progressColor: AppColors.primaryColor,
-                        percent: 3 / 21,
+                        percent: 5 / 21,
                         center: Text.rich(
                           TextSpan(
                             children: [
                               TextSpan(
-                                text: '3 ',
+                                text: '5 ',
                                 style: TextStyles.font14W700.copyWith(
                                   color: AppColors.whiteColor,
                                 ),
@@ -117,7 +117,7 @@ class Step3Screen extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: 'gender ',
+                      text: 'weight ',
                       style: TextStyles.font24w600.copyWith(
                         color: AppColors.primaryColor,
                       ),
@@ -132,75 +132,158 @@ class Step3Screen extends StatelessWidget {
                 ),
               ),
             ),
-            verticalSpace(24),
-
+            verticalSpace(34),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    "Please select only one option below.",
-                    style: TextStyles.font14greyColorColor79W400,
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 8.h,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.r),
+                      border: Border.all(color: AppColors.primaryColor),
+                    ),
+                    child: Text(
+                      'Kilos',
+                      style: TextStyles.font16White2ColorW600,
+                    ),
                   ),
+                ],
+              ),
+            ),
+            verticalSpace(34),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Row(
+                children: [
+                  horizontalSpace(14),
+                  Expanded(
+                    child: BlocBuilder<Step5Cubit, Step5State>(
+                      buildWhen: (previous, current) {
+                        return current is OnChangeSelectedKiloState;
+                      },
+                      builder: (context, state) {
+                        return SizedBox(
+                          height: 250.h,
+                          child: ListWheelScrollView.useDelegate(
+                            itemExtent: 95.h,
+                            perspective: 0.003,
+                            diameterRatio: 3.0,
+                            overAndUnderCenterOpacity: .4,
+                            physics: const FixedExtentScrollPhysics(),
+                            onSelectedItemChanged: (index) {
+                              Step5Cubit.get(
+                                context,
+                              ).onChangeSelectedKilo(index);
+                            },
+                            childDelegate: ListWheelChildBuilderDelegate(
+                              builder: (context, index) {
+                                if (index > 990) return null; // stop at 250 cm
+                                return Center(
+                                  child: Column(
+                                    children: [
+                                      Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: '$index \t',
+                                              style: TextStyles
+                                                  .font40WhiteColorBold,
+                                            ),
+                                            TextSpan(
+                                              text: 'Kilos',
+                                              style: TextStyles
+                                                  .font40WhiteColorBold
+                                                  .copyWith(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(color: AppColors.primaryColor),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  horizontalSpace(25),
+                  Text('.', style: TextStyles.font40WhiteColorBold),
+                  horizontalSpace(25),
+                  Expanded(
+                    child: BlocBuilder<Step5Cubit, Step5State>(
+                      buildWhen: (previous, current) {
+                        return current is OnChangeSelectedKiloState;
+                      },
+                      builder: (context, state) {
+                        return SizedBox(
+                          height: 250.h,
+                          child: ListWheelScrollView.useDelegate(
+                            itemExtent: 95.h,
+                            perspective: 0.003,
+                            diameterRatio: 3.0,
+                            overAndUnderCenterOpacity: .4,
+                            physics: const FixedExtentScrollPhysics(),
+                            onSelectedItemChanged: (index) {
+                              Step5Cubit.get(
+                                context,
+                              ).onChangeSelectedGram(index);
+                            },
+                            childDelegate: ListWheelChildBuilderDelegate(
+                              builder: (context, index) {
+                                if (index > 990) return null; // stop at 250 cm
+                                return Center(
+                                  child: Column(
+                                    children: [
+                                      Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: '$index \t',
+                                              style: TextStyles
+                                                  .font40WhiteColorBold,
+                                            ),
+                                            TextSpan(
+                                              text: 'g',
+                                              style: TextStyles
+                                                  .font40WhiteColorBold
+                                                  .copyWith(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(color: AppColors.primaryColor),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  horizontalSpace(14),
                 ],
               ),
             ),
             verticalSpace(6),
 
-            BlocBuilder<Step3Cubit, Step3State>(
-              buildWhen: (previous, current) {
-                return current is OnChangeSelectedState;
-              },
-              builder: (context, state) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Column(
-                    children: Step3Cubit.get(context).genders
-                        .map(
-                          (item) => GestureDetector(
-                            onTap: () {
-                              Step3Cubit.get(
-                                context,
-                              ).changeSelectedGender(item.id);
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 16.w,
-                                vertical: 16.w,
-                              ),
-                              margin: EdgeInsets.symmetric(vertical: 6.w),
-                              decoration: BoxDecoration(
-                                color: AppColors.greyColorColor00,
-                                borderRadius: BorderRadius.circular(8.r),
-                                border: Border.all(
-                                  color:
-                                      Step3Cubit.get(context).selectedGender ==
-                                          item.id
-                                      ? AppColors.primaryColor
-                                      : AppColors.greyColorColor00,
-                                  width: 2,
-                                ),
-                              ),
-                              child: Text(
-                                item.name,
-                                style:
-                                    Step3Cubit.get(context).selectedGender ==
-                                        item.id
-                                    ? TextStyles.font16primaryColorW600
-                                    : TextStyles.font16WhiteColorW600,
-                              ),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                );
-              },
-            ),
             Spacer(),
-            BlocConsumer<Step3Cubit, Step3State>(
+            BlocConsumer<Step5Cubit, Step5State>(
               // buildWhen: (previous, current) {
               //   return current is OnRegisterLoadingState ||
               //       current is OnRegisterSuccessState ||
@@ -254,7 +337,7 @@ class Step3Screen extends StatelessWidget {
                     borderColor: AppColors.primaryColor,
                     textStyle: TextStyles.font18blackColorW600,
                     onPressed: () {
-                      context.pushNamed(Routes.step4Screen);
+                      context.pushNamed(Routes.step6Screen);
                       // validateRegister(context);
                     },
                   ),
