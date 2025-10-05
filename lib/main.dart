@@ -1,5 +1,5 @@
 // import 'package:firebase_analytics/firebase_analytics.dart';
- import 'package:willizo/config/routes/routes.dart';
+import 'package:willizo/config/routes/routes.dart';
 import 'package:willizo/core/services/firebase_notification_service.dart';
 import 'package:willizo/core/services/local_notification_service.dart';
 import 'package:willizo/core/services/pusher_service.dart';
@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'core/services/cache_helper.dart';
 import 'core/services/services_locator.dart';
 import 'core/utils/app_constant.dart';

@@ -5,6 +5,7 @@ class AppColors {
   static const Color blackColor = Colors.black;
   static const Color primaryColor = Color(0xffD4FF00);
   static const Color greenColorC82 = Color(0xff7c892c);
+  static const Color blueColorF32 = Color(0xff1f32a8);
   static const Color darkColor = Color(0xff0F0F0F);
   static const Color greyColorColor = Color(0xffA1A1A1);
   static const Color greyColorColor80 = Color(0xff6B7280);
@@ -13,29 +14,13 @@ class AppColors {
   static const Color greyColorColorED = Color(0xffEBEDED);
   static const Color greyColorColor79 = Color(0xff797979);
   static const Color greyColorColor00 = Color(0xff171C00);
+  static const Color blackColor20 = Color(0xff202600);
+  static const Color blackColor171C = Color(0xff171C00);
+  static const Color blackColorE5 = Color(0xffE5E5E5);
+  static const Color blackColor1E = Color(0xff1e1e1e);
+  static const Color greenColor5e6 = Color(0xff5e6e4a);
 
-  static const Color blackColor171C =  Color(0xff171C00);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   static const Color whiteColorD8 = Color(0xffd9d7d8);
+  static const Color whiteColorD8 = Color(0xffd9d7d8);
   static const Color greenColor = Color(0xFF01EB00);
   static const Color greyColorF8 = Color(0xFFF9F7F8);
   static const Color greyColor20 = Color(0xFF211F20);
@@ -88,4 +73,9 @@ class AppColors {
   static const Color greenColor00 = Color(0xff41B800);
   static const Color redColor00 = Color(0xffB50200);
   static const Color redColor39 = Color(0xff9D3739);
+  static const Color whiteColorEb = Color(0xffebeded);
+  static const Color kCardGreenStart = Color(0xFFCFF66A);
+  static const Color kCardGreenEnd = Color(0xFF9ED300);
+  static const Color kCardBlueStart = Color(0xFF3B6BFF);
+  static const Color kCardBlueEnd = Color(0xFF2A47D9);
 }

@@ -1,7 +1,6 @@
 class ImageAsset {
-
   ///images
-
+  static const String appLogo = 'assets/images/app_logo.svg';
   static const String onBoarding1Image = 'assets/images/on_boarding_1.png';
   static const String onBoarding2Image = 'assets/images/on_boarding_2.png';
   static const String onBoarding3Image = 'assets/images/on_boarding_3.png';
@@ -36,4 +35,16 @@ class ImageAsset {
   static const String dumbleIcon = 'assets/svgs/dumble_icon.svg';
   static const String shopIcon = 'assets/svgs/shop.svg';
   static const String communityIcon = 'assets/svgs/comunity_icon.svg';
+  static const String muscleIcon = 'assets/svgs/muscle_icon.svg';
+  static const String mealIcon = "assets/svgs/meal_icon.svg";
+  static const String appLogoIconTwo = "assets/svgs/app_logo_two.svg";
+  static const String overviewIcon = "assets/svgs/over_view_icon.svg";
+  static const String shopingIcon = "assets/svgs/shop_icon.svg";
+  static const String calenderIcon = "assets/svgs/calender_icon.svg";
+  static const String releasedIcon = "assets/svgs/released_icon.svg";
+  static const String settingIcon = "assets/svgs/settings.svg";
+  static const String helpIcon = "assets/svgs/help_icon.svg";
+  static const String arrowBackIcon = "assets/icons/arrow_back_icon.svg";
+  static const String editIcon = "assets/icons/edit_icon.svg";
+  static const String deleteIcon = "assets/icons/delete_icon.svg";
 }

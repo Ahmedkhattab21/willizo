@@ -55,6 +55,7 @@ import 'package:willizo/features/forget_password_code/ui/forget_password_code_sc
 import 'package:willizo/features/forget_password_done/logic/forget_password_done_cubit.dart';
 import 'package:willizo/features/forget_password_done/ui/forget_password_done_screen.dart';
 import 'package:willizo/features/home/ui/home_screen.dart';
+import 'package:willizo/features/notificatoin/ui/notification_screen.dart';
 import 'package:willizo/features/onboarding/logic/onboarding_cubit.dart';
 import 'package:willizo/features/onboarding/ui/onboarding_screen.dart';
 import 'package:willizo/features/sign_in/logic/sign_in_cubit.dart';
@@ -266,7 +267,6 @@ class RouteGenerator {
           ),
         );
 
-
       case Routes.buttonNavBarWidget:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
@@ -274,6 +274,9 @@ class RouteGenerator {
             child: const ButtonNavBarWidget(),
           ),
         );
+
+      case Routes.notificationScreen:
+        return MaterialPageRoute(builder: (_) => const NotificationsScreen());
       // ///user routes
       // case Routes.loginScreen:
       //   return MaterialPageRoute(

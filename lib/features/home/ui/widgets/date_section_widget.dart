@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
+import 'package:willizo/core/utils/spacing.dart';
+import 'package:willizo/core/utils/styles.dart';
 
 class DateSelector extends StatelessWidget {
   const DateSelector({super.key});
@@ -8,22 +10,25 @@ class DateSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final days = [18, 19, 20, 21, 22, 23, 24];
-    final labels = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
+    final labels = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
     return SizedBox(
-      height: 80.h,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          for (int i = 0; i < days.length; i++) ...[
-            DayItem(
-              number: days[i].toString(),
-              short: labels[i],
-              selected: i == 3,
-            ),
-            if (i != days.length - 1) const SizedBox(width: 8),
+      height: 80,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            for (int i = 0; i < days.length; i++) ...[
+              DayItem(
+                number: days[i].toString(),
+                short: labels[i],
+                selected: i == 3,
+              ),
+              if (i != days.length - 1) horizontalSpace(2),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -46,7 +51,7 @@ class DayItem extends StatelessWidget {
       width: 56.w,
       height: 80.h,
       decoration: BoxDecoration(
-        color: selected ? Color(0xff202600) : Colors.transparent,
+        color: selected ? AppColors.blackColor20 : Colors.transparent,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -54,22 +59,20 @@ class DayItem extends StatelessWidget {
         children: [
           Text(
             number,
-            style: TextStyle(
+            style: TextStyles.font18whiteColorW600.copyWith(
               color: selected ? AppColors.primaryColor : Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
             ),
           ),
-          const SizedBox(height: 4),
+          horizontalSpace(2),
           Text(
             short,
-            style: TextStyle(
-              color: selected ? AppColors.primaryColor : Colors.white54,
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
+            style: TextStyles.font13whiteColorW400.copyWith(
+              color: selected
+                  ? AppColors.primaryColor
+                  : AppColors.greenColor5e6,
             ),
           ),
-          const SizedBox(height: 6),
+          verticalSpace(6),
           Container(
             width: 8,
             height: 8,

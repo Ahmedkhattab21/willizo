@@ -31,4 +31,5 @@ class Routes {
   static const step20Screen = "/Step20Screen";
   static const step21Screen = "/Step21Screen";
   static const buttonNavBarWidget = "/ButtonNavBarWidget";
+  static const notificationScreen = "/NotificationScreen";
 }
