@@ -15,120 +15,126 @@ class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: AppColors.primaryColor,
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    child: SvgPicture.asset(ImageAsset.arrowBackIcon),
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        'ACCOUNT',
-                        style: TextStyles.font14BebasNeueW400,
-                      ),
-                    ),
-                  ),
-                  horizontalSpace(40),
-                ],
-              ),
-              verticalSpace(12),
-              const ProfileHeader(),
-              const SizedBox(height: 18),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.25),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Personal Info',
-                          style: TextStyles.font14whiteColorColorW400.copyWith(
-                            fontWeight: FontWeight.w700,
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: AppColors.primaryColor,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      child: SvgPicture.asset(ImageAsset.arrowBackIcon),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          'ACCOUNT',
+                          style: TextStyles.font14BebasNeueW400,
+                        ),
+                      ),
+                    ),
+                    horizontalSpace(40),
+                  ],
+                ),
+                verticalSpace(12),
+                const ProfileHeader(),
+                verticalSpace(18),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.25),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Personal Info',
+                            style: TextStyles.font14whiteColorColorW400
+                                .copyWith(fontWeight: FontWeight.w700),
                           ),
-                        ),
-                        SvgPicture.asset(
-                          ImageAsset.editIcon,
-                          width: 20.w,
-                          height: 20.h,
-                        ),
-                      ],
-                    ),
-                    verticalSpace(8),
-                    Wrap(
-                      spacing: 12,
-                      runSpacing: 10,
-                      children: const [
-                        InfoTile(label: 'Name', value: 'Olivia Bennett'),
-                        InfoTile(label: 'Phone', value: '+1 (555) 987-6543'),
-                        InfoTile(label: 'Email', value: 'olivia.bee@gmail.com'),
-                        InfoTile(label: 'Gender', value: 'male'),
-                        InfoTile(label: 'Height', value: '172 cm'),
-                        InfoTile(label: 'Weight', value: '72.4 kg'),
-                      ],
-                    ),
-                  ],
+                          SvgPicture.asset(
+                            ImageAsset.editIcon,
+                            width: 20.w,
+                            height: 20.h,
+                          ),
+                        ],
+                      ),
+                      verticalSpace(20),
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 10,
+                        children: const [
+                          InfoTile(label: 'Name', value: 'Olivia Bennett'),
+                          InfoTile(label: 'Phone', value: '+1 (555) 987-6543'),
+                          InfoTile(
+                            label: 'Email',
+                            value: 'olivia.bee@gmail.com',
+                          ),
+                          InfoTile(label: 'Gender', value: 'male'),
+                          InfoTile(label: 'Height', value: '172 cm'),
+                          InfoTile(label: 'Weight', value: '72.4 kg'),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
 
-              verticalSpace(14),
-              const SubscriptionCard(),
-              verticalSpace(18),
-              Text('Workouts', style: TextStyles.font16WhiteColorW500),
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.25),
-                  borderRadius: BorderRadius.circular(12),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  child: const SubscriptionCard(),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('12', style: TextStyles.fon32whiteColorW700),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Last 7 days • +10%',
-                              style: TextStyle(color: Colors.white70),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    // const SizedBox(height: 12),
-                    // const SizedBox(height: 160, child: NeonChart()),
-                  ],
+                verticalSpace(18),
+                Text('Workouts', style: TextStyles.font16WhiteColorW500),
+                verticalSpace(8),
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.25),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('12', style: TextStyles.fon32whiteColorW700),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Last 7 days • +10%',
+                                style: TextStyle(color: Colors.white70),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      // const SizedBox(height: 12),
+                      // const SizedBox(height: 160, child: NeonChart()),
+                    ],
+                  ),
                 ),
-              ),
-
-              const SizedBox(height: 24),
-            ],
+                verticalSpace(24),
+              ],
+            ),
           ),
         ),
       ),

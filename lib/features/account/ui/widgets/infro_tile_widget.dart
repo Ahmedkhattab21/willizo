@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
@@ -11,7 +12,7 @@ class InfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 160,
+      width: 160.w,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -21,11 +22,14 @@ class InfoTile extends StatelessWidget {
               color: AppColors.whiteColor,
             ),
           ),
-          verticalSpace(6),
-          Text(
-            value,
-            style: TextStyles.font14BlackColorW700.copyWith(
-              color: AppColors.greenColor5e6,
+          // verticalSpace(10),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Text(
+              value,
+              style: TextStyles.font14BlackColorW700.copyWith(
+                color: AppColors.greenColor5e6,
+              ),
             ),
           ),
         ],

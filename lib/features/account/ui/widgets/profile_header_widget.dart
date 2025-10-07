@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
+import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 
 class ProfileHeader extends StatelessWidget {
@@ -37,12 +38,12 @@ class ProfileHeader extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 12),
+        verticalSpace(12),
         Text(
           'Mohamed Seyam',
           style: TextStyles.font22WhiteColorW600.copyWith(fontSize: 18.sp),
         ),
-        const SizedBox(height: 6),
+        verticalSpace(6),
         Text(
           'mh16998866@gmail.com',
           style: TextStyles.font14whiteColorColorW400.copyWith(fontSize: 10.sp),

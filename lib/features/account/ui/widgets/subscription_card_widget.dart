@@ -21,9 +21,8 @@ class _SubscriptionCardState extends State<SubscriptionCard>
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.25),
+        color: AppColors.backgroundColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -87,66 +86,84 @@ class _SubscriptionCardState extends State<SubscriptionCard>
             ],
           ),
           verticalSpace(14),
-          Row(
+          Stack(
+            alignment: Alignment.bottomLeft,
+            clipBehavior: Clip.none,
             children: [
-              GestureDetector(
-                onTap: () => setState(() => _selected = 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Analytics',
-                      style: TextStyle(
-                        color: _selected == 0
-                            ? AppColors.primaryColor
-                            : Colors.white54,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Container(
-                      width: 70,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: _selected == 0
-                            ? AppColors.primaryColor
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                  ],
-                ),
+              Positioned(
+                left: -16,
+                right: -16,
+                child: Container(height: 1, color: Color(0xff4d5041)),
               ),
-              horizontalSpace(22),
-              GestureDetector(
-                onTap: () => setState(() => _selected = 1),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Progress',
-                      style: TextStyle(
-                        color: _selected == 1
-                            ? AppColors.primaryColor
-                            : AppColors.greyColorColor79,
-                        fontWeight: FontWeight.bold,
-                      ),
+
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => setState(() => _selected = 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Analytics',
+                          style: TextStyle(
+                            color: _selected == 0
+                                ? AppColors.primaryColor
+                                : Colors.white54,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Container(
+                          width: 70,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: _selected == 0
+                                ? AppColors.primaryColor
+                                : Colors.grey.withOpacity(0.4),
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                      ],
                     ),
-                    verticalSpace(6),
-                    Container(
-                      width: 70,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: _selected == 1
-                            ? AppColors.primaryColor
-                            : AppColors.whiteColor,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
+                  ),
+                  horizontalSpace(22),
+                  GestureDetector(
+                    onTap: () => setState(() => _selected = 1),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Progress',
+                          style: TextStyle(
+                            color: _selected == 1
+                                ? AppColors.primaryColor
+                                : AppColors.greyColorColor79,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Container(
+                          width: 70,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: _selected == 1
+                                ? AppColors.primaryColor
+                                : Color(0xffd3d3d3),
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
+          ),
+          verticalSpace(4),
+          Container(
+            width: double.infinity,
+            height: 1,
+            color: Colors.grey.withOpacity(0.3),
           ),
         ],
       ),
