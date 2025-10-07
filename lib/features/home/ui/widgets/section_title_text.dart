@@ -15,7 +15,7 @@ class SectionTitle extends StatelessWidget {
         children: [
           TextSpan(
             text: "$title ",
-            style: const TextStyle(color: Colors.white70),
+            style: const TextStyle(color: Colors.white),
           ),
           TextSpan(
             text: accent,

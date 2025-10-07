@@ -22,13 +22,13 @@ class NotificationsScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: AppColors.primaryColor,
                         width: 2,
                       ),
-                      borderRadius: BorderRadius.circular(12.r),
+                      borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: SvgPicture.asset(ImageAsset.arrowBackIcon),
                   ),

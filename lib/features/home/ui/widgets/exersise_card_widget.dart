@@ -14,8 +14,8 @@ class ExerciseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
+        image: DecorationImage(image: AssetImage( ImageAsset.backgroundCardImage),fit: BoxFit.fill),
         gradient: const LinearGradient(
           colors: [AppColors.kCardGreenStart, AppColors.kCardGreenEnd],
           begin: Alignment.topLeft,
@@ -30,132 +30,117 @@ class ExerciseCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Stack(
-        children: [
-          Positioned(
-            right: -40,
-            top: -20,
-            child: Container(
-              width: 140,
-              height: 140,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.03),
-                borderRadius: BorderRadius.circular(70),
-              ),
-            ),
-          ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child:Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Container(
-                      width: 48,
-                      height: 48,
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-
-                        shape: BoxShape.circle,
-                      ),
-                      child: SvgPicture.asset(
-                        ImageAsset.muscleIcon,
-                        width: 20.w,
-                        height: 20.h,
-                      ),
+                      shape: BoxShape.circle,
+                    ),
+                    child: SvgPicture.asset(
+                      ImageAsset.muscleIcon,
+                      width: 20.w,
+                      height: 20.h,
                     ),
                   ),
-                  horizontalSpace(12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'EXERCISES',
-                          style: TextStyles.font16BlackColorW400.copyWith(
-                            fontSize: 18.sp,
-                          ),
+                ),
+                horizontalSpace(12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'EXERCISES',
+                        style: TextStyles.font16BlackColorW400.copyWith(
+                          fontSize: 18.sp,
                         ),
-                        Text(
-                          'Do biceps exercise',
-                          style: TextStyles.font12BlackColorColorW500,
-                        ),
-                        verticalSpace(8),
-                      ],
-                    ),
-                  ),
-                  // menu
-                  const SizedBox(width: 8),
-                  Column(
-                    children: const [
-                      Icon(Icons.more_vert, color: Colors.black54),
+                      ),
+                      Text(
+                        'Do biceps exercise',
+                        style: TextStyles.font12BlackColorColorW500,
+                      ),
+                      verticalSpace(8),
                     ],
                   ),
-                ],
-              ),
-
-              Text(
-                'The biceps curl is a basic strength training exercise that targets.',
-                style: TextStyles.font12W700.copyWith(
-                  fontWeight: FontWeight.w500,
-                  height: 1.7,
                 ),
+                // menu
+                const SizedBox(width: 8),
+                Column(
+                  children: const [
+                    Icon(Icons.more_vert, color: Colors.black54),
+                  ],
+                ),
+              ],
+            ),
+            Text(
+              'The biceps curl is a basic strength training exercise that targets.',
+              style: TextStyles.font12W700.copyWith(
+                fontWeight: FontWeight.w500,
+                height: 1.7,
               ),
-              verticalSpace(14),
-              Row(
-                children: [
-                  ButtonWidget(
-                    isLoading: false,
-                    buttonText: "Start",
-                    textStyle: TextStyles.font14PrimaryColorW600,
-                    icon: Icons.arrow_forward,
-                    iconColor: AppColors.primaryColor,
-                    backGroundColor: Colors.black,
-                    borderRadius: 40,
-                    buttonWidth: 94.w,
-                    buttonHeight: 41.h,
-                    horizontalPadding: 18.w,
-                    verticalPadding: 10.h,
-                    onPressed: () {},
-                  ),
+            ),
+            verticalSpace(14),
+            Row(
+              children: [
+                ButtonWidget(
+                  isLoading: false,
+                  buttonText: "Start",
+                  textStyle: TextStyles.font14PrimaryColorW600,
+                  icon: Icons.arrow_forward,
+                  iconColor: AppColors.primaryColor,
+                  backGroundColor: Colors.black,
+                  borderRadius: 40,
+                  buttonWidth: 94.w,
+                  buttonHeight: 41.h,
+                  horizontalPadding: 18.w,
+                  verticalPadding: 10.h,
+                  onPressed: () {},
+                ),
 
-                  horizontalSpace(12),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.08),
-                      border: Border.all(color: Colors.black, width: 2),
-                      borderRadius: BorderRadius.circular(28),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.access_time,
-                          size: 18.r,
-                          color: Colors.black87,
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          '50 Min',
-                          style: TextStyles.font14BlackColorW700.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
+                horizontalSpace(12),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
                   ),
-                ],
-              ),
-            ],
-          ),
-        ],
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    border: Border.all(color: Colors.black, width: 2),
+                    borderRadius: BorderRadius.circular(28),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.access_time,
+                        size: 18.r,
+                        color: Colors.black,
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        '50 Min',
+                        style: TextStyles.font14BlackColorW700.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
