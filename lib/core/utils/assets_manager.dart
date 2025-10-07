@@ -4,6 +4,7 @@ class ImageAsset {
   static const String onBoarding1Image = 'assets/images/on_boarding_1.png';
   static const String onBoarding2Image = 'assets/images/on_boarding_2.png';
   static const String onBoarding3Image = 'assets/images/on_boarding_3.png';
+  static const String backgroundCardImage = 'assets/icons/back_ground_card_image.png';
 
   ///
   ///

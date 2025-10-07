@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -168,50 +169,35 @@ class Step5Screen extends StatelessWidget {
                       },
                       builder: (context, state) {
                         return SizedBox(
-                          height: 250.h,
-                          child: ListWheelScrollView.useDelegate(
-                            itemExtent: 95.h,
-                            perspective: 0.003,
-                            diameterRatio: 3.0,
-                            overAndUnderCenterOpacity: .4,
-                            physics: const FixedExtentScrollPhysics(),
-                            onSelectedItemChanged: (index) {
+                          height: 200.h,
+                          width: 200.w,
+                          child: CupertinoPicker(
+                            backgroundColor: Colors.transparent,
+                            scrollController: FixedExtentScrollController(
+                              initialItem:
+                                  Step5Cubit.get(context).selectedKilo - 100,
+                            ),
+                            itemExtent: 35.h,
+
+                            looping: false,
+                            onSelectedItemChanged: (int index) {
                               Step5Cubit.get(
                                 context,
                               ).onChangeSelectedKilo(index);
                             },
-                            childDelegate: ListWheelChildBuilderDelegate(
-                              builder: (context, index) {
-                                if (index > 990) return null; // stop at 250 cm
-                                return Center(
-                                  child: Column(
-                                    children: [
-                                      Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: '$index \t',
-                                              style: TextStyles
-                                                  .font40WhiteColorBold,
-                                            ),
-                                            TextSpan(
-                                              text: 'Kilos',
-                                              style: TextStyles
-                                                  .font40WhiteColorBold
-                                                  .copyWith(
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
+                            children: List.generate(180, (index) {
+                              final height = 20 + index;
+                              return Center(
+                                child: Text(
+                                  "$height Kilo",
+                                  style: TextStyles.font40WhiteColorBold
+                                      .copyWith(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w400,
                                       ),
-                                      Divider(color: AppColors.primaryColor),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
+                                ),
+                              );
+                            }),
                           ),
                         );
                       },
@@ -227,50 +213,35 @@ class Step5Screen extends StatelessWidget {
                       },
                       builder: (context, state) {
                         return SizedBox(
-                          height: 250.h,
-                          child: ListWheelScrollView.useDelegate(
-                            itemExtent: 95.h,
-                            perspective: 0.003,
-                            diameterRatio: 3.0,
-                            overAndUnderCenterOpacity: .4,
-                            physics: const FixedExtentScrollPhysics(),
-                            onSelectedItemChanged: (index) {
+                          height: 200.h,
+                          width: 200.w,
+                          child: CupertinoPicker(
+                            backgroundColor: Colors.transparent,
+                            scrollController: FixedExtentScrollController(
+                              initialItem:
+                                  Step5Cubit.get(context).selectedGram - 100,
+                            ),
+                            itemExtent: 35.h,
+
+                            looping: false,
+                            onSelectedItemChanged: (int index) {
                               Step5Cubit.get(
                                 context,
                               ).onChangeSelectedGram(index);
                             },
-                            childDelegate: ListWheelChildBuilderDelegate(
-                              builder: (context, index) {
-                                if (index > 990) return null; // stop at 250 cm
-                                return Center(
-                                  child: Column(
-                                    children: [
-                                      Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: '$index \t',
-                                              style: TextStyles
-                                                  .font40WhiteColorBold,
-                                            ),
-                                            TextSpan(
-                                              text: 'g',
-                                              style: TextStyles
-                                                  .font40WhiteColorBold
-                                                  .copyWith(
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
+                            children: List.generate(1000, (index) {
+                              final height = index;
+                              return Center(
+                                child: Text(
+                                  "$height g",
+                                  style: TextStyles.font40WhiteColorBold
+                                      .copyWith(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w400,
                                       ),
-                                      Divider(color: AppColors.primaryColor),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
+                                ),
+                              );
+                            }),
                           ),
                         );
                       },

@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
             navigatorKey: MyApp.navigatorKey,
             title: "willizo",
             theme: blackThemeData(),
-            initialRoute: Routes.notificationScreen,
+            initialRoute: widget.navigateWidget,
             onGenerateRoute: RouteGenerator.generateRoute,
           ),
         );
