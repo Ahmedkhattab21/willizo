@@ -4,7 +4,8 @@ class ImageAsset {
   static const String onBoarding1Image = 'assets/images/on_boarding_1.png';
   static const String onBoarding2Image = 'assets/images/on_boarding_2.png';
   static const String onBoarding3Image = 'assets/images/on_boarding_3.png';
-  static const String backgroundCardImage = 'assets/icons/back_ground_card_image.png';
+  static const String backgroundCardImage =
+      'assets/icons/back_ground_card_image.png';
 
   ///
   ///
@@ -48,4 +49,8 @@ class ImageAsset {
   static const String arrowBackIcon = "assets/icons/arrow_back_icon.svg";
   static const String editIcon = "assets/icons/edit_icon.svg";
   static const String deleteIcon = "assets/icons/delete_icon.svg";
+  static const String shopCircleIcon = "assets/icons/shop_circle_icon.svg";
+  static const String filterIcon = "assets/icons/filter_icon.svg";
+  static const String searchIcon = "assets/icons/search_icon.svg";
+  static const String startIcon = "assets/svgs/star_svg.svg";
 }

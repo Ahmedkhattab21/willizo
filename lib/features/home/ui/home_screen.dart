@@ -17,11 +17,12 @@ class HomeScreen extends StatelessWidget {
       drawer: const CustomDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-            const  HomeTopHeaderWidget(),
+              const HomeTopHeaderWidget(),
               verticalSpace(18),
               const DateSelector(),
               verticalSpace(18),

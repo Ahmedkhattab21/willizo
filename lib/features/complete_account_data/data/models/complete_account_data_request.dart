@@ -1,9 +1,9 @@
 class StepsRequestModel {
-  final int height; // in cm
-  final int weight; // in kg
+  final int height; 
+  final int weight; 
   final int age;
-  final String gender; // "male" or "female"
-  final String goal; // e.g., "lose_weight", "maintain", "gain_muscle"
+  final String gender; 
+  final String goal; 
 
   StepsRequestModel({
     required this.height,

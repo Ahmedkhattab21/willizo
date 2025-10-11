@@ -93,9 +93,8 @@ class _SubscriptionCardState extends State<SubscriptionCard>
               Positioned(
                 left: -16,
                 right: -16,
-                child: Container(height: 1, color: Color(0xff4d5041)),
+                child: Container(height: 1, color: AppColors.greyColor4d),
               ),
-
               Row(
                 children: [
                   GestureDetector(
@@ -158,12 +157,6 @@ class _SubscriptionCardState extends State<SubscriptionCard>
                 ],
               ),
             ],
-          ),
-          verticalSpace(4),
-          Container(
-            width: double.infinity,
-            height: 1,
-            color: Colors.grey.withOpacity(0.3),
           ),
         ],
       ),

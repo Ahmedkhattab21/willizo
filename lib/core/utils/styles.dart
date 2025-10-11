@@ -47,6 +47,13 @@ class TextStyles {
     fontFamily: 'Lato',
   );
 
+  static TextStyle font20WhiteColorW600 = TextStyle(
+    fontSize: 20.sp,
+    color: AppColors.whiteColor,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Lato',
+  );
+
   ///BebasNeue font
   static TextStyle font40PrimaryColorW400 = TextStyle(
     fontSize: 40.sp,
@@ -108,7 +115,24 @@ class TextStyles {
     fontWeight: FontWeight.w700,
     fontFamily: 'Inter',
   );
-
+  static TextStyle font12GreenColorW500 = TextStyle(
+    color: AppColors.greenColor7C,
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
+    fontFamily: "Inter",
+  );
+  static TextStyle font10WhiteColorW600 = TextStyle(
+    fontSize: 10.sp,
+    color: Colors.white,
+    fontWeight: FontWeight.w600,
+    fontFamily: "Inter",
+  );
+  static TextStyle font17GreyColorW400 = TextStyle(
+    fontSize: 17.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.greyColorColor79,
+    fontFamily: "Inter",
+  );
   static TextStyle font16WhiteColorW600 = TextStyle(
     fontSize: 16.sp,
     color: AppColors.whiteColor,
@@ -258,6 +282,12 @@ class TextStyles {
     color: AppColors.primaryColor,
     fontWeight: FontWeight.w600,
     fontFamily: 'Montserrat',
+  );
+  static TextStyle font12PrimaryColorW700 = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w700,
+    fontFamily: "Montserrat",
+    color: AppColors.primaryColor,
   );
   static TextStyle font18whiteColorW600 = TextStyle(
     fontSize: 18.sp,

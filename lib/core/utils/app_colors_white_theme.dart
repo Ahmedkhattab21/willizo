@@ -13,6 +13,7 @@ class AppColors {
   static const Color greyColorColorA0 = Color(0xffA0A0A0);
   static const Color greyColorColorED = Color(0xffEBEDED);
   static const Color greyColorColor79 = Color(0xff797979);
+  static const Color greyColorColor6E = Color(0xff6E7786);
   static const Color greyColorColor00 = Color(0xff171C00);
   static const Color blackColor20 = Color(0xff202600);
   static const Color blackColor171C = Color(0xff171C00);
@@ -29,6 +30,7 @@ class AppColors {
   static const Color greyColro8D = Color(0xff8D8B8C);
   static const Color darkGreyColor = Color(0xff3e3d3e);
   static const Color greyColorD3 = Color(0xFF413d38);
+  static const Color greyColor4d = Color(0xff4d5041);
 
   ///remove
 
@@ -78,4 +80,5 @@ class AppColors {
   static const Color kCardGreenEnd = Color(0xFF9ED300);
   static const Color kCardBlueStart = Color(0xFF3B6BFF);
   static const Color kCardBlueEnd = Color(0xFF2A47D9);
+  static const Color greenColor7C = Color(0xFF758A5C);
 }
