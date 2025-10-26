@@ -26,7 +26,7 @@ class TextStyles {
     fontSize: 16.sp,
     color: AppColors.whiteColor,
     fontWeight: FontWeight.w600,
-    fontFamily: 'Lato',
+    fontFamily: 'Inter',
   );
 
   static TextStyle font16WhiteColorW400 = TextStyle(
@@ -305,6 +305,62 @@ class TextStyles {
     fontSize: 13.sp,
     fontWeight: FontWeight.w400,
     fontFamily: 'Inter',
+  );
+  static TextStyle font14InterW600 = TextStyle(
+    fontSize: 13.sp,
+    fontFamily: "Inter",
+    fontWeight: FontWeight.w600,
+  );
+  static TextStyle font18InterW600 = TextStyle(
+    fontFamily: "Inter",
+    fontWeight: FontWeight.w600,
+    fontSize: 18.sp,
+  );
+  static TextStyle font14InterW400 = TextStyle(
+    fontFamily: "Inter",
+    fontWeight: FontWeight.w400,
+    fontSize: 14.sp,
+  );
+  static TextStyle font18WhiteInterW600 = TextStyle(
+    fontFamily: "Inter",
+    color: AppColors.whiteColor,
+    fontWeight: FontWeight.w600,
+    fontSize: 18.sp,
+  );
+  static TextStyle font12InterW400 = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: Colors.white,
+    fontFamily: "Inter",
+  );
+  static TextStyle font12InterWhiteW400 = TextStyle(
+    color: Color(0xffD1D5DB),
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    fontFamily: "Inter",
+  );
+  static TextStyle font16InterW600 = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w600,
+    fontFamily: "Inter",
+    color: Colors.white,
+  );
+
+  static TextStyle font24InterW700 = TextStyle(
+    fontFamily: "Inter",
+    fontWeight: FontWeight.w700,
+    fontSize: 24.sp,
+  );
+  static TextStyle font14LexendW500 = TextStyle(
+    fontFamily: "Lexend",
+    fontWeight: FontWeight.w500,
+    fontSize: 14.sp,
+  );
+  static TextStyle font12LexendW400 = TextStyle(
+    fontFamily: "Lexend",
+    color: AppColors.greenColor7,
+    fontWeight: FontWeight.w400,
+    fontSize: 12.sp,
   );
 
   ///remove

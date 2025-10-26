@@ -55,4 +55,10 @@ class ImageAsset {
   static const String startIcon = "assets/svgs/star_svg.svg";
   static const String coloredDoumble = "assets/svgs/black_double_icon.svg";
   static const String doubleArrowIcon = "assets/svgs/double_arro_icon.svg";
+  static const String worldCrownIcon = "assets/icons/world_crown_icon.svg";
+  static const String squatsIcon = "assets/icons/squats_icon.svg";
+  static const String pullUpsIcon = "assets/icons/alarm_icon.svg";
+  static const String plankIcon = "assets/icons/planck_icon.svg";
+  static const String groupIcon = "assets/icons/group_icon.svg";
+  static const String fire = "assets/icons/fire.svg";
 }
