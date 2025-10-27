@@ -61,4 +61,5 @@ class ImageAsset {
   static const String plankIcon = "assets/icons/planck_icon.svg";
   static const String groupIcon = "assets/icons/group_icon.svg";
   static const String fire = "assets/icons/fire.svg";
+  static const String overheadPressIcon = "assets/svgs/overhead_press.svg";
 }

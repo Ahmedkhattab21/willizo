@@ -61,6 +61,7 @@ import 'package:willizo/features/onboarding/ui/onboarding_screen.dart';
 import 'package:willizo/features/sign_in/logic/sign_in_cubit.dart';
 import 'package:willizo/features/sign_in/ui/sign_in_screen.dart';
 import 'package:willizo/features/splash/ui/splash_video_screen.dart';
+import 'package:willizo/features/top_friends/ui/top_friends_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
@@ -277,6 +278,8 @@ class RouteGenerator {
 
       case Routes.notificationScreen:
         return MaterialPageRoute(builder: (_) => const NotificationsScreen());
+      case Routes.topFriendsScreen:
+        return MaterialPageRoute(builder: (_) => const TopFriendsScreen());
       // ///user routes
       // case Routes.loginScreen:
       //   return MaterialPageRoute(

@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
-import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
+import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/features/community/ui/widgets/leader_board_grid_widget.dart';
 import 'package:willizo/features/community/ui/widgets/pushup_leader_board_card.dart';
 import 'package:willizo/features/community/ui/widgets/top_friends_board_card.dart';
 import 'package:willizo/features/community/ui/widgets/weekly_challenge_card_widget.dart';
 
 class LeaderboardBody extends StatelessWidget {
-  const LeaderboardBody({super.key});
+  final VoidCallback? onViewAllPressed;
+
+  const LeaderboardBody({super.key, this.onViewAllPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +54,7 @@ class LeaderboardBody extends StatelessWidget {
                         ),
                       ],
                     ),
-
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
                           height: 48.w,
@@ -82,7 +82,6 @@ class LeaderboardBody extends StatelessWidget {
                         Text(
                           "2,847",
                           style: TextStyle(
-                            fontFamily: "Inter",
                             fontWeight: FontWeight.w700,
                             fontSize: 24.sp,
                           ),
@@ -95,9 +94,21 @@ class LeaderboardBody extends StatelessWidget {
               ),
             ),
             verticalSpace(15),
-            Text(
-              "Excercise Categories",
-              style: TextStyles.font18WhiteInterW600,
+            Row(
+              children: [
+                Text(
+                  "Exercise Categories",
+                  style: TextStyles.font18WhiteInterW600,
+                ),
+                const Spacer(),
+                GestureDetector(
+                  onTap: onViewAllPressed,
+                  child: Text(
+                    "View all",
+                    style: TextStyles.font12GreenColorW500,
+                  ),
+                ),
+              ],
             ),
             verticalSpace(10),
             LeaderboardGrid(),

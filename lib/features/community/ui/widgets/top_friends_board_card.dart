@@ -5,6 +5,7 @@ import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
+import 'package:willizo/features/community/ui/community_screen.dart';
 
 class TopFriendsBoardCard extends StatelessWidget {
   const TopFriendsBoardCard({super.key});
@@ -73,11 +74,21 @@ class TopFriendsBoardCard extends StatelessWidget {
 
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20.h),
-              child: const Text(
-                "View All Friends",
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontWeight: FontWeight.w500,
+              child: GestureDetector(
+                onTap: () {
+                  final parentState = context
+                      .findAncestorStateOfType<CommunityScreenState>();
+                  parentState!.setState(() {
+                    parentState.showTopFriends = true;
+                  });
+                },
+
+                child: const Text(
+                  "View All Friends",
+                  style: TextStyle(
+                    color: AppColors.primaryColor,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),

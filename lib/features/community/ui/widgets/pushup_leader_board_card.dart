@@ -5,6 +5,8 @@ import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
+import 'package:willizo/features/community/ui/community_screen.dart';
+import 'package:willizo/features/community/ui/widgets/push_leaderboard_row_info_widget.dart';
 
 class PushupLeaderBoardCard extends StatelessWidget {
   const PushupLeaderBoardCard({super.key});
@@ -12,7 +14,6 @@ class PushupLeaderBoardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         border: Border.all(width: 2, color: Colors.transparent),
@@ -27,7 +28,6 @@ class PushupLeaderBoardCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            // verticalSpace(5),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
               child: Row(
@@ -68,7 +68,7 @@ class PushupLeaderBoardCard extends StatelessWidget {
             ),
             Divider(color: Colors.white, thickness: 1),
 
-            _buildUserRow(
+            PushupLeaderBoardRowInf(
               rank: 1,
               name: "Alex Johnson",
               image: "https://randomuser.me/api/portraits/men/75.jpg",
@@ -77,7 +77,7 @@ class PushupLeaderBoardCard extends StatelessWidget {
               highlight: false,
               medalColor: AppColors.orangeColorEA,
             ),
-            _buildUserRow(
+            PushupLeaderBoardRowInf(
               rank: 2,
               name: "Sarah Chen",
               image: "https://randomuser.me/api/portraits/women/65.jpg",
@@ -86,7 +86,7 @@ class PushupLeaderBoardCard extends StatelessWidget {
               highlight: false,
               medalColor: AppColors.greyColorCA,
             ),
-            _buildUserRow(
+            PushupLeaderBoardRowInf(
               rank: 3,
               name: "Mike Torres",
               image: "https://randomuser.me/api/portraits/men/44.jpg",
@@ -98,8 +98,7 @@ class PushupLeaderBoardCard extends StatelessWidget {
 
             verticalSpace(6),
 
-            /// --- Current user section ---
-            _buildUserRow(
+            PushupLeaderBoardRowInf(
               rank: 7,
               name: "You",
               image: "https://randomuser.me/api/portraits/men/46.jpg",
@@ -111,116 +110,22 @@ class PushupLeaderBoardCard extends StatelessWidget {
 
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20.h),
-              child: const Text(
-                "View Full Leaderboard",
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildUserRow({
-    required int rank,
-    required String name,
-    required String image,
-    required String reps,
-    required String diff,
-    bool highlight = false,
-    Color? medalColor,
-  }) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: highlight ? 8.w : 0),
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12.w),
-        decoration: BoxDecoration(
-          color: highlight ? Colors.white : Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              height: 34.w,
-              width: 34.w,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: medalColor ?? Colors.white12,
-                shape: BoxShape.circle,
-              ),
-              child: Text(
-                rank.toString(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14.sp,
-                ),
-              ),
-            ),
-
-            horizontalSpace(12),
-
-            /// Profile image
-            ClipOval(
-              child: Image.network(
-                image,
-                width: 36,
-                height: 36,
-                fit: BoxFit.cover,
-              ),
-            ),
-
-            horizontalSpace(12),
-
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: TextStyle(
-                      color: highlight ? Colors.black : Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    "$reps reps",
-                    style: TextStyle(
-                      color: highlight
-                          ? AppColors.greyColorColor80
-                          : Colors.white,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "Inter",
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  reps,
+              child: GestureDetector(
+                onTap: () {
+                  final parentState = context
+                      .findAncestorStateOfType<CommunityScreenState>();
+                  parentState!.setState(() {
+                    parentState.showPushupsLeaderboard = true;
+                  });
+                },
+                child: const Text(
+                  "View Full Leaderboard",
                   style: TextStyle(
-                    color: highlight ? Colors.black : Colors.white,
-                    fontWeight: FontWeight.w700,
+                    color: AppColors.primaryColor,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                Text(
-                  diff,
-                  style: const TextStyle(
-                    color: Colors.lightGreenAccent,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ),
