@@ -4,11 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
-import 'package:willizo/features/sign_in/logic/sign_in_cubit.dart';
-import 'package:willizo/features/sign_in/logic/sign_in_state.dart';
-import 'package:willizo/features/sign_in/ui/widgets/login_widget.dart';
-import 'package:willizo/features/sign_in/ui/widgets/register_widget.dart';
-import 'package:willizo/features/sign_in/ui/widgets/taps_widget.dart';
+import 'package:willizo/features/login_and_signup/logic/login_and_signup_cubit.dart';
+import 'package:willizo/features/login_and_signup/logic/login_and_signup_state.dart';
+import 'package:willizo/features/login_and_signup/ui/widgets/login_widget.dart';
+import 'package:willizo/features/login_and_signup/ui/widgets/register_widget.dart';
+import 'package:willizo/features/login_and_signup/ui/widgets/taps_widget.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -17,7 +17,7 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: BlocBuilder<SignInCubit, SignInState>(
+        child: BlocBuilder<LoginAndSignup, LoginAndSignupState>(
           buildWhen: (previous, current) {
             return current is OnChangeSignInState;
           },
@@ -25,29 +25,29 @@ class SignInScreen extends StatelessWidget {
             return SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: Form(
-                key: SignInCubit.get(context).signInState == 1
-                    ? SignInCubit.get(context).loginKey
-                    : SignInCubit.get(context).registerKey,
+                key: LoginAndSignup.get(context).signInState == 1
+                    ? LoginAndSignup.get(context).loginKey
+                    : LoginAndSignup.get(context).registerKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     verticalSpace(80),
                     Image.asset(ImageAsset.appLogoImage),
-                    if (SignInCubit.get(context).signInState == 2)
+                    if (LoginAndSignup.get(context).signInState == 2)
                       verticalSpace(12),
-                    if (SignInCubit.get(context).signInState == 2)
+                    if (LoginAndSignup.get(context).signInState == 2)
                       Text(
                         'Create your account to start your fitness journey',
                         style: TextStyles.font14greyColorColorEDW400,
                       ),
-                    if (SignInCubit.get(context).signInState == 2)
-                    verticalSpace(30),
-                    if (SignInCubit.get(context).signInState == 1)
+                    if (LoginAndSignup.get(context).signInState == 2)
+                      verticalSpace(30),
+                    if (LoginAndSignup.get(context).signInState == 1)
                       verticalSpace(50),
                     TapsWidget(),
-                    if (SignInCubit.get(context).signInState == 1)
+                    if (LoginAndSignup.get(context).signInState == 1)
                       LoginWidget(),
-                    if (SignInCubit.get(context).signInState == 2)
+                    if (LoginAndSignup.get(context).signInState == 2)
                       RegisterWidget(),
 
                     // verticalSpace(16),

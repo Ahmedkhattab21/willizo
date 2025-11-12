@@ -8,15 +8,15 @@ import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/core/widgets/app_text_field.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
-import 'package:willizo/features/sign_in/logic/sign_in_cubit.dart';
-import 'package:willizo/features/sign_in/logic/sign_in_state.dart';
+import 'package:willizo/features/login_and_signup/logic/login_and_signup_cubit.dart';
+import 'package:willizo/features/login_and_signup/logic/login_and_signup_state.dart';
 
 class LoginWidget extends StatelessWidget {
   const LoginWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return  Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         verticalSpace(24),
@@ -29,41 +29,26 @@ class LoginWidget extends StatelessWidget {
             horizontal: 20.w,
           ),
           textStyle: TextStyles.font14whiteColorColorW400,
-          controller: SignInCubit.get(context).loginEmailController,
+          controller: LoginAndSignup.get(context).loginEmailController,
           backgroundColor: AppColors.blackColor,
           prefixIcon: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10.w,
-              vertical: 10.h,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             child: SvgPicture.asset(ImageAsset.emailIcon),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.primaryColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.primaryColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.redColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.redColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.redColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.redColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           validator: (String? value) {
@@ -84,41 +69,26 @@ class LoginWidget extends StatelessWidget {
             horizontal: 20.w,
           ),
           textStyle: TextStyles.font14whiteColorColorW400,
-          controller: SignInCubit.get(context).loginEmailController,
+          controller: LoginAndSignup.get(context).loginEmailController,
           prefixIcon: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10.w,
-              vertical: 10.h,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             child: SvgPicture.asset(ImageAsset.passwordIcon),
           ),
           backgroundColor: AppColors.blackColor,
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.primaryColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.primaryColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.redColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.redColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.redColor,
-              width: 2,
-            ),
+            borderSide: BorderSide(color: AppColors.redColor, width: 2),
             borderRadius: BorderRadius.circular(10.r),
           ),
           validator: (String? value) {
@@ -133,14 +103,11 @@ class LoginWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text(
-              "Forgot password?",
-              style: TextStyles.font14primaryColorW400,
-            ),
+            Text("Forgot password?", style: TextStyles.font14primaryColorW400),
           ],
         ),
         verticalSpace(24),
-        BlocConsumer<SignInCubit, SignInState>(
+        BlocConsumer<LoginAndSignup, LoginAndSignupState>(
           // buildWhen: (previous, current) {
           //   return current is OnRegisterLoadingState ||
           //       current is OnRegisterSuccessState ||
@@ -197,9 +164,7 @@ class LoginWidget extends StatelessWidget {
             Expanded(
               child: Container(
                 height: 2,
-                decoration: BoxDecoration(
-                  color: AppColors.whiteColor,
-                ),
+                decoration: BoxDecoration(color: AppColors.whiteColor),
               ),
             ),
             horizontalSpace(20),
@@ -211,9 +176,7 @@ class LoginWidget extends StatelessWidget {
             Expanded(
               child: Container(
                 height: 2,
-                decoration: BoxDecoration(
-                  color: AppColors.whiteColor,
-                ),
+                decoration: BoxDecoration(color: AppColors.whiteColor),
               ),
             ),
           ],
@@ -273,7 +236,6 @@ class LoginWidget extends StatelessWidget {
             ),
           ),
         ),
-
       ],
     );
   }

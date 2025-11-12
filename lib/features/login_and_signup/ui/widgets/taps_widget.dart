@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
- import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
-import 'package:willizo/features/sign_in/logic/sign_in_cubit.dart';
+import 'package:willizo/features/login_and_signup/logic/login_and_signup_cubit.dart';
 
 class TapsWidget extends StatelessWidget {
   const TapsWidget({super.key});
@@ -22,27 +22,21 @@ class TapsWidget extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                SignInCubit.get(context).changeSignInState(1);
+                LoginAndSignup.get(context).changeSignInState(1);
               },
               child: Container(
                 height: 30.h,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
-                  color:
-                  SignInCubit.get(context).signInState == 1
+                  color: LoginAndSignup.get(context).signInState == 1
                       ? AppColors.primaryColor
                       : Colors.transparent,
                 ),
                 child: Text(
                   'Sign in',
-                  style: TextStyles.font14BlackColorW700
-                      .copyWith(
-                    color:
-                    SignInCubit.get(
-                      context,
-                    ).signInState ==
-                        1
+                  style: TextStyles.font14BlackColorW700.copyWith(
+                    color: LoginAndSignup.get(context).signInState == 1
                         ? AppColors.blackColor
                         : AppColors.primaryColor,
                   ),
@@ -54,27 +48,21 @@ class TapsWidget extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                SignInCubit.get(context).changeSignInState(2);
+                LoginAndSignup.get(context).changeSignInState(2);
               },
               child: Container(
                 height: 30.h,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
-                  color:
-                  SignInCubit.get(context).signInState == 2
+                  color: LoginAndSignup.get(context).signInState == 2
                       ? AppColors.primaryColor
                       : Colors.transparent,
                 ),
                 child: Text(
                   'Sign up',
-                  style: TextStyles.font14BlackColorW700
-                      .copyWith(
-                    color:
-                    SignInCubit.get(
-                      context,
-                    ).signInState ==
-                        2
+                  style: TextStyles.font14BlackColorW700.copyWith(
+                    color: LoginAndSignup.get(context).signInState == 2
                         ? AppColors.blackColor
                         : AppColors.primaryColor,
                   ),

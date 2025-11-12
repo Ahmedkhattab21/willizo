@@ -8,8 +8,8 @@ import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/core/widgets/app_text_field.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
-import 'package:willizo/features/sign_in/logic/sign_in_cubit.dart';
-import 'package:willizo/features/sign_in/logic/sign_in_state.dart';
+import 'package:willizo/features/login_and_signup/logic/login_and_signup_cubit.dart';
+import 'package:willizo/features/login_and_signup/logic/login_and_signup_state.dart';
 
 class RegisterWidget extends StatelessWidget {
   const RegisterWidget({super.key});
@@ -29,7 +29,7 @@ class RegisterWidget extends StatelessWidget {
             horizontal: 20.w,
           ),
           textStyle: TextStyles.font14whiteColorColorW400,
-          controller: SignInCubit.get(context).registerNameController,
+          controller: LoginAndSignup.get(context).registerNameController,
           backgroundColor: AppColors.blackColor,
           prefixIcon: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
@@ -68,7 +68,7 @@ class RegisterWidget extends StatelessWidget {
             horizontal: 20.w,
           ),
           textStyle: TextStyles.font14whiteColorColorW400,
-          controller: SignInCubit.get(context).registerPhoneController,
+          controller: LoginAndSignup.get(context).registerPhoneController,
           prefixIcon: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             child: SvgPicture.asset(ImageAsset.phoneIcon),
@@ -107,7 +107,7 @@ class RegisterWidget extends StatelessWidget {
             horizontal: 20.w,
           ),
           textStyle: TextStyles.font14whiteColorColorW400,
-          controller: SignInCubit.get(context).registerEmailController,
+          controller: LoginAndSignup.get(context).registerEmailController,
           prefixIcon: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             child: SvgPicture.asset(ImageAsset.phoneIcon),
@@ -146,7 +146,7 @@ class RegisterWidget extends StatelessWidget {
             horizontal: 20.w,
           ),
           textStyle: TextStyles.font14whiteColorColorW400,
-          controller: SignInCubit.get(context).registerBirthDateController,
+          controller: LoginAndSignup.get(context).registerBirthDateController,
           prefixIcon: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             child: SvgPicture.asset(ImageAsset.birthDateIcon),
@@ -187,7 +187,7 @@ class RegisterWidget extends StatelessWidget {
             horizontal: 20.w,
           ),
           textStyle: TextStyles.font14whiteColorColorW400,
-          controller: SignInCubit.get(context).registerPasswordController,
+          controller: LoginAndSignup.get(context).registerPasswordController,
           prefixIcon: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             child: SvgPicture.asset(ImageAsset.passwordIcon),
@@ -218,7 +218,7 @@ class RegisterWidget extends StatelessWidget {
           keyboardType: TextInputType.visiblePassword,
         ),
         verticalSpace(24),
-        BlocBuilder<SignInCubit, SignInState>(
+        BlocBuilder<LoginAndSignup, LoginAndSignupState>(
           buildWhen: (previous, current) {
             return current is OnChangeAgreeForTermsState;
           },
@@ -227,10 +227,10 @@ class RegisterWidget extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    SignInCubit.get(context).changeAgreeForTerms();
+                    LoginAndSignup.get(context).changeAgreeForTerms();
                   },
                   child: SvgPicture.asset(
-                    SignInCubit.get(context).isAgreeForTerms
+                    LoginAndSignup.get(context).isAgreeForTerms
                         ? ImageAsset.selectedBoxIcon
                         : ImageAsset.boxIcon,
                   ),
@@ -274,7 +274,7 @@ class RegisterWidget extends StatelessWidget {
 
         verticalSpace(40),
 
-        BlocConsumer<SignInCubit, SignInState>(
+        BlocConsumer<LoginAndSignup, LoginAndSignupState>(
           // buildWhen: (previous, current) {
           //   return current is OnRegisterLoadingState ||
           //       current is OnRegisterSuccessState ||

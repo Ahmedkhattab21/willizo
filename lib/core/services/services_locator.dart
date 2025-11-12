@@ -1,8 +1,9 @@
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:get_it/get_it.dart';
+import 'package:willizo/features/login_and_signup/data/repo/login_and_signup_repo.dart';
+import 'package:willizo/features/login_and_signup/data/services/login_and_signup_service.dart';
 
 import '../api/api_consumer.dart';
 import '../api/app_interceptor.dart';
@@ -12,11 +13,12 @@ final getIt = GetIt.instance;
 
 class ServicesLocator {
   static Future<void> init() async {
-    /// login
-    // getIt.registerLazySingleton<LoginRepo>(() => LoginRepo(getIt()));
-    // getIt.registerFactory<LoginService>(
-    //   () => LoginService(apiConsumer: getIt()),
-    // );
+    getIt.registerLazySingleton<LoginAndSignupRepo>(
+      () => LoginAndSignupRepo(getIt()),
+    );
+    getIt.registerLazySingleton<LoginAndSignupService>(
+      () => LoginAndSignupService(apiConsumer: getIt()),
+    );
 
     ///core
 

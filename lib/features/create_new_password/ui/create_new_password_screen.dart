@@ -12,11 +12,11 @@ import 'package:willizo/core/widgets/app_text_field.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
 import 'package:willizo/features/create_new_password/logic/create_new_password_cubit.dart';
 import 'package:willizo/features/create_new_password/logic/create_new_password_state.dart';
-import 'package:willizo/features/sign_in/logic/sign_in_cubit.dart';
-import 'package:willizo/features/sign_in/logic/sign_in_state.dart';
-import 'package:willizo/features/sign_in/ui/widgets/login_widget.dart';
-import 'package:willizo/features/sign_in/ui/widgets/register_widget.dart';
-import 'package:willizo/features/sign_in/ui/widgets/taps_widget.dart';
+import 'package:willizo/features/login_and_signup/logic/login_and_signup_cubit.dart';
+import 'package:willizo/features/login_and_signup/logic/login_and_signup_state.dart';
+import 'package:willizo/features/login_and_signup/ui/widgets/login_widget.dart';
+import 'package:willizo/features/login_and_signup/ui/widgets/register_widget.dart';
+import 'package:willizo/features/login_and_signup/ui/widgets/taps_widget.dart';
 
 class CreateNewPasswordScreen extends StatelessWidget {
   const CreateNewPasswordScreen({super.key});

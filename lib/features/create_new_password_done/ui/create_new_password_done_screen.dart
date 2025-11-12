@@ -8,11 +8,11 @@ import 'package:willizo/core/utils/extentions.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
-import 'package:willizo/features/sign_in/logic/sign_in_cubit.dart';
-import 'package:willizo/features/sign_in/logic/sign_in_state.dart';
-import 'package:willizo/features/sign_in/ui/widgets/login_widget.dart';
-import 'package:willizo/features/sign_in/ui/widgets/register_widget.dart';
-import 'package:willizo/features/sign_in/ui/widgets/taps_widget.dart';
+import 'package:willizo/features/login_and_signup/logic/login_and_signup_cubit.dart';
+import 'package:willizo/features/login_and_signup/logic/login_and_signup_state.dart';
+import 'package:willizo/features/login_and_signup/ui/widgets/login_widget.dart';
+import 'package:willizo/features/login_and_signup/ui/widgets/register_widget.dart';
+import 'package:willizo/features/login_and_signup/ui/widgets/taps_widget.dart';
 
 class CreateNewPasswordDoneScreen extends StatelessWidget {
   const CreateNewPasswordDoneScreen({super.key});

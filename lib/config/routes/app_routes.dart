@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:willizo/config/routes/routes.dart';
+import 'package:willizo/core/services/services_locator.dart';
 import 'package:willizo/features/button_nav_bar/logic/cubit/button_nav_bar_cubit.dart';
 import 'package:willizo/features/button_nav_bar/ui/button_nav_bar.dart';
 import 'package:willizo/features/complete_account_data/step_1/logic/step_1_cubit.dart';
@@ -54,12 +55,11 @@ import 'package:willizo/features/forget_password_code/logic/forget_password_code
 import 'package:willizo/features/forget_password_code/ui/forget_password_code_screen.dart';
 import 'package:willizo/features/forget_password_done/logic/forget_password_done_cubit.dart';
 import 'package:willizo/features/forget_password_done/ui/forget_password_done_screen.dart';
-import 'package:willizo/features/home/ui/home_screen.dart';
 import 'package:willizo/features/notificatoin/ui/notification_screen.dart';
 import 'package:willizo/features/onboarding/logic/onboarding_cubit.dart';
 import 'package:willizo/features/onboarding/ui/onboarding_screen.dart';
-import 'package:willizo/features/sign_in/logic/sign_in_cubit.dart';
-import 'package:willizo/features/sign_in/ui/sign_in_screen.dart';
+import 'package:willizo/features/login_and_signup/logic/login_and_signup_cubit.dart';
+import 'package:willizo/features/login_and_signup/ui/sign_in_screen.dart';
 import 'package:willizo/features/splash/ui/splash_video_screen.dart';
 import 'package:willizo/features/top_friends/ui/top_friends_screen.dart';
 
@@ -81,7 +81,7 @@ class RouteGenerator {
       case Routes.signInScreen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => SignInCubit(),
+            create: (context) => LoginAndSignup(getIt()),
             child: SignInScreen(),
           ),
         );

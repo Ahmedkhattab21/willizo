@@ -12,9 +12,9 @@ import 'package:willizo/core/widgets/app_text_field.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
 import 'package:willizo/features/forget_password/logic/forget_password_cubit.dart';
 import 'package:willizo/features/forget_password/logic/forget_password_state.dart';
-import 'package:willizo/features/sign_in/ui/widgets/login_widget.dart';
-import 'package:willizo/features/sign_in/ui/widgets/register_widget.dart';
-import 'package:willizo/features/sign_in/ui/widgets/taps_widget.dart';
+import 'package:willizo/features/login_and_signup/ui/widgets/login_widget.dart';
+import 'package:willizo/features/login_and_signup/ui/widgets/register_widget.dart';
+import 'package:willizo/features/login_and_signup/ui/widgets/taps_widget.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
   const ForgetPasswordScreen({super.key});
