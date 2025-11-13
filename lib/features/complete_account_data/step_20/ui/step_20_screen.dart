@@ -7,12 +7,29 @@ import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/extentions.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
+import 'package:willizo/core/utils/app_constant.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
+import 'package:willizo/core/widgets/card_widget.dart';
 import 'package:willizo/features/complete_account_data/step_20/logic/step_20_cubit.dart';
 import 'package:willizo/features/complete_account_data/step_20/logic/step_20_state.dart';
 
-class Step20Screen extends StatelessWidget {
+class Step20Screen extends StatefulWidget {
   const Step20Screen({super.key});
+
+  @override
+  State<Step20Screen> createState() => _Step20ScreenState();
+}
+
+class _Step20ScreenState extends State<Step20Screen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Step20Cubit.get(context).getSupportiveTools();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,10 +113,124 @@ class Step20Screen extends StatelessWidget {
               ),
             ),
             verticalSpace(24),
-
-            verticalSpace(24),
-
-            Spacer(),
+            BlocBuilder<Step20Cubit, Step20State>(
+              buildWhen: (previous, current) {
+                return current is OnChangeSelectedState ||
+                    current is GetSupportiveToolsSuccess;
+              },
+              builder: (context, state) {
+                final cubit = Step20Cubit.get(context);
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 14.w),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Supportive tools",
+                            style: TextStyles.font14W600.copyWith(
+                              color: AppColors.whiteColor,
+                            ),
+                          ),
+                          Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              cubit.selectAllTools();
+                            },
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  cubit.isAllSelected
+                                      ? ImageAsset.selectAllIcon
+                                      : ImageAsset.selectIcon,
+                                ),
+                                horizontalSpace(10),
+                                Text(
+                                  "Select All",
+                                  style: TextStyles.font12WhiteColorW500.copyWith(
+                                    color: AppColors.whiteColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+            verticalSpace(10),
+            Expanded(
+              child: BlocBuilder<Step20Cubit, Step20State>(
+                buildWhen: (previous, current) {
+                  return current is GetSupportiveToolsLoading ||
+                      current is GetSupportiveToolsSuccess ||
+                      current is GetSupportiveToolsError ||
+                      current is OnChangeSelectedState;
+                },
+                builder: (context, state) {
+                  final cubit = Step20Cubit.get(context);
+                  
+                  if (state is GetSupportiveToolsLoading) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryColor,
+                      ),
+                    );
+                  }
+                  
+                  if (state is GetSupportiveToolsError) {
+                    return Center(
+                      child: Text(
+                        state.message,
+                        style: TextStyles.font14W600.copyWith(
+                          color: AppColors.redColor,
+                        ),
+                      ),
+                    );
+                  }
+                  
+                  if (cubit.supportiveTools.isEmpty) {
+                    return Center(
+                      child: Text(
+                        "No tools available",
+                        style: TextStyles.font14W600.copyWith(
+                          color: AppColors.whiteColor,
+                        ),
+                      ),
+                    );
+                  }
+                  
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 14.w),
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16.w,
+                        mainAxisSpacing: 12.h,
+                        childAspectRatio: 0.8,
+                      ),
+                      itemCount: cubit.supportiveTools.length,
+                      itemBuilder: (context, index) {
+                        final tool = cubit.supportiveTools[index];
+                        final isSelected = cubit.isToolSelected(tool);
+                        return GymMachineCard(
+                          imageUrl: tool.imageUrl,
+                          title: tool.name,
+                          description: tool.description,
+                          isSelected: isSelected,
+                          onTap: () {
+                            cubit.toggleTool(tool);
+                          },
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
             BlocConsumer<Step20Cubit, Step20State>(
               // buildWhen: (previous, current) {
               //   return current is OnRegisterLoadingState ||
@@ -108,33 +239,11 @@ class Step20Screen extends StatelessWidget {
               //       current is OnRegisterCatchErrorState;
               // },
               listener: (context, state) {
-                // if (state is OnRegisterSuccessState) {
-                //   AppConstant.toast(
-                //     "Register successfully. ",
-                //     AppColors.greenColor,
-                //   );
-                //   if (state.accountStatus == 'pending') {
-                //     ///
-                //     context.pushNamed(Routes.registerDoneScreen);
-                //   } else if (state.accountStatus ==
-                //       'awaiting_verification') {
-                //     context.pushNamed(
-                //       Routes.registerOtpScreen,
-                //       arguments: {
-                //         'email': RegisterCubit.get(
-                //           context,
-                //         ).emailController.text,
-                //       },
-                //     );
-                //   }
-                // } else if (state is OnRegisterErrorState) {
-                //   AppConstant.toast(state.message, AppColors.redColor);
-                // } else if (state is OnRegisterCatchErrorState) {
-                //   AppConstant.toast(
-                //     "Something wrong tray again later!",
-                //     AppColors.redColor,
-                //   );
-                // }
+                if (state is Step20SuccessState) {
+                  context.pushNamed(Routes.step21Screen);
+                } else if (state is Step20ErrorState) {
+                  AppConstant.toast(state.message, AppColors.redColor);
+                }
               },
               builder: (context, state) {
                 return Container(
@@ -146,7 +255,7 @@ class Step20Screen extends StatelessWidget {
                     bottom: 34.h,
                   ),
                   child: ButtonWidget(
-                    isLoading: false,
+                    isLoading: state is Step20LoadingState,
                     borderRadius: 50,
                     buttonHeight: 46.h,
                     buttonText: "Next",
@@ -154,8 +263,7 @@ class Step20Screen extends StatelessWidget {
                     borderColor: AppColors.primaryColor,
                     textStyle: TextStyles.font18blackColorW600,
                     onPressed: () {
-                      context.pushNamed(Routes.step21Screen);
-                      // validateRegister(context);
+                      Step20Cubit.get(context).sendStep();
                     },
                   ),
                 );

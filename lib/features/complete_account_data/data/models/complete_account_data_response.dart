@@ -1,48 +1,53 @@
-class StepsResponseModel {
-  final bool status;
+class StepResponseModel {
+  final bool success;
   final String message;
-  final StepsData? data;
+  final StepData? data;
 
-  StepsResponseModel({
-    required this.status,
+  StepResponseModel({
+    required this.success,
     required this.message,
     this.data,
   });
 
-  factory StepsResponseModel.fromJson(Map<String, dynamic> json) {
-    return StepsResponseModel(
-      status: json['status'] ?? false,
+  factory StepResponseModel.fromJson(Map<String, dynamic> json) {
+    return StepResponseModel(
+      success: json['success'] ?? false,
       message: json['message'] ?? '',
-      data: json['data'] != null ? StepsData.fromJson(json['data']) : null,
+      data: json['data'] != null ? StepData.fromJson(json['data']) : null,
     );
   }
 }
 
-class StepsData {
-  final int dailyStepTarget;
-  final int caloriesTarget;
-  final double distanceTargetKm;
+class StepData {
+  final int? currentStep;
+  final int? totalSteps;
+  final Map<String, dynamic>? answers;
+  final bool? isCompleted;
+  final double? progressPercentage;
+  final String? createdAt;
+  final String? updatedAt;
 
-  StepsData({
-    required this.dailyStepTarget,
-    required this.caloriesTarget,
-    required this.distanceTargetKm,
+  StepData({
+    this.currentStep,
+    this.totalSteps,
+    this.answers,
+    this.isCompleted,
+    this.progressPercentage,
+    this.createdAt,
+    this.updatedAt,
   });
 
-  factory StepsData.fromJson(Map<String, dynamic> json) {
-    return StepsData(
-      dailyStepTarget: json['daily_step_target'] ?? 0,
-      caloriesTarget: json['calories_target'] ?? 0,
-      distanceTargetKm:
-          (json['distance_target_km'] ?? 0).toDouble(),
+  factory StepData.fromJson(Map<String, dynamic> json) {
+    return StepData(
+      currentStep: json['current_step'],
+      totalSteps: json['total_steps'],
+      answers: json['answers'] != null
+          ? Map<String, dynamic>.from(json['answers'])
+          : null,
+      isCompleted: json['is_completed'],
+      progressPercentage: (json['progress_percentage'] as num?)?.toDouble(),
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      "daily_step_target": dailyStepTarget,
-      "calories_target": caloriesTarget,
-      "distance_target_km": distanceTargetKm,
-    };
   }
 }

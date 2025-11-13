@@ -1,8 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:willizo/features/complete_account_data/data/models/complete_account_data_request.dart';
+import 'package:willizo/features/complete_account_data/data/repo/complete_account_repo.dart';
 import 'package:willizo/features/complete_account_data/step_7/logic/step_7_state.dart';
 
 class Step7Cubit extends Cubit<Step7State> {
-  Step7Cubit() : super(InitialState());
+  final CompleteAccountRepo _completeAccountRepo;
+
+  Step7Cubit(this._completeAccountRepo) : super(InitialState());
 
   List<GoalItem> items = [
     GoalItem(id: 1, name: 'Build muscle mass'),
@@ -37,6 +41,21 @@ class Step7Cubit extends Cubit<Step7State> {
 
   bool containItem(GoalItem value) {
     return selectedItems.any((item) => item.id == value.id);
+  }
+
+  Future<void> sendStep() async {
+    emit(Step7LoadingState());
+    final primaryGoal = selectedItems.map((item) => item.name).toList();
+    final result = await _completeAccountRepo.sendSteps(
+      parameter: StepsRequestModel(
+        stepNumber: 7,
+        primaryGoal: primaryGoal,
+      ),
+    );
+    result.fold(
+      (failure) => emit(Step7ErrorState(message: failure.message)),
+      (data) => emit(Step7SuccessState()),
+    );
   }
 
   static Step7Cubit get(context) => BlocProvider.of(context);

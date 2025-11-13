@@ -7,6 +7,7 @@ import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/extentions.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
+import 'package:willizo/core/utils/app_constant.dart';
 import 'package:willizo/core/widgets/app_text_field.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
 import 'package:willizo/features/complete_account_data/step_14/logic/step_14_cubit.dart';
@@ -304,33 +305,11 @@ class Step14Screen extends StatelessWidget {
               //       current is OnRegisterCatchErrorState;
               // },
               listener: (context, state) {
-                // if (state is OnRegisterSuccessState) {
-                //   AppConstant.toast(
-                //     "Register successfully. ",
-                //     AppColors.greenColor,
-                //   );
-                //   if (state.accountStatus == 'pending') {
-                //     ///
-                //     context.pushNamed(Routes.registerDoneScreen);
-                //   } else if (state.accountStatus ==
-                //       'awaiting_verification') {
-                //     context.pushNamed(
-                //       Routes.registerOtpScreen,
-                //       arguments: {
-                //         'email': RegisterCubit.get(
-                //           context,
-                //         ).emailController.text,
-                //       },
-                //     );
-                //   }
-                // } else if (state is OnRegisterErrorState) {
-                //   AppConstant.toast(state.message, AppColors.redColor);
-                // } else if (state is OnRegisterCatchErrorState) {
-                //   AppConstant.toast(
-                //     "Something wrong tray again later!",
-                //     AppColors.redColor,
-                //   );
-                // }
+                if (state is Step14SuccessState) {
+                  context.pushNamed(Routes.step15Screen);
+                } else if (state is Step14ErrorState) {
+                  AppConstant.toast(state.message, AppColors.redColor);
+                }
               },
               builder: (context, state) {
                 return Container(
@@ -342,7 +321,7 @@ class Step14Screen extends StatelessWidget {
                     bottom: 34.h,
                   ),
                   child: ButtonWidget(
-                    isLoading: false,
+                    isLoading: state is Step14LoadingState,
                     borderRadius: 50,
                     buttonHeight: 46.h,
                     buttonText: "Next",
@@ -350,8 +329,7 @@ class Step14Screen extends StatelessWidget {
                     borderColor: AppColors.primaryColor,
                     textStyle: TextStyles.font18blackColorW600,
                     onPressed: () {
-                      context.pushNamed(Routes.step15Screen);
-                      // validateRegister(context);
+                      Step14Cubit.get(context).sendStep();
                     },
                   ),
                 );

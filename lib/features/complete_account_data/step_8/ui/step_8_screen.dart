@@ -7,6 +7,7 @@ import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/extentions.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
+import 'package:willizo/core/utils/app_constant.dart';
 import 'package:willizo/core/widgets/app_text_field.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
 import 'package:willizo/features/complete_account_data/step_8/logic/step_8_cubit.dart';
@@ -192,33 +193,11 @@ class Step8Screen extends StatelessWidget {
               //       current is OnRegisterCatchErrorState;
               // },
               listener: (context, state) {
-                // if (state is OnRegisterSuccessState) {
-                //   AppConstant.toast(
-                //     "Register successfully. ",
-                //     AppColors.greenColor,
-                //   );
-                //   if (state.accountStatus == 'pending') {
-                //     ///
-                //     context.pushNamed(Routes.registerDoneScreen);
-                //   } else if (state.accountStatus ==
-                //       'awaiting_verification') {
-                //     context.pushNamed(
-                //       Routes.registerOtpScreen,
-                //       arguments: {
-                //         'email': RegisterCubit.get(
-                //           context,
-                //         ).emailController.text,
-                //       },
-                //     );
-                //   }
-                // } else if (state is OnRegisterErrorState) {
-                //   AppConstant.toast(state.message, AppColors.redColor);
-                // } else if (state is OnRegisterCatchErrorState) {
-                //   AppConstant.toast(
-                //     "Something wrong tray again later!",
-                //     AppColors.redColor,
-                //   );
-                // }
+                if (state is Step8SuccessState) {
+                  context.pushNamed(Routes.step9Screen);
+                } else if (state is Step8ErrorState) {
+                  AppConstant.toast(state.message, AppColors.redColor);
+                }
               },
               builder: (context, state) {
                 return Container(
@@ -230,7 +209,7 @@ class Step8Screen extends StatelessWidget {
                     bottom: 34.h,
                   ),
                   child: ButtonWidget(
-                    isLoading: false,
+                    isLoading: state is Step8LoadingState,
                     borderRadius: 50,
                     buttonHeight: 46.h,
                     buttonText: "Next",
@@ -238,8 +217,7 @@ class Step8Screen extends StatelessWidget {
                     borderColor: AppColors.primaryColor,
                     textStyle: TextStyles.font18blackColorW600,
                     onPressed: () {
-                      context.pushNamed(Routes.step9Screen);
-                      // validateRegister(context);
+                      Step8Cubit.get(context).sendStep();
                     },
                   ),
                 );

@@ -21,7 +21,12 @@ class TextStyles {
     fontWeight: FontWeight.w600,
     fontFamily: 'Lato',
   );
-
+  static TextStyle font14GreyColorW400 = TextStyle(
+    fontSize: 14.sp,
+    color: AppColors.greyColorF7,
+    fontWeight: FontWeight.w400,
+    fontFamily: 'Lato',
+  );
   static TextStyle font16White2ColorW600 = TextStyle(
     fontSize: 16.sp,
     color: AppColors.whiteColor,
@@ -242,6 +247,11 @@ class TextStyles {
   static TextStyle font14W700 = TextStyle(
     fontSize: 14.sp,
     fontWeight: FontWeight.w700,
+    fontFamily: 'Inter',
+  );
+  static TextStyle font14W600 = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w600,
     fontFamily: 'Inter',
   );
 

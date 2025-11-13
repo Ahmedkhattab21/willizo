@@ -286,29 +286,27 @@ class RegisterWidget extends StatelessWidget {
           },
           listener: (context, state) {
             if (state is SignupSuccessState) {
-              AppConstant.toast(
-                "Signup successfully",
-                AppColors.primaryColor,
-              );
-              context.pushNamed(Routes.buttonNavBarWidget);
+              AppConstant.toast("Signup successfully", AppColors.primaryColor);
+              context.pushNamed(Routes.step1Screen);
             } else if (state is SignupFailureState) {
               AppConstant.toast(state.error, AppColors.redColor);
             }
           },
           builder: (context, state) {
             final cubit = LoginAndSignup.get(context);
-            final isEnabled = cubit.isAgreeForTerms && state is! SignupLoadingState;
-            
+            final isEnabled =
+                cubit.isAgreeForTerms && state is! SignupLoadingState;
+
             return ButtonWidget(
               isLoading: state is SignupLoadingState,
               borderRadius: 10,
               buttonHeight: 46.h,
               buttonText: "Sign up",
-              backGroundColor: isEnabled 
-                  ? AppColors.primaryColor 
+              backGroundColor: isEnabled
+                  ? AppColors.primaryColor
                   : AppColors.greyColorColor,
-              borderColor: isEnabled 
-                  ? AppColors.primaryColor 
+              borderColor: isEnabled
+                  ? AppColors.primaryColor
                   : AppColors.greyColorColor,
               textStyle: TextStyles.font18blackColorW600,
               onPressed: isEnabled

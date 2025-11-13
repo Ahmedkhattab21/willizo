@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:willizo/config/routes/routes.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
+import 'package:willizo/core/utils/app_constant.dart';
 import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/extentions.dart';
 import 'package:willizo/core/utils/spacing.dart';
@@ -12,9 +13,6 @@ import 'package:willizo/core/widgets/app_text_field.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
 import 'package:willizo/features/forget_password/logic/forget_password_cubit.dart';
 import 'package:willizo/features/forget_password/logic/forget_password_state.dart';
-import 'package:willizo/features/login_and_signup/ui/widgets/login_widget.dart';
-import 'package:willizo/features/login_and_signup/ui/widgets/register_widget.dart';
-import 'package:willizo/features/login_and_signup/ui/widgets/taps_widget.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
   const ForgetPasswordScreen({super.key});
@@ -145,44 +143,25 @@ class ForgetPasswordScreen extends StatelessWidget {
                 ),
                 verticalSpace(32),
                 BlocConsumer<ForgetPasswordCubit, ForgetPasswordState>(
-                  // buildWhen: (previous, current) {
-                  //   return current is OnRegisterLoadingState ||
-                  //       current is OnRegisterSuccessState ||
-                  //       current is OnRegisterErrorState ||
-                  //       current is OnRegisterCatchErrorState;
-                  // },
                   listener: (context, state) {
-                    // if (state is OnRegisterSuccessState) {
-                    //   AppConstant.toast(
-                    //     "Register successfully. ",
-                    //     AppColors.greenColor,
-                    //   );
-                    //   if (state.accountStatus == 'pending') {
-                    //     ///
-                    //     context.pushNamed(Routes.registerDoneScreen);
-                    //   } else if (state.accountStatus ==
-                    //       'awaiting_verification') {
-                    //     context.pushNamed(
-                    //       Routes.registerOtpScreen,
-                    //       arguments: {
-                    //         'email': RegisterCubit.get(
-                    //           context,
-                    //         ).emailController.text,
-                    //       },
-                    //     );
-                    //   }
-                    // } else if (state is OnRegisterErrorState) {
-                    //   AppConstant.toast(state.message, AppColors.redColor);
-                    // } else if (state is OnRegisterCatchErrorState) {
-                    //   AppConstant.toast(
-                    //     "Something wrong tray again later!",
-                    //     AppColors.redColor,
-                    //   );
-                    // }
+                    if (state is ForgetPasswordSuccessState) {
+                      AppConstant.toast(
+                        "Reset code sent successfully",
+                        AppColors.primaryColor,
+                      );
+                      context.pushNamed(
+                        Routes.forgetPasswordCodeScreen,
+                        arguments: {
+                          'email': ForgetPasswordCubit.get(context).emailController.text,
+                        },
+                      );
+                    } else if (state is ForgetPasswordErrorState) {
+                      AppConstant.toast(state.error, AppColors.redColor);
+                    }
                   },
                   builder: (context, state) {
                     return ButtonWidget(
-                      isLoading: false,
+                      isLoading: state is ForgetPasswordLoadingState,
                       borderRadius: 10,
                       buttonHeight: 46.h,
                       buttonText: "Reset Password",
@@ -190,8 +169,9 @@ class ForgetPasswordScreen extends StatelessWidget {
                       borderColor: AppColors.primaryColor,
                       textStyle: TextStyles.font18blackColorW600,
                       onPressed: () {
-                        context.pushNamed(Routes.forgetPasswordCodeScreen);
-                        // validateRegister(context);
+                        if (ForgetPasswordCubit.get(context).forgetKey.currentState!.validate()) {
+                          ForgetPasswordCubit.get(context).forgetPassword();
+                        }
                       },
                     );
                   },

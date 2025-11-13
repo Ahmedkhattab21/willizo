@@ -10,7 +10,7 @@ class CompleteAccountRepo {
 
   CompleteAccountRepo({required this.completeAccountService});
 
-  Future<Either<Failure, StepsResponseModel>> sendSteps({
+  Future<Either<Failure, StepResponseModel>> sendSteps({
     required StepsRequestModel parameter,
   }) async {
     try {

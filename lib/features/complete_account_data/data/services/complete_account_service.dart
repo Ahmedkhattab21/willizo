@@ -15,7 +15,7 @@ class CompleteAccountService {
 
   CompleteAccountService({required this.apiConsumer});
 
-  Future<StepsResponseModel> sendSteps({
+  Future<StepResponseModel> sendSteps({
     required StepsRequestModel parameter,
   }) async {
     final response = await apiConsumer.post(
@@ -28,7 +28,7 @@ class CompleteAccountService {
     );
     if (response.statusCode == StatusCode.ok ||
         response.statusCode == StatusCode.created) {
-      return StepsResponseModel.fromJson(jsonDecode(response.body));
+      return StepResponseModel.fromJson(jsonDecode(response.body));
     } else {
       throw ServerException(
         serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
