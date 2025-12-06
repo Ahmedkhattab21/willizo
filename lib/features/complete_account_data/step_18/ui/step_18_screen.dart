@@ -265,7 +265,12 @@ class _Step18ScreenState extends State<Step18Screen> {
                     borderColor: AppColors.primaryColor,
                     textStyle: TextStyles.font18blackColorW600,
                     onPressed: () {
-                      Step18Cubit.get(context).sendStep();
+                      final cubit = Step18Cubit.get(context);
+                      if (cubit.isValid) {
+                        cubit.sendStep();
+                      } else {
+                        AppConstant.toast("Please select at least one gym equipment", AppColors.redColor);
+                      }
                     },
                   ),
                 );

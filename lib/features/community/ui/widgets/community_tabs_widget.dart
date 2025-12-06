@@ -6,7 +6,7 @@ import 'package:willizo/core/utils/styles.dart';
 class CommunityTabs extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onTabSelected;
-  final List<String> tabs = const ["Leaderboards", "Challenges"];
+  final List<String> tabs = const ["Leaderboards", "Leagues", "Friends"];
 
   const CommunityTabs({
     super.key,

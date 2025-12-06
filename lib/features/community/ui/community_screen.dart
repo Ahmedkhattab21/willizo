@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/features/all_excercises/ui/all_excersies_screen.dart';
-import 'package:willizo/features/community/ui/widgets/challenges_body_widget.dart';
 import 'package:willizo/features/community/ui/widgets/community_tabs_widget.dart';
+import 'package:willizo/features/community/ui/widgets/create_invitational_league_widget.dart';
+import 'package:willizo/features/community/ui/widgets/create_league_form_widget.dart';
 import 'package:willizo/features/community/ui/widgets/custom_header_widget.dart';
+import 'package:willizo/features/community/ui/widgets/join_invitational_league_widget.dart';
 import 'package:willizo/features/community/ui/widgets/leaderboard_body_widget.dart';
+import 'package:willizo/features/community/ui/widgets/leagues_body_widget.dart';
 import 'package:willizo/features/push_ups_leaderboard/ui/puhs_ups_leaderboard_screen.dart';
 import 'package:willizo/features/top_friends/ui/top_friends_screen.dart';
 
@@ -17,13 +20,14 @@ class CommunityScreen extends StatefulWidget {
 }
 
 class CommunityScreenState extends State<CommunityScreen> {
-  int selectedIndex = 0;
+  int selectedIndex = 1; // Default to Leagues tab
 
   bool showTopFriends = false;
   bool showPushupsLeaderboard = false;
   bool showExercises = false;
-
-  final List<Widget> tabBodies = const [LeaderboardBody(), ChallengesBody()];
+  bool showJoinInvitationalLeague = false;
+  bool showCreateLeague = false;
+  bool showCreateLeagueForm = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +44,10 @@ class CommunityScreenState extends State<CommunityScreen> {
                 onTabSelected: (index) {
                   setState(() {
                     selectedIndex = index;
+                    // Reset nested navigation states when switching tabs
+                    showJoinInvitationalLeague = false;
+                    showCreateLeague = false;
+                    showCreateLeagueForm = false;
                   });
                 },
               ),
@@ -49,17 +57,8 @@ class CommunityScreenState extends State<CommunityScreen> {
                 width: double.infinity,
               ),
               verticalSpace(16),
-              Expanded(
-                child: LeaderboardBody(
-                  onViewAllPressed: () {
-                    setState(() {
-                      showExercises = true;
-                    });
-                  },
-                ),
-              ),
-            ]
-            else if (showTopFriends) ...[
+              Expanded(child: _buildTabContent()),
+            ] else if (showTopFriends) ...[
               CustomHeader(
                 title: "Top Friends",
                 onBack: () {
@@ -94,5 +93,50 @@ class CommunityScreenState extends State<CommunityScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildTabContent() {
+    switch (selectedIndex) {
+      case 0:
+        return LeaderboardBody(
+          onViewAllPressed: () {
+            setState(() {
+              showExercises = true;
+            });
+          },
+        );
+      case 1:
+        if (showJoinInvitationalLeague) {
+          return const JoinInvitationalLeagueWidget();
+        }
+        if (showCreateLeagueForm) {
+          return const CreateLeagueFormWidget();
+        }
+        if (showCreateLeague) {
+          return CreateInvitationalLeagueWidget(
+            onCreateLeague: () {
+              setState(() {
+                showCreateLeagueForm = true;
+              });
+            },
+          );
+        }
+        return LeaguesBody(
+          onJoinInvitationalLeague: () {
+            setState(() {
+              showJoinInvitationalLeague = true;
+            });
+          },
+          onJoinGeneralLeague: () {
+            setState(() {
+              showCreateLeague = true;
+            });
+          },
+        );
+      case 2:
+        return const TopFriendsScreen();
+      default:
+        return const SizedBox.shrink();
+    }
   }
 }

@@ -263,7 +263,12 @@ class _Step19ScreenState extends State<Step19Screen> {
                     borderColor: AppColors.primaryColor,
                     textStyle: TextStyles.font18blackColorW600,
                     onPressed: () {
-                      Step19Cubit.get(context).sendStep();
+                      final cubit = Step19Cubit.get(context);
+                      if (cubit.isValid) {
+                        cubit.sendStep();
+                      } else {
+                        AppConstant.toast("Please select at least one free weight", AppColors.redColor);
+                      }
                     },
                   ),
                 );

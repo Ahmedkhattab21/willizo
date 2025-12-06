@@ -10,25 +10,26 @@ import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/core/widgets/app_text_field.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
+import 'package:willizo/core/utils/app_constant.dart';
 import 'package:willizo/features/create_new_password/logic/create_new_password_cubit.dart';
 import 'package:willizo/features/create_new_password/logic/create_new_password_state.dart';
-import 'package:willizo/features/login_and_signup/logic/login_and_signup_cubit.dart';
-import 'package:willizo/features/login_and_signup/logic/login_and_signup_state.dart';
-import 'package:willizo/features/login_and_signup/ui/widgets/login_widget.dart';
-import 'package:willizo/features/login_and_signup/ui/widgets/register_widget.dart';
-import 'package:willizo/features/login_and_signup/ui/widgets/taps_widget.dart';
 
 class CreateNewPasswordScreen extends StatelessWidget {
-  const CreateNewPasswordScreen({super.key});
+  final String? email;
+  const CreateNewPasswordScreen({super.key, this.email});
 
   @override
   Widget build(BuildContext context) {
+    final cubit = CreateNewPasswordCubit.get(context);
+    if (email != null && cubit.emailController.text.isEmpty) {
+      cubit.emailController.text = email!;
+    }
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Form(
-            key: CreateNewPasswordCubit.get(context).createPasswordKey,
+            key: cubit.createPasswordKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -94,6 +95,92 @@ class CreateNewPasswordScreen extends StatelessWidget {
                 ),
                 verticalSpace(32),
                 AppTextFormField(
+                  hintText: "OTP Code",
+                  hintStyle: TextStyles.font14greyColorColorW400,
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 12.h,
+                    horizontal: 20.w,
+                  ),
+                  textStyle: TextStyles.font14whiteColorColorW400,
+                  controller: cubit.otpController,
+                  backgroundColor: AppColors.blackColor,
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: AppColors.primaryColor,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: AppColors.primaryColor,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.redColor, width: 2),
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.redColor, width: 2),
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return "Enter OTP Code";
+                    }
+                    return null;
+                  },
+                  keyboardType: TextInputType.number,
+                ),
+                verticalSpace(16),
+                AppTextFormField(
+                  hintText: "Email",
+                  hintStyle: TextStyles.font14greyColorColorW400,
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 12.h,
+                    horizontal: 20.w,
+                  ),
+                  textStyle: TextStyles.font14whiteColorColorW400,
+                  controller: cubit.emailController,
+                  isEnable: email != null ? false : true,
+                  backgroundColor: AppColors.blackColor,
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: AppColors.primaryColor,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: AppColors.primaryColor,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.redColor, width: 2),
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.redColor, width: 2),
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return "Enter Email";
+                    }
+                    if (!value.contains('@') || !value.contains('.')) {
+                      return "Enter Valid Email";
+                    }
+                    return null;
+                  },
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                verticalSpace(16),
+                AppTextFormField(
                   hintText: "Password",
                   hintStyle: TextStyles.font14greyColorColorW400,
                   contentPadding: EdgeInsets.symmetric(
@@ -101,7 +188,7 @@ class CreateNewPasswordScreen extends StatelessWidget {
                     horizontal: 20.w,
                   ),
                   textStyle: TextStyles.font14whiteColorColorW400,
-                  controller: CreateNewPasswordCubit.get(context).passwordController,
+                  controller: cubit.passwordController,
                   prefixIcon: Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: 10.w,
@@ -134,13 +221,17 @@ class CreateNewPasswordScreen extends StatelessWidget {
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return "Enter Value";
+                      return "Enter Password";
+                    }
+                    if (value.length < 6) {
+                      return "Password must be at least 6 characters";
                     }
                     return null;
                   },
                   keyboardType: TextInputType.visiblePassword,
+                  isObscureText: true,
                 ),
-                verticalSpace(32),
+                verticalSpace(16),
                 AppTextFormField(
                   hintText: "Confirm Password",
                   hintStyle: TextStyles.font14greyColorColorW400,
@@ -149,7 +240,7 @@ class CreateNewPasswordScreen extends StatelessWidget {
                     horizontal: 20.w,
                   ),
                   textStyle: TextStyles.font14whiteColorColorW400,
-                  controller: CreateNewPasswordCubit.get(context).confirmForgetPasswordController,
+                  controller: cubit.confirmForgetPasswordController,
                   prefixIcon: Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: 10.w,
@@ -182,52 +273,32 @@ class CreateNewPasswordScreen extends StatelessWidget {
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return "Enter Value";
+                      return "Enter Confirm Password";
+                    }
+                    if (value != cubit.passwordController.text) {
+                      return "Passwords do not match";
                     }
                     return null;
                   },
                   keyboardType: TextInputType.visiblePassword,
+                  isObscureText: true,
                 ),
                 verticalSpace(32),
                 BlocConsumer<CreateNewPasswordCubit, CreateNewPasswordState>(
-                  // buildWhen: (previous, current) {
-                  //   return current is OnRegisterLoadingState ||
-                  //       current is OnRegisterSuccessState ||
-                  //       current is OnRegisterErrorState ||
-                  //       current is OnRegisterCatchErrorState;
-                  // },
                   listener: (context, state) {
-                    // if (state is OnRegisterSuccessState) {
-                    //   AppConstant.toast(
-                    //     "Register successfully. ",
-                    //     AppColors.greenColor,
-                    //   );
-                    //   if (state.accountStatus == 'pending') {
-                    //     ///
-                    //     context.pushNamed(Routes.registerDoneScreen);
-                    //   } else if (state.accountStatus ==
-                    //       'awaiting_verification') {
-                    //     context.pushNamed(
-                    //       Routes.registerOtpScreen,
-                    //       arguments: {
-                    //         'email': RegisterCubit.get(
-                    //           context,
-                    //         ).emailController.text,
-                    //       },
-                    //     );
-                    //   }
-                    // } else if (state is OnRegisterErrorState) {
-                    //   AppConstant.toast(state.message, AppColors.redColor);
-                    // } else if (state is OnRegisterCatchErrorState) {
-                    //   AppConstant.toast(
-                    //     "Something wrong tray again later!",
-                    //     AppColors.redColor,
-                    //   );
-                    // }
+                    if (state is CreateNewPasswordSuccessState) {
+                      AppConstant.toast(
+                        "Password reset successfully",
+                        AppColors.primaryColor,
+                      );
+                      context.pushNamed(Routes.createNewPasswordDoneScreen);
+                    } else if (state is CreateNewPasswordErrorState) {
+                      AppConstant.toast(state.error, AppColors.redColor);
+                    }
                   },
                   builder: (context, state) {
                     return ButtonWidget(
-                      isLoading: false,
+                      isLoading: state is CreateNewPasswordLoadingState,
                       borderRadius: 10,
                       buttonHeight: 46.h,
                       buttonText: "Reset Password",
@@ -235,8 +306,9 @@ class CreateNewPasswordScreen extends StatelessWidget {
                       borderColor: AppColors.primaryColor,
                       textStyle: TextStyles.font18blackColorW600,
                       onPressed: () {
-                        context.pushNamed(Routes.createNewPasswordDoneScreen);
-                        // validateRegister(context);
+                        if (cubit.createPasswordKey.currentState!.validate()) {
+                          cubit.resetPassword();
+                        }
                       },
                     );
                   },

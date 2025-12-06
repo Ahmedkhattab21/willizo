@@ -150,7 +150,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                         AppColors.primaryColor,
                       );
                       context.pushNamed(
-                        Routes.forgetPasswordCodeScreen,
+                        Routes.createNewPasswordScreen,
                         arguments: {
                           'email': ForgetPasswordCubit.get(context).emailController.text,
                         },

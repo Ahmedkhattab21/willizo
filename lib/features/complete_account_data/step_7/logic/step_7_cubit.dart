@@ -43,6 +43,10 @@ class Step7Cubit extends Cubit<Step7State> {
     return selectedItems.any((item) => item.id == value.id);
   }
 
+  bool get isValid {
+    return selectedItems.isNotEmpty;
+  }
+
   Future<void> sendStep() async {
     emit(Step7LoadingState());
     final primaryGoal = selectedItems.map((item) => item.name).toList();

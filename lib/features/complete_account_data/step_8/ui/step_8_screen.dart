@@ -217,7 +217,12 @@ class Step8Screen extends StatelessWidget {
                     borderColor: AppColors.primaryColor,
                     textStyle: TextStyles.font18blackColorW600,
                     onPressed: () {
-                      Step8Cubit.get(context).sendStep();
+                      final cubit = Step8Cubit.get(context);
+                      if (cubit.isValid) {
+                        cubit.sendStep();
+                      } else {
+                        AppConstant.toast("Please select at least one day", AppColors.redColor);
+                      }
                     },
                   ),
                 );

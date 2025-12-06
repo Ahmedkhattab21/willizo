@@ -58,6 +58,10 @@ class Step19Cubit extends Cubit<Step19State> {
            selectedWeights.length == freeWeights.length;
   }
 
+  bool get isValid {
+    return selectedWeights.isNotEmpty;
+  }
+
   Future<void> sendStep() async {
     emit(Step19LoadingState());
     final weightIds = selectedWeights.map((e) => e.id).toList();

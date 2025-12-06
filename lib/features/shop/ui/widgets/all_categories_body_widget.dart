@@ -9,8 +9,8 @@ class AllCategoriesBodyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
       shrinkWrap: true,
-      physics: const BouncingScrollPhysics(),
-      itemCount: 6,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: 4,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 12.w,

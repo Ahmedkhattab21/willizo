@@ -2,6 +2,7 @@ import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../utils/app_colors_white_theme.dart';
 
@@ -19,6 +20,11 @@ class ButtonWidget extends StatelessWidget {
   final double? buttonHeight;
   final String buttonText;
   final IconData? icon;
+  final IconData? leadingIcon;
+
+  final String? leadingSvg; // SVG قبل النص
+  final String? svgIcon; // SVG بعد النص
+
   final TextStyle textStyle;
   final VoidCallback? onPressed;
 
@@ -36,6 +42,9 @@ class ButtonWidget extends StatelessWidget {
     this.buttonHeight,
     this.buttonWidth,
     this.icon,
+    this.leadingIcon,
+    this.leadingSvg,
+    this.svgIcon,
     required this.buttonText,
     required this.textStyle,
     required this.onPressed,
@@ -61,20 +70,46 @@ class ButtonWidget extends StatelessWidget {
             width: borderWidth ?? 0,
           ),
         ),
-        child: isLoading == true
+        child: isLoading
             ? LoadingWidget(color: fourGroundColor ?? AppColors.whiteColor)
-            : (icon == null
-                  ? Text(buttonText, style: textStyle)
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(buttonText, style: textStyle),
-                        horizontalSpace(5),
-                        Icon(icon, color: iconColor, size: 18.r),
-                      ],
-                    )),
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (leadingSvg != null) ...[
+                    SvgPicture.asset(leadingSvg!, width: 18.r, height: 18.r),
+                    horizontalSpace(10),
+                  ],
+                  if (leadingIcon != null && leadingSvg == null) ...[
+                    Icon(
+                      leadingIcon,
+                      color: iconColor ?? AppColors.whiteColor,
+                      size: 18.r,
+                    ),
+                    horizontalSpace(6),
+                  ],
+
+                  /// ----------- Text ----------
+                  Text(buttonText, style: textStyle),
+
+                  /// ----------- trailing SVG ----------
+                  if (svgIcon != null) ...[
+                    horizontalSpace(6),
+                    SvgPicture.asset(
+                      svgIcon!,
+                      width: 18.r,
+                      height: 18.r,
+                      color: iconColor,
+                    ),
+                  ],
+
+                  if (icon != null && svgIcon == null) ...[
+                    horizontalSpace(6),
+                    Icon(icon, color: iconColor, size: 18.r),
+                  ],
+                ],
+              ),
       ),
-      // ),
     );
   }
 }

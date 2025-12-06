@@ -1,6 +1,5 @@
 import 'package:willizo/config/routes/routes.dart';
 import 'package:willizo/config/themes/app_black_theme.dart';
-import 'package:willizo/core/theme/app_theme.dart';
 import 'package:willizo/core/widgets/offline_alert_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -29,11 +28,13 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _listenToNetwork() {
+    
     // MyConnectivity.myStream.listen((event) {
     //   if (!MyConnectivity.isOnline()) {
     //     _showOfflineDialog();
     //   }
     // });
+  
   }
 
   void _showOfflineDialog() {
@@ -61,6 +62,8 @@ class _MyAppState extends State<MyApp> {
             title: "willizo",
             theme: blackThemeData(),
             initialRoute: widget.navigateWidget,
+
+            // Routes.subscribeScreen,
             onGenerateRoute: RouteGenerator.generateRoute,
           ),
         );

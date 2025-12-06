@@ -43,6 +43,10 @@ class Step8Cubit extends Cubit<Step8State> {
     return selectedItems.any((item) => item.id == value.id);
   }
 
+  bool get isValid {
+    return selectedItems.isNotEmpty;
+  }
+
   Future<void> sendStep() async {
     emit(Step8LoadingState());
     final days = selectedItems.map((item) => item.name).toList();

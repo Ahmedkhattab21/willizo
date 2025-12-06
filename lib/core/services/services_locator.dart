@@ -12,8 +12,18 @@ import 'package:willizo/features/login_and_signup/data/repo/login_and_signup_rep
 import 'package:willizo/features/login_and_signup/data/services/login_and_signup_service.dart';
 import 'package:willizo/features/forget_password/data/repo/forget_password_repo.dart';
 import 'package:willizo/features/forget_password/data/services/forget_password_service.dart';
+import 'package:willizo/features/create_new_password/data/repo/reset_password_repo.dart';
+import 'package:willizo/features/create_new_password/data/services/reset_password_service.dart';
 import 'package:willizo/features/complete_account_data/data/repo/complete_account_repo.dart';
 import 'package:willizo/features/complete_account_data/data/services/complete_account_service.dart';
+import 'package:willizo/features/account/data/repo/account_repo.dart';
+import 'package:willizo/features/account/data/services/account_services.dart';
+import 'package:willizo/features/all_products/data/repo/all_products_repo.dart';
+import 'package:willizo/features/all_products/data/services/all_products_service.dart';
+import 'package:willizo/features/product_details/data/repo/product_details_repo.dart';
+import 'package:willizo/features/product_details/data/services/product_details_service.dart';
+import 'package:willizo/features/shop/data/repo/shop_repo.dart';
+import 'package:willizo/features/shop/data/services/shop_service.dart';
 
 import '../api/api_consumer.dart';
 import '../api/app_interceptor.dart';
@@ -37,11 +47,42 @@ class ServicesLocator {
       () => ForgetPasswordService(apiConsumer: getIt()),
     );
 
+    getIt.registerLazySingleton<ResetPasswordRepo>(
+      () => ResetPasswordRepo(getIt()),
+    );
+    getIt.registerLazySingleton<ResetPasswordService>(
+      () => ResetPasswordService(apiConsumer: getIt()),
+    );
+
     getIt.registerLazySingleton<CompleteAccountRepo>(
       () => CompleteAccountRepo(completeAccountService: getIt()),
     );
     getIt.registerLazySingleton<CompleteAccountService>(
       () => CompleteAccountService(apiConsumer: getIt()),
+    );
+
+    getIt.registerLazySingleton<AccountRepo>(() => AccountRepo(getIt()));
+    getIt.registerLazySingleton<AccountService>(
+      () => AccountService(apiConsumer: getIt()),
+    );
+
+    getIt.registerLazySingleton<ShopRepo>(() => ShopRepo(getIt()));
+    getIt.registerLazySingleton<ShopService>(
+      () => ShopService(apiConsumer: getIt()),
+    );
+
+    getIt.registerLazySingleton<AllProductsRepo>(
+      () => AllProductsRepo(getIt()),
+    );
+    getIt.registerLazySingleton<AllProductsService>(
+      () => AllProductsService(apiConsumer: getIt()),
+    );
+
+    getIt.registerLazySingleton<ProductDetailsRepo>(
+      () => ProductDetailsRepo(getIt()),
+    );
+    getIt.registerLazySingleton<ProductDetailsService>(
+      () => ProductDetailsService(apiConsumer: getIt()),
     );
 
     ///core

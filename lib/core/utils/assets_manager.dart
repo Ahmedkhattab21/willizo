@@ -64,4 +64,22 @@ class ImageAsset {
   static const String overheadPressIcon = "assets/svgs/overhead_press.svg";
   static const String selectIcon = "assets/icons/select_icon.svg";
   static const String selectAllIcon = "assets/icons/select_all_icon.svg";
+  static const String cartIcon = "assets/icons/cart_icon.svg";
+  static const String sharetIcon = "assets/icons/share.svg";
+  static const String heartIcon = "assets/icons/heart.svg";
+  static const String shippingCar = "assets/icons/shipping_car_icon.svg";
+  static const String returnIcon = "assets/icons/return_icon.svg";
+  static const String appLogoIcon = "assets/icons/app_logo_icon.svg";
+  static const String facebookIconFill = "assets/icons/facebook_icon_fill.svg";
+  static const String sendIcon = "assets/icons/send_icon.svg";
+  static const String visaIcon = "assets/icons/visa_icon.svg";
+  static const String safetyIcon = "assets/icons/safety_icon.svg";
+  static const String customerServiceIcon =
+      "assets/icons/customer_service_icon.svg";
+  static const String blueReturnIcon = "assets/icons/blue_return_icon.svg";
+  static const String confirmationIcon = "assets/icons/confirmation_icon.svg";
+  static const String enterIcon = "assets/icons/enter_icon.svg";
+  static const String detailsIcon = "assets/icons/details_icon.svg";
+  static const String checkCircleIcon = "assets/icons/check_circle_icon.svg";
+  static const String cancelCircleIcon = "assets/icons/cancel_circle_icon.svg";
 }

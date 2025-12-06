@@ -1,59 +1,65 @@
 class AccountResponseModel {
-  final bool status;
   final String message;
-  final AccountData? data;
+  final AccountData data;
 
   AccountResponseModel({
-    required this.status,
     required this.message,
-    this.data,
+    required this.data,
   });
 
   factory AccountResponseModel.fromJson(Map<String, dynamic> json) {
     return AccountResponseModel(
-      status: json['status'] ?? false,
-      message: json['message'] ?? '',
-      data: json['data'] != null ? AccountData.fromJson(json['data']) : null,
+      message: json['message'] ?? "",
+      data: AccountData.fromJson(json['data'] ?? {}),
     );
   }
 }
 
 class AccountData {
-  final int id;
-  final String name;
+  final String id;
   final String email;
-  final String phone;
-  final String image;
-  final String createdAt;
+  final String name;
+  final String phoneNumber;
+  final String dateOfBirth;
+  final Onboarding onboarding;
 
   AccountData({
     required this.id,
-    required this.name,
     required this.email,
-    required this.phone,
-    required this.image,
-    required this.createdAt,
+    required this.name,
+    required this.phoneNumber,
+    required this.dateOfBirth,
+    required this.onboarding,
   });
 
   factory AccountData.fromJson(Map<String, dynamic> json) {
     return AccountData(
-      id: json['id'] ?? 0,
-      name: json['name'] ?? '',
-      email: json['email'] ?? '',
-      phone: json['phone'] ?? '',
-      image: json['image'] ?? '',
-      createdAt: json['created_at'] ?? '',
+      id: json['id'] ?? "",
+      email: json['email'] ?? "",
+      name: json['name'] ?? "",
+      phoneNumber: json['phone_number'] ?? "",
+      dateOfBirth: json['date_of_birth'] ?? "",
+      onboarding: Onboarding.fromJson(json['onboarding'] ?? {}),
     );
   }
+}
 
-  Map<String, dynamic> toJson() {
-    return {
-      "id": id,
-      "name": name,
-      "email": email,
-      "phone": phone,
-      "image": image,
-      "created_at": createdAt,
-    };
+class Onboarding {
+  final int step;
+  final bool isCompleted;
+  final int progressPercentage;
+
+  Onboarding({
+    required this.step,
+    required this.isCompleted,
+    required this.progressPercentage,
+  });
+
+  factory Onboarding.fromJson(Map<String, dynamic> json) {
+    return Onboarding(
+      step: json['step'] ?? 0,
+      isCompleted: json['is_completed'] ?? false,
+      progressPercentage: json['progress_percentage'] ?? 0,
+    );
   }
 }

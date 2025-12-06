@@ -257,9 +257,7 @@ class Step16Screen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.r),
                 ),
                 validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return "Enter Value";
-                  }
+                  // Description field is optional, so no validation needed
                   return null;
                 },
                 keyboardType: TextInputType.number,

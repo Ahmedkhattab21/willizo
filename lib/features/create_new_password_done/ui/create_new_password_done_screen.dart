@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
@@ -7,12 +6,8 @@ import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/extentions.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
+import 'package:willizo/config/routes/routes.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
-import 'package:willizo/features/login_and_signup/logic/login_and_signup_cubit.dart';
-import 'package:willizo/features/login_and_signup/logic/login_and_signup_state.dart';
-import 'package:willizo/features/login_and_signup/ui/widgets/login_widget.dart';
-import 'package:willizo/features/login_and_signup/ui/widgets/register_widget.dart';
-import 'package:willizo/features/login_and_signup/ui/widgets/taps_widget.dart';
 
 class CreateNewPasswordDoneScreen extends StatelessWidget {
   const CreateNewPasswordDoneScreen({super.key});
@@ -73,11 +68,10 @@ class CreateNewPasswordDoneScreen extends StatelessWidget {
                 borderColor: AppColors.primaryColor,
                 textStyle: TextStyles.font18blackColorW600,
                 onPressed: () {
-                  context.pop();
-                  context.pop();
-                  context.pop();
-                  context.pop();
-                  context.pop();
+                  context.pushNamedAndRemoveUntil(
+                    Routes.signInScreen,
+                    predicate: (route) => false,
+                  );
                 },
               ),
             ],

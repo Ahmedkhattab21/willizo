@@ -5,7 +5,14 @@ import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 
 class ProfileHeader extends StatelessWidget {
-  const ProfileHeader({super.key});
+  final String name;
+  final String email;
+
+  const ProfileHeader({
+    super.key,
+    required this.name,
+    required this.email,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +47,12 @@ class ProfileHeader extends StatelessWidget {
         ),
         verticalSpace(12),
         Text(
-          'Mohamed Seyam',
+          name,
           style: TextStyles.font22WhiteColorW600.copyWith(fontSize: 18.sp),
         ),
         verticalSpace(6),
         Text(
-          'mh16998866@gmail.com',
+          email,
           style: TextStyles.font14whiteColorColorW400.copyWith(fontSize: 10.sp),
         ),
       ],

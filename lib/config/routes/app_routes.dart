@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:willizo/config/routes/routes.dart';
 import 'package:willizo/core/services/services_locator.dart';
+import 'package:willizo/features/billing/ui/billing_screen.dart';
+import 'package:willizo/features/cart/ui/cart_screen.dart';
 import 'package:willizo/features/complete_account_data/data/repo/complete_account_repo.dart';
 import 'package:willizo/features/complete_account_data/step_18/data/repo/step18_repo.dart';
 import 'package:willizo/features/complete_account_data/step_19/data/repo/step19_repo.dart';
@@ -50,6 +52,7 @@ import 'package:willizo/features/complete_account_data/step_8/logic/step_8_cubit
 import 'package:willizo/features/complete_account_data/step_8/ui/step_8_screen.dart';
 import 'package:willizo/features/complete_account_data/step_9/logic/step_9_cubit.dart';
 import 'package:willizo/features/complete_account_data/step_9/ui/step_9_screen.dart';
+import 'package:willizo/features/create_new_password/data/repo/reset_password_repo.dart';
 import 'package:willizo/features/create_new_password/logic/create_new_password_cubit.dart';
 import 'package:willizo/features/create_new_password/ui/create_new_password_screen.dart';
 import 'package:willizo/features/create_new_password_done/ui/create_new_password_done_screen.dart';
@@ -59,12 +62,18 @@ import 'package:willizo/features/forget_password_code/logic/forget_password_code
 import 'package:willizo/features/forget_password_code/ui/forget_password_code_screen.dart';
 import 'package:willizo/features/forget_password_done/logic/forget_password_done_cubit.dart';
 import 'package:willizo/features/forget_password_done/ui/forget_password_done_screen.dart';
+import 'package:willizo/features/my_favourite/ui/my_favourtie_screen.dart';
+import 'package:willizo/features/my_order/ui/my_order_screen.dart';
 import 'package:willizo/features/notificatoin/ui/notification_screen.dart';
 import 'package:willizo/features/onboarding/logic/onboarding_cubit.dart';
 import 'package:willizo/features/onboarding/ui/onboarding_screen.dart';
 import 'package:willizo/features/login_and_signup/logic/login_and_signup_cubit.dart';
 import 'package:willizo/features/login_and_signup/ui/sign_in_screen.dart';
+import 'package:willizo/features/order_details/ui/order_details_screen.dart';
+import 'package:willizo/features/plan_details/ui/plan_details_screen.dart';
+import 'package:willizo/features/product_details/ui/product_details_screen.dart';
 import 'package:willizo/features/splash/ui/splash_video_screen.dart';
+import 'package:willizo/features/subscrip/ui/subscribe_screen.dart';
 import 'package:willizo/features/top_friends/ui/top_friends_screen.dart';
 
 class RouteGenerator {
@@ -113,8 +122,11 @@ class RouteGenerator {
       case Routes.createNewPasswordScreen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => CreateNewPasswordCubit(),
-            child: CreateNewPasswordScreen(),
+            create: (context) =>
+                CreateNewPasswordCubit(getIt<ResetPasswordRepo>()),
+            child: CreateNewPasswordScreen(
+              email: args != null ? args['email'] : null,
+            ),
           ),
         );
       case Routes.createNewPasswordDoneScreen:
@@ -245,21 +257,24 @@ class RouteGenerator {
       case Routes.step18Screen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => Step18Cubit(getIt<Step18Repo>(), getIt<CompleteAccountRepo>()),
+            create: (context) =>
+                Step18Cubit(getIt<Step18Repo>(), getIt<CompleteAccountRepo>()),
             child: Step18Screen(),
           ),
         );
       case Routes.step19Screen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => Step19Cubit(getIt<Step19Repo>(), getIt<CompleteAccountRepo>()),
+            create: (context) =>
+                Step19Cubit(getIt<Step19Repo>(), getIt<CompleteAccountRepo>()),
             child: Step19Screen(),
           ),
         );
       case Routes.step20Screen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => Step20Cubit(getIt<Step20Repo>(), getIt<CompleteAccountRepo>()),
+            create: (context) =>
+                Step20Cubit(getIt<Step20Repo>(), getIt<CompleteAccountRepo>()),
             child: Step20Screen(),
           ),
         );
@@ -292,9 +307,29 @@ class RouteGenerator {
       //       child: LoginScreen(),
       //     ),
       //   );
+      case Routes.productDetailsScreen:
+        return MaterialPageRoute(
+          builder: (_) => ProductDetailsScreen(
+            product: args != null ? args['product'] : null,
+          ),
+        );
 
+      case Routes.cartScreen:
+        return MaterialPageRoute(builder: (_) => const CartScreen());
+      case Routes.myFavouriteScreen:
+        return MaterialPageRoute(builder: (_) => const MyFavouriteScreen());
       // case Routes.chatScreen:
       //   return MaterialPageRoute(builder: (_) => AllChatsScreen());
+      case Routes.myOrderScreen:
+        return MaterialPageRoute(builder: (_) => const MyOrderScreen());
+      case Routes.myOrderDetailsScreen:
+        return MaterialPageRoute(builder: (_) => const MyOrderDetailsScreen());
+      case Routes.subscribeScreen:
+        return MaterialPageRoute(builder: (_) => const SubscribeScreen());
+      case Routes.billingScreen:
+        return MaterialPageRoute(builder: (_) => const BillingScreen());
+      case Routes.planDetailsScreen:
+        return MaterialPageRoute(builder: (_) => const PlanDetailsScreen());
       default:
         return null;
     }

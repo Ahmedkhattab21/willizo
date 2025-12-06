@@ -56,6 +56,13 @@ class LoginAndSignup extends Cubit<LoginAndSignupState> {
                   r.data!.tokens!.accessToken!,
                 );
               }
+              // Save refresh token to SharedPreferences
+              if (r.data?.tokens?.refreshToken != null) {
+                await CacheHelper.setSecuredString(
+                  ConstantKeys.saveRefreshTokenToShared,
+                  r.data!.tokens!.refreshToken!,
+                );
+              }
               // Save user name if available
               if (r.data?.user?.fullName != null) {
                 await CacheHelper.setSecuredString(
@@ -103,14 +110,18 @@ class LoginAndSignup extends Cubit<LoginAndSignupState> {
               emit(SignupFailureState(l.message));
             },
             (r) async {
-              // Save token to SharedPreferences
               if (r.data?.tokens?.accessToken != null) {
                 await CacheHelper.setSecuredString(
                   ConstantKeys.saveTokenToShared,
                   r.data!.tokens!.accessToken!,
                 );
               }
-              // Save user name if available
+              if (r.data?.tokens?.refreshToken != null) {
+                await CacheHelper.setSecuredString(
+                  ConstantKeys.saveRefreshTokenToShared,
+                  r.data!.tokens!.refreshToken!,
+                );
+              }
               if (r.data?.user?.fullName != null) {
                 await CacheHelper.setSecuredString(
                   ConstantKeys.saveNameToShared,

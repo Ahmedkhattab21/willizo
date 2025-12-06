@@ -6,7 +6,11 @@ final class AccountInitial extends AccountState {}
 
 final class FetchAccountLoadingState extends AccountState {}
 
-final class FetchAccountLoadedState extends AccountState {}
+final class FetchAccountLoadedState extends AccountState {
+  final AccountResponseModel accountData;
+
+  FetchAccountLoadedState({required this.accountData});
+}
 
 final class FetchAccountErrorState extends AccountState {
   final String message;

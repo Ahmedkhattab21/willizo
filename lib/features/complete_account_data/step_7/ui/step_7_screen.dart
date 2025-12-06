@@ -221,7 +221,12 @@ class Step7Screen extends StatelessWidget {
                     borderColor: AppColors.primaryColor,
                     textStyle: TextStyles.font18blackColorW600,
                     onPressed: () {
-                      Step7Cubit.get(context).sendStep();
+                      final cubit = Step7Cubit.get(context);
+                      if (cubit.isValid) {
+                        cubit.sendStep();
+                      } else {
+                        AppConstant.toast("Please select at least one goal", AppColors.redColor);
+                      }
                     },
                   ),
                 );

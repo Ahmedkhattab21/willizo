@@ -263,7 +263,12 @@ class _Step20ScreenState extends State<Step20Screen> {
                     borderColor: AppColors.primaryColor,
                     textStyle: TextStyles.font18blackColorW600,
                     onPressed: () {
-                      Step20Cubit.get(context).sendStep();
+                      final cubit = Step20Cubit.get(context);
+                      if (cubit.isValid) {
+                        cubit.sendStep();
+                      } else {
+                        AppConstant.toast("Please select at least one supportive tool", AppColors.redColor);
+                      }
                     },
                   ),
                 );

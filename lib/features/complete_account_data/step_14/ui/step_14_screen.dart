@@ -329,7 +329,12 @@ class Step14Screen extends StatelessWidget {
                     borderColor: AppColors.primaryColor,
                     textStyle: TextStyles.font18blackColorW600,
                     onPressed: () {
-                      Step14Cubit.get(context).sendStep();
+                      final cubit = Step14Cubit.get(context);
+                      if (cubit.isValid) {
+                        cubit.sendStep();
+                      } else {
+                        AppConstant.toast("Please select at least one dietary option", AppColors.redColor);
+                      }
                     },
                   ),
                 );

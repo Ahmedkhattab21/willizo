@@ -57,6 +57,15 @@ class Step14Cubit extends Cubit<Step14State> {
     return selectedItems.any((item) => item.id == value.id);
   }
 
+  bool get isValid {
+    // If "Yes" is selected, at least one diet item must be selected
+    if (selectedWeightId == 1) {
+      return selectedItems.isNotEmpty;
+    }
+    // If "No" is selected, validation passes
+    return true;
+  }
+
   Future<void> sendStep() async {
     emit(Step14LoadingState());
     final hasDietry = selectedWeightId == 1;

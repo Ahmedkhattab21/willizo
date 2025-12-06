@@ -27,13 +27,30 @@ class TextStyles {
     fontWeight: FontWeight.w400,
     fontFamily: 'Lato',
   );
+  static TextStyle font24WhiteColorW700 = TextStyle(
+    color: Colors.white,
+    fontSize: 24.sp,
+    fontFamily: "Inter",
+    fontWeight: FontWeight.w700,
+  );
+  static TextStyle font24PrimaryColorW700 = TextStyle(
+    color: AppColors.primaryColor,
+    fontSize: 24.sp,
+    fontFamily: "Inter",
+    fontWeight: FontWeight.w700,
+  );
   static TextStyle font16White2ColorW600 = TextStyle(
     fontSize: 16.sp,
     color: AppColors.whiteColor,
     fontWeight: FontWeight.w600,
     fontFamily: 'Inter',
   );
-
+  static TextStyle font16GreyColorW500 = TextStyle(
+    fontSize: 16.sp,
+    color: AppColors.greyColorF7,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Lato',
+  );
   static TextStyle font16WhiteColorW400 = TextStyle(
     fontSize: 16.sp,
     color: AppColors.whiteColor,
@@ -292,6 +309,12 @@ class TextStyles {
     color: AppColors.primaryColor,
     fontWeight: FontWeight.w600,
     fontFamily: 'Montserrat',
+  );
+  static TextStyle font10GreyColorW400 = TextStyle(
+    fontFamily: "Montserrat",
+    fontWeight: FontWeight.w400,
+    fontSize: 10.sp,
+    color: AppColors.greyColorFD,
   );
   static TextStyle font12PrimaryColorW700 = TextStyle(
     fontSize: 12.sp,

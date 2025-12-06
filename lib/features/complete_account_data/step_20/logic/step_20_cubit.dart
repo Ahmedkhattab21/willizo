@@ -59,6 +59,10 @@ class Step20Cubit extends Cubit<Step20State> {
         selectedTools.length == supportiveTools.length;
   }
 
+  bool get isValid {
+    return selectedTools.isNotEmpty;
+  }
+
   Future<void> sendStep() async {
     emit(Step20LoadingState());
     final toolIds = selectedTools.map((e) => e.id).toList();

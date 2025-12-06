@@ -6,6 +6,7 @@ import 'package:willizo/core/exceptions/exceptions.dart';
 import 'package:willizo/core/exceptions/failure.dart';
 import 'package:willizo/core/services/cache_helper.dart';
 import 'package:willizo/core/utils/constant_keys.dart';
+import 'package:willizo/features/login_and_signup/data/models/get_onboarding_step_response.dart';
 import 'package:willizo/features/login_and_signup/data/models/login_request_model.dart';
 import 'package:willizo/features/login_and_signup/data/models/login_response_model.dart';
 import 'package:willizo/features/login_and_signup/data/models/signup_request_model.dart';
@@ -55,6 +56,27 @@ class LoginAndSignupService {
     if (response.statusCode == StatusCode.ok ||
         response.statusCode == StatusCode.created) {
       return SignupResponseModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  Future<GetOnboardingStepResponseModel> getOnboardingStatus() async {
+    final token = await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared);
+    final response = await apiConsumer.get(
+      LoginAndSignupApiEndPoints.getOnboardingStepUrl,
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} $token",
+      },
+    );
+    print(response.statusCode);
+    print(response.body);
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      return GetOnboardingStepResponseModel.fromJson(jsonDecode(response.body));
     } else {
       throw ServerException(
         serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),

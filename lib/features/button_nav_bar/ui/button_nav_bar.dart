@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:willizo/core/services/services_locator.dart';
 import 'package:willizo/features/account/ui/account_screen.dart';
 import 'package:willizo/features/button_nav_bar/logic/cubit/button_nav_bar_cubit.dart';
 import 'package:willizo/features/button_nav_bar/logic/cubit/button_nav_bar_state.dart';
 import 'package:willizo/features/button_nav_bar/ui/widgets/eleveated_bottom_nav_bar.dart';
 import 'package:willizo/features/community/ui/community_screen.dart';
 import 'package:willizo/features/home/ui/home_screen.dart';
+import 'package:willizo/features/shop/data/repo/shop_repo.dart';
+import 'package:willizo/features/shop/logic/cubit/categories_cubit.dart';
+import 'package:willizo/features/shop/logic/cubit/shop_cubit.dart';
 import 'package:willizo/features/shop/ui/shop_screen.dart';
 import 'package:willizo/features/workout/ui/workout_screen.dart';
 
@@ -31,7 +35,17 @@ class ButtonNavBarWidget extends StatelessWidget {
       case 1:
         return const WorkoutScreen();
       case 2:
-        return const ShopScreen();
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => ShopCubit(getIt())..getFeaturedProducts(),
+            ),
+            BlocProvider(
+              create: (context) => CategoriesCubit(getIt())..getCategories(),
+            ),
+          ],
+          child: const ShopScreen(),
+        );
       case 3:
         return const CommunityScreen();
       case 4:

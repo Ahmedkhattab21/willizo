@@ -57,6 +57,10 @@ class Step18Cubit extends Cubit<Step18State> {
            selectedEquipments.length == gymEquipments.length;
   }
 
+  bool get isValid {
+    return selectedEquipments.isNotEmpty;
+  }
+
   Future<void> sendStep() async {
     emit(Step18LoadingState());
     final equipmentIds = selectedEquipments.map((e) => e.id).toList();
