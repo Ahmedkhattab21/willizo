@@ -7,7 +7,6 @@ import 'package:willizo/features/button_nav_bar/logic/cubit/button_nav_bar_state
 import 'package:willizo/features/button_nav_bar/ui/widgets/eleveated_bottom_nav_bar.dart';
 import 'package:willizo/features/community/ui/community_screen.dart';
 import 'package:willizo/features/home/ui/home_screen.dart';
-import 'package:willizo/features/shop/data/repo/shop_repo.dart';
 import 'package:willizo/features/shop/logic/cubit/categories_cubit.dart';
 import 'package:willizo/features/shop/logic/cubit/shop_cubit.dart';
 import 'package:willizo/features/shop/ui/shop_screen.dart';
@@ -19,6 +18,7 @@ class ButtonNavBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: BlocBuilder<ButtonNavBarCubit, NavigationState>(
         builder: (context, state) {
           return _getScreenForIndex(state.selectedIndex);
@@ -33,8 +33,6 @@ class ButtonNavBarWidget extends StatelessWidget {
       case 0:
         return const HomeScreen();
       case 1:
-        return const WorkoutScreen();
-      case 2:
         return MultiBlocProvider(
           providers: [
             BlocProvider(
@@ -46,6 +44,8 @@ class ButtonNavBarWidget extends StatelessWidget {
           ],
           child: const ShopScreen(),
         );
+      case 2:
+        return const WorkoutScreen();
       case 3:
         return const CommunityScreen();
       case 4:

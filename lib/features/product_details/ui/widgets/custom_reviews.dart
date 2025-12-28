@@ -4,9 +4,17 @@ import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
+import 'package:willizo/features/product_details/ui/widgets/write_review_dialog.dart';
 
 class CustomReviews extends StatelessWidget {
-  const CustomReviews({super.key});
+  final double rating;
+  final int reviewCount;
+
+  const CustomReviews({
+    super.key,
+    required this.rating,
+    required this.reviewCount,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,27 +32,28 @@ class CustomReviews extends StatelessWidget {
           ),
           verticalSpace(40),
           Text(
-            "4.8",
+            rating.toStringAsFixed(1),
             style: TextStyles.font24InterW700.copyWith(
               color: AppColors.whiteColor,
               fontSize: 64.sp,
               fontWeight: FontWeight.w700,
             ),
           ),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(5, (index) {
               return Icon(
                 Icons.star,
-                color: const Color(0xFFFFD700),
+                color: index < rating.floor()
+                    ? const Color(0xFFFFD700)
+                    : Colors.grey,
                 size: 28.sp,
               );
             }),
           ),
           SizedBox(height: 8.h),
           Text(
-            "Based on 258 reviews",
+            "Based on $reviewCount reviews",
             style: TextStyles.font14InterW400.copyWith(
               color: AppColors.greyColorCA,
             ),
@@ -87,7 +96,12 @@ class CustomReviews extends StatelessWidget {
             textStyle: TextStyles.font14InterW600.copyWith(
               color: AppColors.blackColor,
             ),
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => const WriteReviewDialog(),
+              );
+            },
           ),
         ],
       ),

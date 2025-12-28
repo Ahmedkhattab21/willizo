@@ -71,6 +71,7 @@ import 'package:willizo/features/login_and_signup/logic/login_and_signup_cubit.d
 import 'package:willizo/features/login_and_signup/ui/sign_in_screen.dart';
 import 'package:willizo/features/order_details/ui/order_details_screen.dart';
 import 'package:willizo/features/plan_details/ui/plan_details_screen.dart';
+import 'package:willizo/features/product_details/logic/cubit/product_details_cubit.dart';
 import 'package:willizo/features/product_details/ui/product_details_screen.dart';
 import 'package:willizo/features/splash/ui/splash_video_screen.dart';
 import 'package:willizo/features/subscrip/ui/subscribe_screen.dart';
@@ -309,8 +310,12 @@ class RouteGenerator {
       //   );
       case Routes.productDetailsScreen:
         return MaterialPageRoute(
-          builder: (_) => ProductDetailsScreen(
-            product: args != null ? args['product'] : null,
+          builder: (_) => BlocProvider(
+            create: (context) => ProductDetailsCubit(getIt())
+              ..getProductDetails(args['productId']),
+            child: ProductDetailsScreen(
+              productId: args != null ? args['productId'] : "",
+            ),
           ),
         );
 

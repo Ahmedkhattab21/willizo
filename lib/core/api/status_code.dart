@@ -4,4 +4,5 @@ class StatusCode {
   static const int okWithOutValidation = 101;
   static const int badRequest = 100;
   static const int unauthorized = 401;
+  static const int noContent = 204;
 }

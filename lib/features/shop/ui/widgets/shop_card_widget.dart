@@ -35,7 +35,7 @@ class ShopProductCard extends StatelessWidget {
         onTap: () {
           context.pushNamed(
             Routes.productDetailsScreen,
-            arguments: {'product': product},
+            arguments: {'productId': product?.id},
           );
         },
         child: Container(

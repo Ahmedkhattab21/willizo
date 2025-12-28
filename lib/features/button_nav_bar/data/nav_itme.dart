@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 
 class NavItem {
   final IconData? icon;
-  final String? assetPath;
+  final String? activeAssetPath;
+  final String? inactiveAssetPath;
   final String label;
 
-  NavItem({this.icon, this.assetPath, required this.label})
-    : assert(
-        icon != null || assetPath != null,
-        'Either icon or svgPath must be provided',
-      );
+  NavItem({
+    this.icon,
+    this.activeAssetPath,
+    this.inactiveAssetPath,
+    required this.label,
+  }) : assert(
+          icon != null || activeAssetPath != null,
+          'Either icon or activeAssetPath must be provided',
+        );
 
-  bool get isSvg => assetPath != null;
+  bool get isSvg => activeAssetPath != null;
 }

@@ -9,11 +9,31 @@ class ButtonNavBarCubit extends Cubit<NavigationState> {
       : super(
           NavigationState(
             items: [
-              NavItem(assetPath: ImageAsset.homeIcon, label: 'Home'),
-              NavItem(assetPath: ImageAsset.dumbleIcon, label: 'Workout'),
-              NavItem(assetPath: ImageAsset.shopIcon, label: 'Shop'),
-              NavItem(assetPath: ImageAsset.communityIcon, label: 'Community'),
-              NavItem(assetPath: ImageAsset.profileIcon, label: 'Account'),
+              NavItem(
+                activeAssetPath: ImageAsset.activeHomeIcon,
+                inactiveAssetPath: ImageAsset.inactiveHomeIcon,
+                label: 'Home',
+              ),
+              NavItem(
+                activeAssetPath: ImageAsset.activeShopIcon,
+                inactiveAssetPath: ImageAsset.activeInactiveShopIcon,
+                label: 'Shop',
+              ),
+              NavItem(
+                activeAssetPath: ImageAsset.activeGymIcon,
+                inactiveAssetPath: ImageAsset.inactiveGymIcon,
+                label: 'Workout',
+              ),
+              NavItem(
+                activeAssetPath: ImageAsset.activeRankingIcon,
+                inactiveAssetPath: ImageAsset.inactiveRankingIcon,
+                label: 'Ranking',
+              ),
+              NavItem(
+                activeAssetPath: ImageAsset.activeProfileIcon,
+                inactiveAssetPath: ImageAsset.inactiveProfileIcon,
+                label: 'Account',
+              ),
             ],
             selectedIndex: 0,
             middleIndex: 2,

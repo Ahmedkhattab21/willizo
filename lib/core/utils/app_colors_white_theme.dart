@@ -24,6 +24,7 @@ class AppColors {
   static const Color backgroundColor = Color(0xff111400);
   static const Color whiteColorD8 = Color(0xffd9d7d8);
   static const Color greenColor = Color(0xFF01EB00);
+  static const Color neonGreenColor = Color(0xFF00FF00); // Bright neon green for nav bar
   static const Color greyColorF8 = Color(0xFFF9F7F8);
   static const Color greyColor20 = Color(0xFF211F20);
   static const Color greyColor0F = Color(0xFF0F0F0F);

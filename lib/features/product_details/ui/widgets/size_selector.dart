@@ -27,7 +27,9 @@ class SizeSelector extends StatelessWidget {
           ),
         ),
         SizedBox(height: 10.h),
-        Row(
+        Wrap(
+          spacing: 10.w,
+          runSpacing: 10.h,
           children: List.generate(sizes.length, (index) {
             final selected = selectedIndex == index;
             return GestureDetector(
@@ -35,7 +37,6 @@ class SizeSelector extends StatelessWidget {
               child: Container(
                 height: 32.h,
                 width: 32.w,
-                margin: EdgeInsets.only(right: 10.w),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.r),
                   color: Colors.transparent,

@@ -21,17 +21,16 @@ class ColorSelector extends StatelessWidget {
       children: [
         Text(
           "Color Options",
-          style: TextStyles.font14W600.copyWith(
-            color: Colors.white,
-          ),
+          style: TextStyles.font14W600.copyWith(color: Colors.white),
         ),
         SizedBox(height: 10.h),
-        Row(
+        Wrap(
+          spacing: 10.w,
+          runSpacing: 10.h,
           children: List.generate(colors.length, (index) {
             return GestureDetector(
               onTap: () => onColorSelected(index),
               child: Container(
-                margin: EdgeInsets.only(right: 10.w),
                 width: 28.w,
                 height: 28.h,
                 decoration: BoxDecoration(

@@ -120,25 +120,6 @@ class ReviewCard extends StatelessWidget {
             ],
           ),
           verticalSpace(20),
-          Center(
-            child: Container(
-              width: 170.w,
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4.r),
-                border: Border.all(color: AppColors.primaryColor),
-              ),
-              child: Center(
-                child: Text(
-                  "Load More Reviews",
-                  style: TextStyles.font12PrimaryColorW700.copyWith(
-                    fontFamily: "Inter",
-                    fontSize: 10.sp,
-                  ),
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );

@@ -82,4 +82,14 @@ class ImageAsset {
   static const String detailsIcon = "assets/icons/details_icon.svg";
   static const String checkCircleIcon = "assets/icons/check_circle_icon.svg";
   static const String cancelCircleIcon = "assets/icons/cancel_circle_icon.svg";
+  static const String activeHomeIcon = "assets/svgs/active_home_icon.svg";
+  static const String inactiveHomeIcon = "assets/svgs/inactive_home_icon.svg";
+  static const String activeInactiveShopIcon = "assets/svgs/inactive_shop.svg";
+  static const String activeShopIcon = "assets/svgs/active_shop.svg";
+  static const String activeGymIcon = "assets/svgs/active_gym_icon.svg";
+  static const String inactiveGymIcon = "assets/svgs/inactive_gym_tool.svg";
+  static const String activeRankingIcon = "assets/svgs/ranking_inactive.svg";
+  static const String inactiveRankingIcon = "assets/svgs/inactive_ranking.svg";
+  static const String inactiveProfileIcon = "assets/svgs/inactive_profile_icon.svg";
+  static const String activeProfileIcon = "assets/svgs/active_profile_icon.svg";
 }
