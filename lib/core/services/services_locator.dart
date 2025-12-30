@@ -24,6 +24,11 @@ import 'package:willizo/features/product_details/data/repo/product_details_repo.
 import 'package:willizo/features/product_details/data/services/product_details_service.dart';
 import 'package:willizo/features/shop/data/repo/shop_repo.dart';
 import 'package:willizo/features/shop/data/services/shop_service.dart';
+import 'package:willizo/features/wishlist/data/repos/wishlist_repo.dart';
+import 'package:willizo/features/wishlist/data/services/wishlist_service.dart';
+import 'package:willizo/features/cart/data/repos/cart_repo.dart';
+import 'package:willizo/features/cart/data/services/cart_service.dart';
+import 'package:willizo/features/shop/logic/cubit/badge_cubit.dart';
 
 import '../api/api_consumer.dart';
 import '../api/app_interceptor.dart';
@@ -83,6 +88,21 @@ class ServicesLocator {
     );
     getIt.registerLazySingleton<ProductDetailsService>(
       () => ProductDetailsService(apiConsumer: getIt()),
+    );
+
+    getIt.registerLazySingleton<WishlistRepo>(() => WishlistRepo(getIt()));
+    getIt.registerLazySingleton<WishlistService>(
+      () => WishlistService(apiConsumer: getIt()),
+    );
+
+    getIt.registerLazySingleton<CartRepo>(() => CartRepo(getIt()));
+    getIt.registerLazySingleton<CartService>(
+      () => CartService(apiConsumer: getIt()),
+    );
+
+    // Badge Cubit (singleton for cart & wishlist badge counts)
+    getIt.registerLazySingleton<BadgeCubit>(
+      () => BadgeCubit(cartRepo: getIt(), wishlistRepo: getIt()),
     );
 
     ///core

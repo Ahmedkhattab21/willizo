@@ -65,8 +65,6 @@ class _ShopScreenState extends State<ShopScreen> {
             children: [
               const ShopHeaderWidget(),
               verticalSpace(16),
-              const SearchAndFilterWidget(),
-              verticalSpace(24),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(

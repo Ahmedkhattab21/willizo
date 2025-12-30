@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:willizo/config/routes/routes.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/assets_manager.dart';
+import 'package:willizo/core/utils/extentions.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
 
 class OrderSummaryWidget extends StatelessWidget {
-  const OrderSummaryWidget({super.key});
+  final double subtotal;
+  final double discount;
+  final double tax;
+
+  const OrderSummaryWidget({
+    super.key,
+    this.subtotal = 0.0,
+    this.discount = 0.0,
+    this.tax = 0.0,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final total = subtotal - discount + tax;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -19,15 +32,15 @@ class OrderSummaryWidget extends StatelessWidget {
           style: TextStyles.font18WhiteColor700.copyWith(fontSize: 18.sp),
         ),
         verticalSpace(20),
-        _SummaryRow(label: "Subtotal", value: "\$499.98"),
+        _SummaryRow(label: "Subtotal", value: "\$${subtotal.toStringAsFixed(2)}"),
         verticalSpace(12),
         _SummaryRow(
           label: "Discount",
-          value: "-\$100.00",
+          value: "-\$${discount.toStringAsFixed(2)}",
           valueColor: AppColors.greenColorFC,
         ),
         verticalSpace(12),
-        _SummaryRow(label: "Tax", value: "\$15.00"),
+        _SummaryRow(label: "Tax", value: "\$${tax.toStringAsFixed(2)}"),
         verticalSpace(20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -37,7 +50,7 @@ class OrderSummaryWidget extends StatelessWidget {
               style: TextStyles.font16WhiteColorW600.copyWith(fontSize: 18.sp),
             ),
             Text(
-              "\$414.98",
+              "\$${total.toStringAsFixed(2)}",
               style: TextStyles.font16primaryColorW600.copyWith(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.w700,
@@ -106,7 +119,9 @@ class OrderSummaryWidget extends StatelessWidget {
           isLoading: false,
           buttonText: "Proceed to Checkout",
           textStyle: TextStyles.font14BlackColorW700.copyWith(fontSize: 16.sp),
-          onPressed: () {},
+          onPressed: () {
+            context.pushNamed(Routes.checkoutScreen);
+          },
           backGroundColor: AppColors.primaryColor,
           borderRadius: 8.r,
           leadingSvg: ImageAsset.visaIcon,

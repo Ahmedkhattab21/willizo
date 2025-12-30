@@ -16,6 +16,9 @@ class ShopProductCard extends StatelessWidget {
   final String price;
   final String rating;
   final Product? product;
+  final bool isWishlist;
+  final bool isDeleting;
+  final VoidCallback? onRemoveFromWishlist;
 
   const ShopProductCard({
     super.key,
@@ -25,13 +28,19 @@ class ShopProductCard extends StatelessWidget {
     required this.price,
     required this.rating,
     this.product,
+    this.isWishlist = false,
+    this.isDeleting = false,
+    this.onRemoveFromWishlist,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: GestureDetector(
+    return AnimatedOpacity(
+      opacity: isDeleting ? 0.5 : 1.0,
+      duration: const Duration(milliseconds: 200),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: GestureDetector(
         onTap: () {
           context.pushNamed(
             Routes.productDetailsScreen,
@@ -129,17 +138,39 @@ class ShopProductCard extends StatelessWidget {
                           "\$$price",
                           style: TextStyles.font12PrimaryColorW700,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            SvgPicture.asset(ImageAsset.startIcon),
-                            SizedBox(width: 4.w),
-                            Text(
-                              rating,
-                              style: TextStyles.font10WhiteColorW600,
-                            ),
-                          ],
-                        ),
+                        isWishlist
+                            ? GestureDetector(
+                                onTap: isDeleting ? null : onRemoveFromWishlist,
+                                child: isDeleting
+                                    ? SizedBox(
+                                        width: 16.w,
+                                        height: 16.h,
+                                        child: const CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: AppColors.primaryColor,
+                                        ),
+                                      )
+                                    : SvgPicture.asset(
+                                        ImageAsset.wishlistIcon,
+                                        colorFilter: const ColorFilter.mode(
+                                          AppColors.primaryColor,
+                                          BlendMode.srcIn,
+                                        ),
+                                        height: 16.h,
+                                        width: 16.w,
+                                      ),
+                              )
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  SvgPicture.asset(ImageAsset.startIcon),
+                                  SizedBox(width: 4.w),
+                                  Text(
+                                    rating,
+                                    style: TextStyles.font10WhiteColorW600,
+                                  ),
+                                ],
+                              ),
                       ],
                     ),
                   ],
@@ -148,6 +179,7 @@ class ShopProductCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
       ),
     );
   }

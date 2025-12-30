@@ -40,6 +40,8 @@ class Routes {
   static const subscribeScreen = "/SubscribeScreen";
   static const billingScreen = "/BillingScreen";
   static const planDetailsScreen = "/PlanDetailsScreen";
+  static const wishlistScreen = "/WishlistScreen";
+  static const checkoutScreen = "/CheckoutScreen";
 
   /// Maps step number to corresponding route
   static String getStepRoute(int stepNumber) {

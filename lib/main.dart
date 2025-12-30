@@ -11,8 +11,6 @@ import 'core/services/services_locator.dart';
 import 'core/utils/app_constant.dart';
 import 'observer.dart';
 
-
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -24,7 +22,7 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
   await ServicesLocator.init();
   await CacheHelper.init();
-   // PusherService.initPusher();
+  // PusherService.initPusher();
 
   ///
 
@@ -38,7 +36,6 @@ Future<void> main() async {
     userType = null;
   }
 
-
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en', 'US'), Locale('ar', 'EG')],
@@ -47,7 +44,7 @@ Future<void> main() async {
       path: 'assets/languages',
       fallbackLocale: const Locale('en', 'US'),
       child: MyApp(
-        navigateWidget:Routes.splashVideoScreen,
+        navigateWidget: Routes.splashVideoScreen,
         // isLoggedInUser
         //     ? (userType == 'client'
         //           ? Routes.buttonNavigationBarScreen

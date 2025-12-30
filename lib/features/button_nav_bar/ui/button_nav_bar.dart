@@ -7,6 +7,7 @@ import 'package:willizo/features/button_nav_bar/logic/cubit/button_nav_bar_state
 import 'package:willizo/features/button_nav_bar/ui/widgets/eleveated_bottom_nav_bar.dart';
 import 'package:willizo/features/community/ui/community_screen.dart';
 import 'package:willizo/features/home/ui/home_screen.dart';
+import 'package:willizo/features/shop/logic/cubit/badge_cubit.dart';
 import 'package:willizo/features/shop/logic/cubit/categories_cubit.dart';
 import 'package:willizo/features/shop/logic/cubit/shop_cubit.dart';
 import 'package:willizo/features/shop/ui/shop_screen.dart';
@@ -40,6 +41,9 @@ class ButtonNavBarWidget extends StatelessWidget {
             ),
             BlocProvider(
               create: (context) => CategoriesCubit(getIt())..getCategories(),
+            ),
+            BlocProvider.value(
+              value: getIt<BadgeCubit>()..fetchBadgeCounts(),
             ),
           ],
           child: const ShopScreen(),

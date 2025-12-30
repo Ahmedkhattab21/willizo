@@ -39,7 +39,7 @@ class CacheHelper {
   /// Gets a bool value from SharedPreferences with given [key].
   static Future<bool> getBool(String key) async {
     debugPrint('SharedPrefHelper : getBool with key : $key');
-    return _sharedPreferences.getBool(key) ?? true;
+    return _sharedPreferences.getBool(key) ?? false;
   }
 
   /// Gets a double value from SharedPreferences with given [key].

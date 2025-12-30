@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:willizo/core/services/services_locator.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/features/product_details/data/models/add_product_to_cart_request_response.dart';
+import 'package:willizo/features/shop/logic/cubit/badge_cubit.dart';
 import 'package:willizo/features/product_details/data/models/product_details_response_model.dart';
 import 'package:willizo/features/product_details/logic/cubit/product_details_cubit.dart';
 import 'package:willizo/features/product_details/ui/widgets/color_selector_widget.dart';
@@ -84,6 +86,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             setState(() {
               isItemAdded = true;
             });
+            // Update cart badge count
+            getIt<BadgeCubit>().incrementCartCount();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.response.message),
@@ -95,6 +99,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             setState(() {
               isItemInWishlist = true;
             });
+            // Update wishlist badge count
+            getIt<BadgeCubit>().incrementWishlistCount();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.response.message),
@@ -106,6 +112,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             setState(() {
               isItemInWishlist = false;
             });
+            // Update wishlist badge count
+            getIt<BadgeCubit>().decrementWishlistCount();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Product removed from wishlist"),
@@ -148,7 +156,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               current is ProductDetailsLoadedState,
           builder: (context, state) {
             if (state is ProductDetailsLoadingState) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                child: CircularProgressIndicator(color: AppColors.primaryColor),
+              );
             } else if (state is ProductDetailsErrorState) {
               return Center(
                 child: Text(

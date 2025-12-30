@@ -29,7 +29,11 @@ class Product {
   final String stockStatus;
   final String status;
   final List<dynamic> images;
+  final String? primaryImage;
   final bool isAvailable;
+  final bool isInWishlist;
+  final double averageRating;
+  final int reviewCount;
   final String createdAt;
   final String updatedAt;
 
@@ -48,7 +52,11 @@ class Product {
     required this.stockStatus,
     required this.status,
     required this.images,
+    this.primaryImage,
     required this.isAvailable,
+    required this.isInWishlist,
+    required this.averageRating,
+    required this.reviewCount,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -69,7 +77,11 @@ class Product {
       stockStatus: json['stock_status'] ?? "",
       status: json['status'] ?? "",
       images: json['images'] ?? [],
+      primaryImage: json['primary_image'],
       isAvailable: json['is_available'] ?? false,
+      isInWishlist: json['is_in_wishlist'] ?? false,
+      averageRating: (json['average_rating'] as num?)?.toDouble() ?? 0.0,
+      reviewCount: json['review_count'] ?? 0,
       createdAt: json['created_at'] ?? "",
       updatedAt: json['updated_at'] ?? "",
     );

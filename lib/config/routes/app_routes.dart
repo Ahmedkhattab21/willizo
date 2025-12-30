@@ -4,6 +4,8 @@ import 'package:willizo/config/routes/routes.dart';
 import 'package:willizo/core/services/services_locator.dart';
 import 'package:willizo/features/billing/ui/billing_screen.dart';
 import 'package:willizo/features/cart/ui/cart_screen.dart';
+import 'package:willizo/features/cart/logic/cubit/cart_cubit.dart';
+import 'package:willizo/features/checkout/ui/checkout_screen.dart';
 import 'package:willizo/features/complete_account_data/data/repo/complete_account_repo.dart';
 import 'package:willizo/features/complete_account_data/step_18/data/repo/step18_repo.dart';
 import 'package:willizo/features/complete_account_data/step_19/data/repo/step19_repo.dart';
@@ -76,6 +78,8 @@ import 'package:willizo/features/product_details/ui/product_details_screen.dart'
 import 'package:willizo/features/splash/ui/splash_video_screen.dart';
 import 'package:willizo/features/subscrip/ui/subscribe_screen.dart';
 import 'package:willizo/features/top_friends/ui/top_friends_screen.dart';
+import 'package:willizo/features/wishlist/logic/cubit/wishlist_cubit.dart';
+import 'package:willizo/features/wishlist/ui/wishlist_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
@@ -320,7 +324,12 @@ class RouteGenerator {
         );
 
       case Routes.cartScreen:
-        return MaterialPageRoute(builder: (_) => const CartScreen());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => CartCubit(getIt())..getCart(),
+            child: const CartScreen(),
+          ),
+        );
       case Routes.myFavouriteScreen:
         return MaterialPageRoute(builder: (_) => const MyFavouriteScreen());
       // case Routes.chatScreen:
@@ -335,6 +344,15 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const BillingScreen());
       case Routes.planDetailsScreen:
         return MaterialPageRoute(builder: (_) => const PlanDetailsScreen());
+      case Routes.wishlistScreen:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => WishlistCubit(getIt())..getWishlist(),
+            child: const WishlistScreen(),
+          ),
+        );
+      case Routes.checkoutScreen:
+        return MaterialPageRoute(builder: (_) => const CheckoutScreen());
       default:
         return null;
     }

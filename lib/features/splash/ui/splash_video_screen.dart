@@ -39,17 +39,17 @@ class _SplashVideoScreenState extends State<SplashVideoScreen> {
 
         result.fold(
           (failure) {
-            // If API call fails, navigate to onboarding screen
+            // If API call fails, navigate to home screen if token exists
             if (mounted) {
-              context.pushReplacementNamed(Routes.onBoardingScreen);
+              context.pushReplacementNamed(Routes.buttonNavBarWidget);
             }
           },
           (response) {
             // Check if onboarding is completed
             if (response.data.isCompleted) {
-              // Navigate to login screen
+              // Navigate to home screen
               if (mounted) {
-                context.pushReplacementNamed(Routes.signInScreen);
+                context.pushReplacementNamed(Routes.buttonNavBarWidget);
               }
             } else {
               // Navigate to the current step
@@ -61,15 +61,23 @@ class _SplashVideoScreenState extends State<SplashVideoScreen> {
           },
         );
       } catch (e) {
-        // If error occurs, navigate to onboarding screen
+        // If error occurs, navigate to home screen
         if (mounted) {
-          context.pushReplacementNamed(Routes.onBoardingScreen);
+          context.pushReplacementNamed(Routes.buttonNavBarWidget);
         }
       }
     } else {
-      // No token, navigate to onboarding screen
+      // No token, check if onboarding was already shown
+      final bool isBoardingCompleted = await CacheHelper.getBool(
+        ConstantKeys.saveIsShowIsBoardingToShared,
+      );
+
       if (mounted) {
-        context.pushReplacementNamed(Routes.onBoardingScreen);
+        if (isBoardingCompleted) {
+          context.pushReplacementNamed(Routes.signInScreen);
+        } else {
+          context.pushReplacementNamed(Routes.onBoardingScreen);
+        }
       }
     }
   }

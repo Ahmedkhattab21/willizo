@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:willizo/config/routes/routes.dart';
+import 'package:willizo/core/services/cache_helper.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
+import 'package:willizo/core/utils/constant_keys.dart';
 import 'package:willizo/core/utils/extentions.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/features/onboarding/logic/onboarding_cubit.dart';
 
 class OnBoardingWidget extends StatelessWidget {
-  int page;
-  OnBoardingWidget({required this.page, super.key});
+  final int page;
+  const OnBoardingWidget({required this.page, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,10 @@ class OnBoardingWidget extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
+                  CacheHelper.setData(
+                    ConstantKeys.saveIsShowIsBoardingToShared,
+                    true,
+                  );
                   context.pushNamed(Routes.signInScreen);
                 },
                 child: Text('Skip', style: TextStyles.font16PrimaryColorW400),
@@ -170,6 +176,10 @@ class OnBoardingWidget extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 if (page == 3) {
+                  CacheHelper.setData(
+                    ConstantKeys.saveIsShowIsBoardingToShared,
+                    true,
+                  );
                   context.pushNamed(Routes.signInScreen);
                 } else {
                   OnboardingCubit.get(context).changeOnBoardingPage(page + 1);
