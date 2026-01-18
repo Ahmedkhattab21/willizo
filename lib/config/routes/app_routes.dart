@@ -10,6 +10,7 @@ import 'package:willizo/features/complete_account_data/data/repo/complete_accoun
 import 'package:willizo/features/complete_account_data/step_18/data/repo/step18_repo.dart';
 import 'package:willizo/features/complete_account_data/step_19/data/repo/step19_repo.dart';
 import 'package:willizo/features/complete_account_data/step_20/data/repo/step20_repo.dart';
+import 'package:willizo/features/cart/data/models/cart_response_model.dart';
 import 'package:willizo/features/button_nav_bar/logic/cubit/button_nav_bar_cubit.dart';
 import 'package:willizo/features/button_nav_bar/ui/button_nav_bar.dart';
 import 'package:willizo/features/complete_account_data/step_1/logic/step_1_cubit.dart';
@@ -352,7 +353,13 @@ class RouteGenerator {
           ),
         );
       case Routes.checkoutScreen:
-        return MaterialPageRoute(builder: (_) => const CheckoutScreen());
+        return MaterialPageRoute(
+          builder: (_) => CheckoutScreen(
+            cartItems: args is Map && args['cartItems'] != null
+                ? (args['cartItems'] as List).cast<CartItem>()
+                : [],
+          ),
+        );
       default:
         return null;
     }

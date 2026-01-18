@@ -1,30 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/spacing.dart';
-import 'package:willizo/core/utils/styles.dart';
-import 'package:willizo/features/cart/ui/widgets/trust_badges_widget.dart';
+import 'package:willizo/features/cart/data/models/cart_response_model.dart';
+import 'package:willizo/features/checkout/ui/widgets/checkout_step_content.dart';
+import 'package:willizo/features/checkout/ui/widgets/step_label.dart';
 
 class CheckoutStepperWidget extends StatefulWidget {
   final Function(int)? onStepChanged;
+  final List<CartItem> cartItems;
 
-  const CheckoutStepperWidget({super.key, this.onStepChanged});
+  const CheckoutStepperWidget({
+    super.key,
+    this.onStepChanged,
+    this.cartItems = const [],
+  });
 
   @override
   State<CheckoutStepperWidget> createState() => _CheckoutStepperWidgetState();
 }
 
 class _CheckoutStepperWidgetState extends State<CheckoutStepperWidget> {
-  int _currentStep = 0; // 0 = Information, 1 = Address, 2 = Payment, 3 = Confirmation
+  int _currentStep = 0;
+  String? _selectedAddressId;
 
   void _onStepTapped(int step) {
     setState(() {
       _currentStep = step;
     });
-    // Notify parent widget about step change
     widget.onStepChanged?.call(step);
+  }
+
+  void _onAddressSelected(String addressId) {
+    setState(() {
+      _selectedAddressId = addressId;
+      _currentStep = 1;
+    });
+    widget.onStepChanged?.call(1);
   }
 
   @override
@@ -34,28 +48,44 @@ class _CheckoutStepperWidgetState extends State<CheckoutStepperWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Back Button
+          GestureDetector(
+            onTap: () => Navigator.of(context).pop(),
+            child: Container(
+              width: 40.w,
+              height: 40.h,
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(8.r),
+                border: Border.all(color: AppColors.primaryColor, width: 1.5),
+              ),
+              child: SvgPicture.asset(ImageAsset.arrowBackIcon),
+            ),
+          ),
+          verticalSpace(16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _StepLabel(
-                title: "Information",
+              StepLabel(
+                title: "Address",
                 isActive: _currentStep == 0,
                 isCompleted: _currentStep > 0,
                 onTap: () => _onStepTapped(0),
               ),
-              _StepLabel(
-                title: "Address",
+              StepLabel(
+                title: "Information",
                 isActive: _currentStep == 1,
                 isCompleted: _currentStep > 1,
                 onTap: () => _onStepTapped(1),
               ),
-              _StepLabel(
+              StepLabel(
                 title: "Payment",
                 isActive: _currentStep == 2,
                 isCompleted: _currentStep > 2,
                 onTap: () => _onStepTapped(2),
               ),
-              _StepLabel(
+              StepLabel(
                 title: "Confirmation",
                 isActive: _currentStep == 3,
                 isCompleted: _currentStep > 3,
@@ -71,7 +101,7 @@ class _CheckoutStepperWidgetState extends State<CheckoutStepperWidget> {
                 width: double.infinity,
                 height: 4.h,
                 decoration: BoxDecoration(
-                  color: AppColors.greyColorColor79.withOpacity(0.3),
+                  color: AppColors.greyColorColor79.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
@@ -110,858 +140,15 @@ class _CheckoutStepperWidgetState extends State<CheckoutStepperWidget> {
             ],
           ),
           verticalSpace(20),
-          // Content based on current step
-          _buildStepContent(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStepContent() {
-    switch (_currentStep) {
-      case 0:
-        return const CheckoutInformationTabContent();
-      case 1:
-        return const CheckoutAddressTabContent();
-      case 2:
-        return const CheckoutPaymentTabContent();
-      case 3:
-        return const CheckoutConfirmationTabContent();
-      default:
-        return const SizedBox.shrink();
-    }
-  }
-}
-
-class _StepLabel extends StatelessWidget {
-  final String title;
-  final bool isActive;
-  final bool isCompleted;
-  final VoidCallback onTap;
-
-  const _StepLabel({
-    required this.title,
-    required this.isActive,
-    required this.isCompleted,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Text(
-        title,
-        style: isActive
-            ? TextStyles.font14primaryColorW600.copyWith(
-                color: AppColors.primaryColor,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w600,
-              )
-            : TextStyles.font14GreyColorW400.copyWith(
-                color: AppColors.greyColorColor79,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-              ),
-      ),
-    );
-  }
-}
-
-// Information Tab Content Widget
-class CheckoutInformationTabContent extends StatelessWidget {
-  const CheckoutInformationTabContent({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Personal Information Header
-        Row(
-          children: [
-            Container(
-              width: 24.w,
-              height: 24.h,
-              decoration: BoxDecoration(
-                color: AppColors.primaryColor,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.person,
-                color: AppColors.blackColor,
-                size: 14.sp,
-              ),
-            ),
-            horizontalSpace(8),
-            Text(
-              "Personal Information",
-              style: TextStyles.font18WhiteColor700.copyWith(fontSize: 18.sp),
-            ),
-          ],
-        ),
-        verticalSpace(20),
-        // Full Name Field
-        _buildInputField(
-          icon: Icons.person_outline,
-          label: "Full Name",
-          hintText: "Zell Blaze",
-        ),
-        verticalSpace(16),
-        // Email Address Field
-        _buildInputField(
-          icon: Icons.email_outlined,
-          label: "Email Address",
-          hintText: "zell@example.com",
-        ),
-        verticalSpace(16),
-        // Address Field
-        _buildInputField(
-          icon: Icons.location_on_outlined,
-          label: "Address",
-          hintText: "123 Main Street, City",
-        ),
-        verticalSpace(16),
-        // Phone Number Field
-        _buildInputField(
-          icon: Icons.phone_outlined,
-          label: "Phone Number",
-          hintText: "+1 234 567 8900",
-        ),
-        verticalSpace(30),
-        // Order Summary Section
-        Text(
-          "Order Summary",
-          style: TextStyles.font18WhiteColor700.copyWith(fontSize: 18.sp),
-        ),
-        verticalSpace(16),
-        _buildSummaryRow("Subtotal", "\$457.75"),
-        verticalSpace(12),
-        _buildSummaryRow("Discount", "-\$100.00", isDiscount: true),
-        verticalSpace(12),
-        _buildSummaryRow("Tax", "\$3.99"),
-        verticalSpace(16),
-        Divider(color: AppColors.greyColorColor79.withOpacity(0.3)),
-        verticalSpace(16),
-        _buildSummaryRow("Total", "\$571.97", isTotal: true),
-        verticalSpace(30),
-        // Continue to Payment Button
-        SizedBox(
-          width: double.infinity,
-          height: 48.h,
-          child: ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-            ),
-            child: Text(
-              "Continue to Payment",
-              style: TextStyles.font16WhiteColorW600.copyWith(
-                color: AppColors.blackColor,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-        verticalSpace(30),
-        // Trust Badges
-        const TrustBadgesWidget(),
-      ],
-    );
-  }
-
-  Widget _buildInputField({
-    required IconData icon,
-    required String label,
-    required String hintText,
-  }) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: AppColors.primaryColor, width: 1.5),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: AppColors.primaryColor, size: 20.sp),
-          horizontalSpace(12),
-          Expanded(
-            child: Text(
-              hintText,
-              style: TextStyles.font14whiteColorColorW400.copyWith(
-                fontSize: 14.sp,
-              ),
-            ),
+          CheckoutStepContent(
+            currentStep: _currentStep,
+            cartItems: widget.cartItems,
+            onStepTapped: _onStepTapped,
+            selectedAddressId: _selectedAddressId,
+            onAddressSelected: _onAddressSelected,
           ),
         ],
       ),
     );
   }
-
-  Widget _buildSummaryRow(
-    String label,
-    String value, {
-    bool isDiscount = false,
-    bool isTotal = false,
-  }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: isTotal
-              ? TextStyles.font16WhiteColorW600.copyWith(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                )
-              : TextStyles.font14GreyColorW400.copyWith(
-                  fontSize: 14.sp,
-                  color: AppColors.greyColorColor79,
-                ),
-        ),
-        Text(
-          value,
-          style: isTotal
-              ? TextStyles.font16WhiteColorW600.copyWith(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
-                )
-              : isDiscount
-              ? TextStyles.font14whiteColorColorW400.copyWith(
-                  fontSize: 14.sp,
-                  color: AppColors.greenColor7C,
-                )
-              : TextStyles.font14whiteColorColorW400.copyWith(fontSize: 14.sp),
-        ),
-      ],
-    );
-  }
 }
-
-// Address Tab Content Widget
-class CheckoutAddressTabContent extends StatelessWidget {
-  const CheckoutAddressTabContent({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Shipping Address Header
-        Row(
-          children: [
-            Container(
-              width: 24.w,
-              height: 24.h,
-              decoration: BoxDecoration(
-                color: AppColors.primaryColor,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.location_on,
-                color: AppColors.blackColor,
-                size: 14.sp,
-              ),
-            ),
-            horizontalSpace(8),
-            Text(
-              "Shipping Address",
-              style: TextStyles.font18WhiteColor700.copyWith(fontSize: 18.sp),
-            ),
-          ],
-        ),
-        verticalSpace(20),
-        // Street Address Field
-        _buildInputField(
-          icon: Icons.home_outlined,
-          label: "Street Address",
-          hintText: "123 Main Street",
-        ),
-        verticalSpace(16),
-        // Apartment/Suite Field
-        _buildInputField(
-          icon: Icons.apartment_outlined,
-          label: "Apartment/Suite (Optional)",
-          hintText: "Apt 4B",
-        ),
-        verticalSpace(16),
-        // City Field
-        _buildInputField(
-          icon: Icons.location_city_outlined,
-          label: "City",
-          hintText: "New York",
-        ),
-        verticalSpace(16),
-        // State/Province and Zip Code Row
-        Row(
-          children: [
-            Expanded(
-              child: _buildInputField(
-                icon: Icons.map_outlined,
-                label: "State/Province",
-                hintText: "NY",
-              ),
-            ),
-            horizontalSpace(12),
-            Expanded(
-              child: _buildInputField(
-                icon: Icons.markunread_mailbox_outlined,
-                label: "Zip Code",
-                hintText: "10001",
-              ),
-            ),
-          ],
-        ),
-        verticalSpace(16),
-        // Country Field
-        _buildInputField(
-          icon: Icons.public_outlined,
-          label: "Country",
-          hintText: "United States",
-        ),
-        verticalSpace(30),
-        // Order Summary Section
-        Text(
-          "Order Summary",
-          style: TextStyles.font18WhiteColor700.copyWith(fontSize: 18.sp),
-        ),
-        verticalSpace(16),
-        _buildSummaryRow("Subtotal", "\$457.75"),
-        verticalSpace(12),
-        _buildSummaryRow("Shipping", "\$9.99"),
-        verticalSpace(12),
-        _buildSummaryRow("Tax", "\$3.99"),
-        verticalSpace(16),
-        Divider(color: AppColors.greyColorColor79.withOpacity(0.3)),
-        verticalSpace(16),
-        _buildSummaryRow("Total", "\$471.73", isTotal: true),
-        verticalSpace(30),
-        // Continue to Payment Button
-        SizedBox(
-          width: double.infinity,
-          height: 48.h,
-          child: ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-            ),
-            child: Text(
-              "Continue to Payment",
-              style: TextStyles.font16WhiteColorW600.copyWith(
-                color: AppColors.blackColor,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-        verticalSpace(30),
-        // Trust Badges
-        const TrustBadgesWidget(),
-      ],
-    );
-  }
-
-  Widget _buildInputField({
-    required IconData icon,
-    required String label,
-    required String hintText,
-  }) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: AppColors.primaryColor, width: 1.5),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: AppColors.primaryColor, size: 20.sp),
-          horizontalSpace(12),
-          Expanded(
-            child: Text(
-              hintText,
-              style: TextStyles.font14whiteColorColorW400.copyWith(
-                fontSize: 14.sp,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSummaryRow(
-    String label,
-    String value, {
-    bool isTotal = false,
-  }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: isTotal
-              ? TextStyles.font16WhiteColorW600.copyWith(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                )
-              : TextStyles.font14GreyColorW400.copyWith(
-                  fontSize: 14.sp,
-                  color: AppColors.greyColorColor79,
-                ),
-        ),
-        Text(
-          value,
-          style: isTotal
-              ? TextStyles.font16WhiteColorW600.copyWith(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
-                )
-              : TextStyles.font14whiteColorColorW400.copyWith(fontSize: 14.sp),
-        ),
-      ],
-    );
-  }
-}
-
-// Payment Tab Content Widget
-class CheckoutPaymentTabContent extends StatefulWidget {
-  const CheckoutPaymentTabContent({super.key});
-
-  @override
-  State<CheckoutPaymentTabContent> createState() => _CheckoutPaymentTabContentState();
-}
-
-class _CheckoutPaymentTabContentState extends State<CheckoutPaymentTabContent> {
-  String _selectedPaymentMethod = 'credit_card';
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Payment Information Header
-        Row(
-          children: [
-            Container(
-              width: 24.w,
-              height: 24.h,
-              decoration: BoxDecoration(
-                color: AppColors.primaryColor,
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Text(
-                  "2",
-                  style: TextStyles.font14W700.copyWith(
-                    color: AppColors.blackColor,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
-            horizontalSpace(8),
-            Text(
-              "Payment Information",
-              style: TextStyles.font18WhiteColor700.copyWith(fontSize: 18.sp),
-            ),
-          ],
-        ),
-        verticalSpace(20),
-        // Payment Method Selection
-        Row(
-          children: [
-            Expanded(
-              child: _buildPaymentMethodButton(
-                'credit_card',
-                'Credit Card',
-                Icons.credit_card,
-              ),
-            ),
-            horizontalSpace(12),
-            Expanded(
-              child: _buildPaymentMethodButton(
-                'apple_pay',
-                'Apple Pay',
-                Icons.apple,
-              ),
-            ),
-            horizontalSpace(12),
-            Expanded(
-              child: _buildPaymentMethodButton(
-                'paypal',
-                'PayPal',
-                Icons.payment,
-              ),
-            ),
-          ],
-        ),
-        verticalSpace(20),
-        // Payment Form Fields (shown only for credit card)
-        if (_selectedPaymentMethod == 'credit_card') ...[
-          _buildPaymentField(
-            icon: Icons.credit_card,
-            label: "Card Number",
-            hintText: "1234 5678 9012 3456",
-          ),
-          verticalSpace(16),
-          _buildPaymentField(
-            icon: Icons.calendar_today,
-            label: "Expiry Date",
-            hintText: "MM/YY",
-          ),
-          verticalSpace(16),
-          _buildPaymentField(
-            icon: Icons.lock_outline,
-            label: "CVV",
-            hintText: "123",
-          ),
-          verticalSpace(16),
-          _buildPaymentField(
-            icon: Icons.person_outline,
-            label: "Cardholder Name",
-            hintText: "John Doe",
-          ),
-          verticalSpace(30),
-        ],
-        // Order Summary Section
-        Text(
-          "Order Summary",
-          style: TextStyles.font18WhiteColor700.copyWith(
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        verticalSpace(16),
-        _buildSummaryRow("Subtotal", "\$899.98"),
-        verticalSpace(12),
-        _buildSummaryRow("Discount", "-\$100.00", isDiscount: true),
-        verticalSpace(12),
-        _buildSummaryRow("Tax", "\$71.99"),
-        verticalSpace(16),
-        Divider(color: AppColors.greyColorColor79.withOpacity(0.3)),
-        verticalSpace(16),
-        _buildSummaryRow("Total", "\$871.97", isTotal: true),
-        verticalSpace(30),
-        // Complete Purchase Button
-        SizedBox(
-          width: double.infinity,
-          height: 48.h,
-          child: ElevatedButton.icon(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-            ),
-            icon: Icon(
-              Icons.shopping_bag,
-              color: AppColors.blackColor,
-              size: 20.sp,
-            ),
-            label: Text(
-              "Complete Purchase",
-              style: TextStyles.font16WhiteColorW600.copyWith(
-                color: AppColors.blackColor,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-        verticalSpace(30),
-        // Trust Badges
-        const TrustBadgesWidget(),
-      ],
-    );
-  }
-
-  Widget _buildPaymentMethodButton(String method, String label, IconData icon) {
-    final isSelected = _selectedPaymentMethod == method;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedPaymentMethod = method;
-        });
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.primaryColor : Colors.transparent,
-          borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(
-            color: isSelected
-                ? AppColors.primaryColor
-                : AppColors.greyColorColor79.withOpacity(0.5),
-            width: 1.5,
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              color: isSelected
-                  ? AppColors.blackColor
-                  : AppColors.greyColorColor79,
-              size: 18.sp,
-            ),
-            horizontalSpace(6),
-            Flexible(
-              child: Text(
-                label,
-                style: TextStyles.font14W600.copyWith(
-                  color: isSelected
-                      ? AppColors.blackColor
-                      : AppColors.greyColorColor79,
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w600,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPaymentField({
-    required IconData icon,
-    required String label,
-    required String hintText,
-  }) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: AppColors.primaryColor, width: 1.5),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: AppColors.primaryColor, size: 20.sp),
-          horizontalSpace(12),
-          Expanded(
-            child: Text(
-              hintText,
-              style: TextStyles.font14whiteColorColorW400.copyWith(
-                fontSize: 14.sp,
-                color: AppColors.greyColorColor79,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSummaryRow(
-    String label,
-    String value, {
-    bool isDiscount = false,
-    bool isTotal = false,
-  }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: isTotal
-              ? TextStyles.font16WhiteColorW600.copyWith(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
-                )
-              : TextStyles.font14GreyColorW400.copyWith(
-                  fontSize: 14.sp,
-                  color: AppColors.greyColorColor79,
-                ),
-        ),
-        Text(
-          value,
-          style: isTotal
-              ? TextStyles.font16WhiteColorW600.copyWith(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.primaryColor,
-                )
-              : isDiscount
-              ? TextStyles.font14whiteColorColorW400.copyWith(
-                  fontSize: 14.sp,
-                  color: AppColors.greenColor7C,
-                )
-              : TextStyles.font14whiteColorColorW400.copyWith(fontSize: 14.sp),
-        ),
-      ],
-    );
-  }
-}
-
-// Confirmation Tab Content Widget
-class CheckoutConfirmationTabContent extends StatelessWidget {
-  const CheckoutConfirmationTabContent({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        verticalSpace(20),
-        SvgPicture.asset(ImageAsset.confirmationIcon),
-        verticalSpace(24),
-        Text(
-          "Payment Successful!",
-          style: TextStyles.font18WhiteColor700.copyWith(
-            fontSize: 24.sp,
-            fontWeight: FontWeight.w700,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        verticalSpace(12),
-        // Success Message
-        Text(
-          "Thank you for your purchase. Your\nFitness journey starts now.",
-          style: TextStyles.font14GreyColorW400.copyWith(
-            fontSize: 14.sp,
-            color: AppColors.greyColorColor79,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        verticalSpace(40),
-        // Order Summary Section
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(20.w),
-          decoration: BoxDecoration(
-            color: AppColors.greyColorColor79.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(
-              color: AppColors.greyColorColor79.withOpacity(0.2),
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Order Summary",
-                style: TextStyles.font18WhiteColor700.copyWith(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              verticalSpace(20),
-              _buildOrderDetailRow("Order Number", "FF-2024-18454"),
-              verticalSpace(16),
-              Divider(color: AppColors.greyColorColor79.withOpacity(0.3)),
-              verticalSpace(16),
-              _buildOrderDetailRow("Item", "T-shirt"),
-              verticalSpace(16),
-              Divider(color: AppColors.greyColorColor79.withOpacity(0.3)),
-              verticalSpace(16),
-              _buildOrderDetailRow("Amount Paid", "\$871.97", isAmount: true),
-            ],
-          ),
-        ),
-        // Next Steps Section
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(20.w),
-          decoration: BoxDecoration(
-            color: AppColors.greyColorColor79.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(
-              color: AppColors.greyColorColor79.withOpacity(0.2),
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Next Steps",
-                style: TextStyles.font18WhiteColor700.copyWith(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              verticalSpace(16),
-              Text(
-                "A confirmation email has been sent to your\naddress with details. Welcome to Willizo\nfamily!",
-                style: TextStyles.font14GreyColorW400.copyWith(
-                  fontSize: 14.sp,
-                  color: AppColors.greyColorColor79,
-                ),
-              ),
-            ],
-          ),
-        ),
-        verticalSpace(40),
-        // Back To Homepage Button
-        SizedBox(
-          width: 189.w,
-          height: 48.h,
-          child: ElevatedButton(
-            onPressed: () {
-              // Navigate back to homepage
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-            ),
-            child: Text(
-              "Back To Homepage",
-              style: TextStyles.font16WhiteColorW600.copyWith(
-                color: AppColors.blackColor,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-        verticalSpace(40),
-      ],
-    );
-  }
-
-  Widget _buildOrderDetailRow(
-    String label,
-    String value, {
-    bool isAmount = false,
-  }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: TextStyles.font14GreyColorW400.copyWith(
-            fontSize: 14.sp,
-            color: AppColors.greyColorColor79,
-          ),
-        ),
-        Text(
-          value,
-          style: isAmount
-              ? TextStyles.font16WhiteColorW600.copyWith(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.primaryColor,
-                )
-              : TextStyles.font14whiteColorColorW400.copyWith(fontSize: 14.sp),
-        ),
-      ],
-    );
-  }
-}
-

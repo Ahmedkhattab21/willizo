@@ -16,9 +16,10 @@ class CartItemWidget extends StatelessWidget {
   final int quantity;
   final bool isUpdating;
   final bool isDeleting;
-  final VoidCallback onAdd;
-  final VoidCallback onRemove;
-  final VoidCallback onDelete;
+  final VoidCallback? onAdd;
+  final VoidCallback? onRemove;
+  final VoidCallback? onDelete;
+  final bool showControls;
 
   const CartItemWidget({
     super.key,
@@ -31,9 +32,10 @@ class CartItemWidget extends StatelessWidget {
     required this.quantity,
     this.isUpdating = false,
     this.isDeleting = false,
-    required this.onAdd,
-    required this.onRemove,
-    required this.onDelete,
+    this.showControls = true,
+    this.onAdd,
+    this.onRemove,
+    this.onDelete,
   });
 
   bool get _hasValidNetworkImage =>
@@ -136,101 +138,112 @@ class CartItemWidget extends StatelessWidget {
             ),
             verticalSpace(12),
             // Actions Row
-            Row(
-              children: [
-                // Quantity Selector
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.greyColorColor79),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Row(
-                    children: [
-                      _QuantityButton(
-                        icon: Icons.remove,
-                        onTap: quantity > 1 ? onRemove : null,
-                        isActive: false,
-                        isEnabled: quantity > 1,
-                      ),
-                      Container(
-                        width: 1.w,
-                        height: 32.h,
-                        color: AppColors.greyColorColor79,
-                      ),
-                      Container(
-                        width: 40.w,
-                        alignment: Alignment.center,
-                        child: isUpdating
-                            ? SizedBox(
-                                width: 16.w,
-                                height: 16.h,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: AppColors.primaryColor,
+            if (showControls)
+              Row(
+                children: [
+                  // Quantity Selector
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.greyColorColor79),
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                    child: Row(
+                      children: [
+                        _QuantityButton(
+                          icon: Icons.remove,
+                          onTap: (onRemove != null && quantity > 1)
+                              ? onRemove
+                              : null,
+                          isActive: false,
+                          isEnabled: quantity > 1,
+                        ),
+                        Container(
+                          width: 1.w,
+                          height: 32.h,
+                          color: AppColors.greyColorColor79,
+                        ),
+                        Container(
+                          width: 40.w,
+                          alignment: Alignment.center,
+                          child: isUpdating
+                              ? SizedBox(
+                                  width: 16.w,
+                                  height: 16.h,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: AppColors.primaryColor,
+                                  ),
+                                )
+                              : Text(
+                                  "$quantity",
+                                  style: TextStyles.font14whiteColorColorW400
+                                      .copyWith(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16.sp,
+                                      ),
                                 ),
-                              )
-                            : Text(
-                                "$quantity",
-                                style: TextStyles.font14whiteColorColorW400
-                                    .copyWith(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16.sp,
-                                    ),
-                              ),
-                      ),
-                      Container(
-                        width: 1.w,
-                        height: 32.h,
-                        color: AppColors.greyColorColor79,
-                      ),
-                      _QuantityButton(
-                        icon: Icons.add,
-                        onTap: onAdd,
-                        isActive: true,
-                        isEnabled: true,
-                      ),
-                    ],
+                        ),
+                        Container(
+                          width: 1.w,
+                          height: 32.h,
+                          color: AppColors.greyColorColor79,
+                        ),
+                        _QuantityButton(
+                          icon: Icons.add,
+                          onTap: onAdd,
+                          isActive: true,
+                          isEnabled: true,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Spacer(),
-                // Remove Button
-                InkWell(
-                  onTap: isDeleting ? null : onDelete,
-                  child: Row(
-                    children: [
-                      if (isDeleting)
-                        SizedBox(
-                          width: 18.w,
-                          height: 18.h,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
+                  Spacer(),
+                  // Remove Button
+                  InkWell(
+                    onTap: (isDeleting || onDelete == null) ? null : onDelete,
+                    child: Row(
+                      children: [
+                        if (isDeleting)
+                          SizedBox(
+                            width: 18.w,
+                            height: 18.h,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: AppColors.redColor,
+                            ),
+                          )
+                        else
+                          SvgPicture.asset(
+                            ImageAsset.deleteIcon,
+                            colorFilter: ColorFilter.mode(
+                              AppColors.redColor,
+                              BlendMode.srcIn,
+                            ),
+                            height: 18.h,
+                            width: 18.w,
+                          ),
+                        horizontalSpace(4),
+                        Text(
+                          isDeleting ? "Removing..." : "Remove",
+                          style: TextStyles.font14W600.copyWith(
                             color: AppColors.redColor,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w500,
                           ),
-                        )
-                      else
-                        SvgPicture.asset(
-                          ImageAsset.deleteIcon,
-                          colorFilter: ColorFilter.mode(
-                            AppColors.redColor,
-                            BlendMode.srcIn,
-                          ),
-                          height: 18.h,
-                          width: 18.w,
                         ),
-                      horizontalSpace(4),
-                      Text(
-                        isDeleting ? "Removing..." : "Remove",
-                        style: TextStyles.font14W600.copyWith(
-                          color: AppColors.redColor,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+                ],
+              )
+            else
+              Text(
+                "Qty: $quantity",
+                style: TextStyles.font14GreyColorW400.copyWith(
+                  fontSize: 14.sp,
+                  color: AppColors.whiteColor,
                 ),
-              ],
-            ),
+              ),
           ],
         ),
       ),

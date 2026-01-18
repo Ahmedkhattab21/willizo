@@ -34,34 +34,29 @@ class _CartStepperWidgetState extends State<CartStepperWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _StepLabel(
-                title: "Cart",
-                isActive: _currentStep == 0,
-                isCompleted: _currentStep > 0,
-                onTap: () => _onStepTapped(0),
-              ),
-              _StepLabel(
-                title: "Information",
-                isActive: _currentStep == 1,
-                isCompleted: _currentStep > 1,
-                onTap: () => _onStepTapped(1),
-              ),
-              _StepLabel(
-                title: "Payment",
-                isActive: _currentStep == 2,
-                isCompleted: _currentStep > 2,
-                onTap: () => _onStepTapped(2),
-              ),
-              _StepLabel(
-                title: "Confirmation",
-                isActive: _currentStep == 3,
-                isCompleted: _currentStep > 3,
-                onTap: () => _onStepTapped(3),
-              ),
-            ],
+          _StepLabel(
+            title: "Information",
+            isActive: _currentStep == 0,
+            isCompleted: _currentStep > 0,
+            onTap: () => _onStepTapped(0),
+          ),
+          _StepLabel(
+            title: "Address",
+            isActive: _currentStep == 1,
+            isCompleted: _currentStep > 1,
+            onTap: () => _onStepTapped(1),
+          ),
+          _StepLabel(
+            title: "Payment",
+            isActive: _currentStep == 2,
+            isCompleted: _currentStep > 2,
+            onTap: () => _onStepTapped(2),
+          ),
+          _StepLabel(
+            title: "Confirmation",
+            isActive: _currentStep == 3,
+            isCompleted: _currentStep > 3,
+            onTap: () => _onStepTapped(3),
           ),
           verticalSpace(8),
           Stack(
@@ -119,8 +114,10 @@ class _CartStepperWidgetState extends State<CartStepperWidget> {
 
   Widget _buildStepContent() {
     switch (_currentStep) {
-      case 1:
+      case 0:
         return const InformationTabContent();
+      case 1:
+        return const AddressTabContent();
       case 2:
         return const PaymentTabContent();
       case 3:
@@ -179,19 +176,24 @@ class InformationTabContent extends StatelessWidget {
         Row(
           children: [
             Container(
-              width: 24.w,
-              height: 24.h,
+              width: 30.w,
+              height: 30.h,
               decoration: BoxDecoration(
                 color: AppColors.primaryColor,
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                Icons.person,
-                color: AppColors.blackColor,
-                size: 14.sp,
+              child: Center(
+                child: Text(
+                  "1",
+                  style: TextStyles.font14W700.copyWith(
+                    color: AppColors.blackColor,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
             ),
-            horizontalSpace(8),
+            horizontalSpace(12),
             Text(
               "Personal Information",
               style: TextStyles.font18WhiteColor700.copyWith(fontSize: 18.sp),
@@ -201,30 +203,45 @@ class InformationTabContent extends StatelessWidget {
         verticalSpace(20),
         // Full Name Field
         _buildInputField(
-          icon: Icons.person_outline,
+          icon: Icons.person,
           label: "Full Name",
-          hintText: "Zell Blaze",
+          hintText: "Full Name",
         ),
         verticalSpace(16),
         // Email Address Field
         _buildInputField(
-          icon: Icons.email_outlined,
+          icon: Icons.email,
           label: "Email Address",
-          hintText: "zell@example.com",
-        ),
-        verticalSpace(16),
-        // Address Field
-        _buildInputField(
-          icon: Icons.location_on_outlined,
-          label: "Address",
-          hintText: "123 Main Street, City",
+          hintText: "Email Address",
         ),
         verticalSpace(16),
         // Phone Number Field
         _buildInputField(
-          icon: Icons.phone_outlined,
+          icon: Icons.phone,
           label: "Phone Number",
-          hintText: "+1 234 567 8900",
+          hintText: "Phone Number",
+        ),
+        verticalSpace(12),
+        // Edit Button
+        Align(
+          alignment: Alignment.centerRight,
+          child: TextButton.icon(
+            onPressed: () {},
+            icon: Icon(Icons.edit, color: AppColors.primaryColor, size: 16.sp),
+            label: Text(
+              "Edit",
+              style: TextStyles.font14primaryColorW600.copyWith(
+                color: AppColors.primaryColor,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.zero,
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+          ),
         ),
         verticalSpace(30),
         // Order Summary Section
@@ -233,15 +250,15 @@ class InformationTabContent extends StatelessWidget {
           style: TextStyles.font18WhiteColor700.copyWith(fontSize: 18.sp),
         ),
         verticalSpace(16),
-        _buildSummaryRow("Subtotal", "\$457.75"),
+        _buildSummaryRow("Subtotal", "\$899.98"),
         verticalSpace(12),
         _buildSummaryRow("Discount", "-\$100.00", isDiscount: true),
         verticalSpace(12),
-        _buildSummaryRow("Tax", "\$3.99"),
+        _buildSummaryRow("Tax", "\$71.99"),
         verticalSpace(16),
         Divider(color: AppColors.greyColorColor79.withOpacity(0.3)),
         verticalSpace(16),
-        _buildSummaryRow("Total", "\$571.97", isTotal: true),
+        _buildSummaryRow("Total", "\$871.97", isTotal: true),
         verticalSpace(30),
         // Continue to Payment Button
         SizedBox(
@@ -328,6 +345,7 @@ class InformationTabContent extends StatelessWidget {
               ? TextStyles.font16WhiteColorW600.copyWith(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w700,
+                  color: AppColors.primaryColor,
                 )
               : isDiscount
               ? TextStyles.font14whiteColorColorW400.copyWith(
@@ -337,6 +355,188 @@ class InformationTabContent extends StatelessWidget {
               : TextStyles.font14whiteColorColorW400.copyWith(fontSize: 14.sp),
         ),
       ],
+    );
+  }
+}
+
+class AddressTabContent extends StatefulWidget {
+  const AddressTabContent({super.key});
+
+  @override
+  State<AddressTabContent> createState() => _AddressTabContentState();
+}
+
+class _AddressTabContentState extends State<AddressTabContent> {
+  String _addressType = 'Home';
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Pin Location Header
+        Row(
+          children: [
+            Container(
+              width: 30.w,
+              height: 30.h,
+              decoration: BoxDecoration(
+                color: AppColors.primaryColor,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.location_on,
+                color: AppColors.blackColor,
+                size: 18.sp,
+              ),
+            ),
+            horizontalSpace(12),
+            Text(
+              "Pin your location",
+              style: TextStyles.font18WhiteColor700.copyWith(fontSize: 18.sp),
+            ),
+          ],
+        ),
+        verticalSpace(20),
+        // Form Fields
+        _buildDropdown("Egypt"),
+        verticalSpace(16),
+        _buildInputField("Street name"),
+        verticalSpace(16),
+        _buildInputField("Building name/no"),
+        verticalSpace(16),
+        Row(
+          children: [
+            Expanded(child: _buildInputField("Floor/Apartment")),
+            horizontalSpace(12),
+            Expanded(child: _buildInputField("Landmark (optional)")),
+          ],
+        ),
+        verticalSpace(16),
+        _buildInputField("City/Area (El Nozha & New Cairo City)"),
+        verticalSpace(16),
+        _buildDropdown("District"),
+        verticalSpace(16),
+        _buildDropdown("Governorate"),
+        verticalSpace(24),
+        // Address Type
+        Text(
+          "Address Type",
+          style: TextStyles.font16WhiteColorW600.copyWith(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        verticalSpace(12),
+        Row(
+          children: [
+            _buildAddressTypeChip("Home"),
+            horizontalSpace(12),
+            _buildAddressTypeChip("Office"),
+          ],
+        ),
+        verticalSpace(30),
+        // Add Address Button
+        SizedBox(
+          width: double.infinity,
+          height: 48.h,
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+            ),
+            child: Text(
+              "Add address",
+              style: TextStyles.font16WhiteColorW600.copyWith(
+                color: AppColors.blackColor,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+        verticalSpace(30),
+      ],
+    );
+  }
+
+  Widget _buildInputField(String hintText) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(8.r),
+        border: Border.all(
+          color: AppColors.greyColorColor79.withOpacity(0.5),
+          width: 1.0,
+        ),
+      ),
+      child: Text(
+        hintText,
+        style: TextStyles.font14whiteColorColorW400.copyWith(
+          fontSize: 14.sp,
+          color: AppColors.greyColorColor79,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDropdown(String value) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(8.r),
+        border: Border.all(
+          color: AppColors.greyColorColor79.withOpacity(0.5),
+          width: 1.0,
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            value,
+            style: TextStyles.font14whiteColorColorW400.copyWith(
+              fontSize: 14.sp,
+            ),
+          ),
+          Icon(
+            Icons.keyboard_arrow_down,
+            color: AppColors.greyColorColor79,
+            size: 20.sp,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAddressTypeChip(String type) {
+    final isSelected = _addressType == type;
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _addressType = type;
+        });
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primaryColor : AppColors.whiteColor,
+          borderRadius: BorderRadius.circular(20.r),
+        ),
+        child: Text(
+          type,
+          style: TextStyles.font14W600.copyWith(
+            fontSize: 14.sp,
+            color: AppColors.blackColor,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
     );
   }
 }

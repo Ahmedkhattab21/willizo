@@ -64,17 +64,18 @@ class CartItem {
     required this.updatedAt,
   });
 
-  factory CartItem.fromJson(Map<String, dynamic> json) {
-    return CartItem(
-      id: json['id'] ?? '',
-      product: CartProduct.fromJson(json['product'] ?? {}),
-      quantity: json['quantity'] ?? 0,
-      price: json['price'] ?? '',
-      subtotal: json['subtotal'] ?? '',
-      createdAt: json['created_at'] ?? '',
-      updatedAt: json['updated_at'] ?? '',
-    );
-  }
+ factory CartItem.fromJson(Map<String, dynamic> json) {
+  return CartItem(
+    id: json['id'] ?? '',
+    product: CartProduct.fromJson(json['product'] ?? {}),
+    quantity: json['quantity'] ?? 0,
+    price: json['price']?.toString() ?? '',
+    subtotal: json['subtotal']?.toString() ?? '',
+    createdAt: json['created_at'] ?? '',
+    updatedAt: json['updated_at'] ?? '',
+  );
+}
+
 }
 
 class CartProduct {

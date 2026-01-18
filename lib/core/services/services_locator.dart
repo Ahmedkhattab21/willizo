@@ -28,6 +28,8 @@ import 'package:willizo/features/wishlist/data/repos/wishlist_repo.dart';
 import 'package:willizo/features/wishlist/data/services/wishlist_service.dart';
 import 'package:willizo/features/cart/data/repos/cart_repo.dart';
 import 'package:willizo/features/cart/data/services/cart_service.dart';
+import 'package:willizo/features/checkout/data/repos/checkout_repo.dart';
+import 'package:willizo/features/checkout/data/services/checkout_services.dart';
 import 'package:willizo/features/shop/logic/cubit/badge_cubit.dart';
 
 import '../api/api_consumer.dart';
@@ -98,6 +100,11 @@ class ServicesLocator {
     getIt.registerLazySingleton<CartRepo>(() => CartRepo(getIt()));
     getIt.registerLazySingleton<CartService>(
       () => CartService(apiConsumer: getIt()),
+    );
+
+    getIt.registerLazySingleton<CheckoutRepo>(() => CheckoutRepo(getIt()));
+    getIt.registerLazySingleton<CheckoutService>(
+      () => CheckoutService(apiConsumer: getIt()),
     );
 
     // Badge Cubit (singleton for cart & wishlist badge counts)

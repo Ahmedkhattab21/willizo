@@ -8,4 +8,6 @@ class CartApiEndpoints {
   static String deleteAllCartItems = '${EndPoints.baseUrl}/cart/clear';
   static String deleteCartItem(String cartItemId) =>
       '$cartUrl/items/$cartItemId';
+  
+  static const String checkoutCalculateUrl = '${EndPoints.baseUrl}/checkout/calculate';
 }

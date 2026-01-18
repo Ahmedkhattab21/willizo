@@ -172,6 +172,41 @@ class CartCubit extends Cubit<CartState> {
     );
   }
 
+  /// Calculate checkout with address and shipping method
+  Future<void> calculateCheckout({
+    required int addressId,
+    required String shippingMethod,
+  }) async {
+    final currentState = state;
+    if (currentState is CartLoaded) {
+      // Update current state with loading indicator for checkout
+      emit(currentState.copyWith());
+    }
+    
+    final response = await cartRepo.calculateCheckout(
+      addressId: addressId,
+      shippingMethod: shippingMethod,
+    );
+    
+    final latestState = state;
+    response.fold(
+      (l) {
+        // Keep cart loaded state but show error if needed
+        if (latestState is CartLoaded) {
+          emit(latestState);
+        }
+      },
+      (r) {
+        // Update cart loaded state with checkout data
+        if (latestState is CartLoaded) {
+          emit(latestState.copyWith(checkoutData: r));
+        } else {
+          emit(CheckoutCalculationLoaded(r));
+        }
+      },
+    );
+  }
+
   @override
   Future<void> close() {
     // Cancel all debounce timers when cubit is closed

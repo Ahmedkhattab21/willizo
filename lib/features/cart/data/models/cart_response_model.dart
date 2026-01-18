@@ -4,9 +4,7 @@ class CartResponseModel {
   CartResponseModel({required this.data});
 
   factory CartResponseModel.fromJson(Map<String, dynamic> json) {
-    return CartResponseModel(
-      data: CartData.fromJson(json['data'] ?? {}),
-    );
+    return CartResponseModel(data: CartData.fromJson(json['data'] ?? {}));
   }
 }
 
@@ -30,7 +28,8 @@ class CartData {
   factory CartData.fromJson(Map<String, dynamic> json) {
     return CartData(
       id: json['id'] ?? "",
-      items: (json['items'] as List<dynamic>?)
+      items:
+          (json['items'] as List<dynamic>?)
               ?.map((item) => CartItem.fromJson(item as Map<String, dynamic>))
               .toList() ??
           [],
@@ -66,8 +65,8 @@ class CartItem {
       id: json['id'] ?? "",
       product: CartProduct.fromJson(json['product'] ?? {}),
       quantity: json['quantity'] ?? 0,
-      price: json['price'] ?? "0.00",
-      subtotal: json['subtotal'] ?? "0.00",
+      price: parsePrice(json['price']),
+      subtotal: parsePrice(json['subtotal']),
       createdAt: json['created_at'] ?? "",
       updatedAt: json['updated_at'] ?? "",
     );
@@ -121,8 +120,10 @@ class CartProduct {
       name: json['name'] ?? "",
       slug: json['slug'] ?? "",
       description: json['description'] ?? "",
-      price: json['price'] ?? "0.00",
-      comparePrice: json['compare_price'],
+      price: parsePrice(json['price']),
+      comparePrice: json['compare_price'] != null
+          ? parsePrice(json['compare_price'])
+          : null,
       sku: json['sku'] ?? "",
       weight: json['weight'] ?? "",
       stockQuantity: json['stock_quantity'] ?? 0,
@@ -139,3 +140,9 @@ class CartProduct {
   }
 }
 
+String parsePrice(dynamic value) {
+  if (value == null) return "0.00";
+  if (value is num) return value.toStringAsFixed(2);
+  if (value is String) return value;
+  return "0.00";
+}

@@ -7,22 +7,35 @@ import 'package:willizo/core/utils/extentions.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
+import 'package:willizo/features/cart/data/models/cart_response_model.dart';
+import 'package:willizo/features/cart/data/models/checkout_calculation_response_model.dart';
 
 class OrderSummaryWidget extends StatelessWidget {
   final double subtotal;
   final double discount;
   final double tax;
+  final CheckoutCalculationResponseModel? checkoutData;
+  final List<CartItem> cartItems;
 
   const OrderSummaryWidget({
     super.key,
     this.subtotal = 0.0,
     this.discount = 0.0,
     this.tax = 0.0,
+    this.checkoutData,
+    this.cartItems = const [],
   });
 
   @override
   Widget build(BuildContext context) {
-    final total = subtotal - discount + tax;
+    // Use checkout data if available, otherwise use passed values
+    final effectiveSubtotal = checkoutData?.pricing.subtotal ?? subtotal;
+    final effectiveDiscount = checkoutData?.pricing.discountAmount ?? discount;
+    final effectiveTax = checkoutData?.pricing.taxAmount ?? tax;
+    final shippingRate = checkoutData?.pricing.shippingRate ?? 0.0;
+    final total =
+        checkoutData?.pricing.total ??
+        (effectiveSubtotal - effectiveDiscount + effectiveTax + shippingRate);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,15 +45,28 @@ class OrderSummaryWidget extends StatelessWidget {
           style: TextStyles.font18WhiteColor700.copyWith(fontSize: 18.sp),
         ),
         verticalSpace(20),
-        _SummaryRow(label: "Subtotal", value: "\$${subtotal.toStringAsFixed(2)}"),
+        _SummaryRow(
+          label: "Subtotal",
+          value: "\$${effectiveSubtotal.toStringAsFixed(2)}",
+        ),
         verticalSpace(12),
         _SummaryRow(
           label: "Discount",
-          value: "-\$${discount.toStringAsFixed(2)}",
+          value: "-\$${effectiveDiscount.toStringAsFixed(2)}",
           valueColor: AppColors.greenColorFC,
         ),
         verticalSpace(12),
-        _SummaryRow(label: "Tax", value: "\$${tax.toStringAsFixed(2)}"),
+        _SummaryRow(
+          label: "Tax",
+          value: "\$${effectiveTax.toStringAsFixed(2)}",
+        ),
+        if (shippingRate > 0) ...[
+          verticalSpace(12),
+          _SummaryRow(
+            label: "Shipping",
+            value: "\$${shippingRate.toStringAsFixed(2)}",
+          ),
+        ],
         verticalSpace(20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -59,68 +85,17 @@ class OrderSummaryWidget extends StatelessWidget {
           ],
         ),
         verticalSpace(20),
-        // Promo Code
-        Row(
-          children: [
-            Icon(Icons.local_offer, color: AppColors.primaryColor, size: 16.sp),
-            horizontalSpace(8),
-            Text(
-              "Promo Code",
-              // style: TextStyles.font14WhiteColorColorW400.copyWith(
-              //   fontWeight: FontWeight.w500,
-              // ),
-            ),
-          ],
-        ),
-        verticalSpace(10),
-        Row(
-          children: [
-            Expanded(
-              child: Container(
-                height: 45.h,
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                decoration: BoxDecoration(
-                  color: const Color(0xff1e1e1e),
-                  borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(
-                    color: AppColors.greyColorFB.withOpacity(0.3),
-                  ),
-                ),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Enter code",
-                  style: TextStyles.font14GreyColorW400.copyWith(
-                    color: AppColors.greyColorColor79,
-                  ),
-                ),
-              ),
-            ),
-            horizontalSpace(10),
-            Container(
-              height: 45.h,
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                "Apply",
-                style: TextStyles.font14BlackColorW700.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ],
-        ),
-        verticalSpace(20),
+      
         // Buttons
         ButtonWidget(
           isLoading: false,
           buttonText: "Proceed to Checkout",
           textStyle: TextStyles.font14BlackColorW700.copyWith(fontSize: 16.sp),
           onPressed: () {
-            context.pushNamed(Routes.checkoutScreen);
+            context.pushNamed(
+              Routes.checkoutScreen,
+              arguments: {'cartItems': cartItems},
+            );
           },
           backGroundColor: AppColors.primaryColor,
           borderRadius: 8.r,
@@ -175,10 +150,10 @@ class _SummaryRow extends StatelessWidget {
         ),
         Text(
           value,
-          // style: TextStyles.font14WhiteColorColorW400.copyWith(
-          //   color: valueColor ?? Colors.white,
-          //   fontWeight: FontWeight.w600,
-          // ),
+          style: TextStyles.font14whiteColorColorW400.copyWith(
+            color: valueColor ?? Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ],
     );
