@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:willizo/core/services/services_locator.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/features/all_excercises/ui/all_excersies_screen.dart';
+import 'package:willizo/features/community/logic/cubit/community_cubit.dart';
 import 'package:willizo/features/community/ui/widgets/community_tabs_widget.dart';
 import 'package:willizo/features/community/ui/widgets/create_invitational_league_widget.dart';
 import 'package:willizo/features/community/ui/widgets/create_league_form_widget.dart';
@@ -10,17 +13,29 @@ import 'package:willizo/features/community/ui/widgets/join_invitational_league_w
 import 'package:willizo/features/community/ui/widgets/leaderboard_body_widget.dart';
 import 'package:willizo/features/community/ui/widgets/leagues_body_widget.dart';
 import 'package:willizo/features/push_ups_leaderboard/ui/puhs_ups_leaderboard_screen.dart';
-import 'package:willizo/features/top_friends/ui/top_friends_screen.dart';
+import 'package:willizo/features/community/ui/widgets/friends_tab_body_widget.dart';
 
-class CommunityScreen extends StatefulWidget {
+class CommunityScreen extends StatelessWidget {
   const CommunityScreen({super.key});
 
   @override
-  State<CommunityScreen> createState() => CommunityScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => CommunityCubit(getIt())..getLeaderboards(),
+      child: const CommunityScreenBody(),
+    );
+  }
 }
 
-class CommunityScreenState extends State<CommunityScreen> {
-  int selectedIndex = 1; // Default to Leagues tab
+class CommunityScreenBody extends StatefulWidget {
+  const CommunityScreenBody({super.key});
+
+  @override
+  State<CommunityScreenBody> createState() => CommunityScreenState();
+}
+
+class CommunityScreenState extends State<CommunityScreenBody> {
+  int selectedIndex = 0;
 
   bool showTopFriends = false;
   bool showPushupsLeaderboard = false;
@@ -44,7 +59,6 @@ class CommunityScreenState extends State<CommunityScreen> {
                 onTabSelected: (index) {
                   setState(() {
                     selectedIndex = index;
-                    // Reset nested navigation states when switching tabs
                     showJoinInvitationalLeague = false;
                     showCreateLeague = false;
                     showCreateLeagueForm = false;
@@ -67,7 +81,7 @@ class CommunityScreenState extends State<CommunityScreen> {
                   });
                 },
               ),
-              const Expanded(child: TopFriendsScreen()),
+              const Expanded(child: FriendsTabBodyWidget()),
             ] else if (showPushupsLeaderboard) ...[
               CustomHeader(
                 title: "Push-ups Leaderboard",
@@ -104,6 +118,16 @@ class CommunityScreenState extends State<CommunityScreen> {
               showExercises = true;
             });
           },
+          onViewAllFriendsPressed: () {
+            setState(() {
+              showTopFriends = true;
+            });
+          },
+          onViewFullLeaderboardPressed: () {
+            setState(() {
+              showPushupsLeaderboard = true;
+            });
+          },
         );
       case 1:
         if (showJoinInvitationalLeague) {
@@ -134,7 +158,7 @@ class CommunityScreenState extends State<CommunityScreen> {
           },
         );
       case 2:
-        return const TopFriendsScreen();
+        return const FriendsTabBodyWidget();
       default:
         return const SizedBox.shrink();
     }

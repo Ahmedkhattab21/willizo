@@ -11,6 +11,7 @@ class ChallengeCard extends StatelessWidget {
   final String icon;
   final Color startColor;
   final Color endColor;
+  final bool isActive;
 
   const ChallengeCard({
     super.key,
@@ -20,6 +21,7 @@ class ChallengeCard extends StatelessWidget {
     required this.icon,
     required this.startColor,
     required this.endColor,
+    this.isActive = false,
   });
 
   @override
@@ -64,7 +66,10 @@ class ChallengeCard extends StatelessWidget {
                     color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12.r),
                   ),
-                  child: Text("Active", style: TextStyles.font12InterW400),
+                  child: Text(
+                    isActive ? "Active" : "Inactive",
+                    style: TextStyles.font12InterW400,
+                  ),
                 ),
               ],
             ),

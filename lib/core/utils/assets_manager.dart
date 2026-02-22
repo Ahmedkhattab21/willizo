@@ -52,6 +52,7 @@ class ImageAsset {
   static const String shopCircleIcon = "assets/icons/shop_circle_icon.svg";
   static const String filterIcon = "assets/icons/filter_icon.svg";
   static const String searchIcon = "assets/icons/search_icon.svg";
+  static const String coloredSearchIcon = "assets/icons/colored_search_icon.svg";
   static const String startIcon = "assets/svgs/star_svg.svg";
   static const String coloredDoumble = "assets/svgs/black_double_icon.svg";
   static const String doubleArrowIcon = "assets/svgs/double_arro_icon.svg";
@@ -94,4 +95,5 @@ class ImageAsset {
   static const String activeProfileIcon = "assets/svgs/active_profile_icon.svg";
   static const String wishlistIcon = "assets/svgs/wishlist_icon.svg";
   static const String shoppingCartIcon = "assets/svgs/cart_icon.svg";
+  static const String removeFrindIcon = "assets/icons/remove_frind_icon.svg";
 }

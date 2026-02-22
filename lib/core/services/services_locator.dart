@@ -31,6 +31,8 @@ import 'package:willizo/features/cart/data/services/cart_service.dart';
 import 'package:willizo/features/checkout/data/repos/checkout_repo.dart';
 import 'package:willizo/features/checkout/data/services/checkout_services.dart';
 import 'package:willizo/features/shop/logic/cubit/badge_cubit.dart';
+import 'package:willizo/features/community/data/services/community_services.dart';
+import 'package:willizo/features/community/data/repo/community_repo.dart';
 
 import '../api/api_consumer.dart';
 import '../api/app_interceptor.dart';
@@ -122,6 +124,14 @@ class ServicesLocator {
     ///shared secure
     FlutterSecureStorage secureStorage = FlutterSecureStorage();
     getIt.registerLazySingleton(() => secureStorage);
+
+    // Community / Leaderboard
+    getIt.registerLazySingleton<CommunityServices>(
+      () => CommunityServices(getIt()),
+    );
+    getIt.registerLazySingleton<CommunityRepo>(
+      () => CommunityRepo(communityServices: getIt()),
+    );
 
     getIt.registerLazySingleton<Step18Services>(() => Step18Services(getIt()));
     getIt.registerLazySingleton<Step18Repo>(() => Step18Repo(getIt()));

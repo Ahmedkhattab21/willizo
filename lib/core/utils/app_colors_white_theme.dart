@@ -24,9 +24,12 @@ class AppColors {
   static const Color backgroundColor = Color(0xff111400);
   static const Color whiteColorD8 = Color(0xffd9d7d8);
   static const Color greenColor = Color(0xFF01EB00);
-  static const Color neonGreenColor = Color(0xFF00FF00); // Bright neon green for nav bar
+  static const Color neonGreenColor = Color(
+    0xFF00FF00,
+  ); // Bright neon green for nav bar
   static const Color greyColorF8 = Color(0xFFF9F7F8);
   static const Color greyColor20 = Color(0xFF211F20);
+  static const Color greyColor2727 = Color(0xff272727);
   static const Color greyColor0F = Color(0xFF0F0F0F);
   static const Color greyColor = Color(0xFFE4E7E7);
   static const Color greyColro8D = Color(0xff8D8B8C);
@@ -37,6 +40,7 @@ class AppColors {
   static const Color redColorF7 = Color(0xff730909);
   static const Color greyColorF2 = Color(0xff2F343C);
   static const Color greenColor19 = Color(0xff19b954);
+
   ///remove
 
   static const Color greyColor97 = Color(0xff979797);
@@ -52,6 +56,7 @@ class AppColors {
   static const Color greyColor67 = Color(0xff676767);
   static const Color greyColor27 = Color(0xff181D27);
   static const Color greyColor66 = Color(0xff666666);
+  static const Color greyColor75 = Color(0xff757575);
   static const Color greyColorDB = Color(0xffD1D1DB);
   static const Color greyColor87 = Color(0xff7F7B87);
   static const Color greyColor3d = Color(0xff3c3e3d);
@@ -110,4 +115,7 @@ class AppColors {
   static const Color whiteColorE5 = Color(0xffE5E7EB);
   static const Color greyColorFD = Color(0xffADAEBC);
   static const Color greenColorFA = Color(0xff28A745);
+  static const Color greenColor12 = Color(0xff12D091);
+  static const Color greenColorDC = Color(0xffDCFCE7);
+  static const Color greenColor1665 = Color(0xff166534);
 }

@@ -1,47 +1,101 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/assets_manager.dart';
+import 'package:willizo/features/community/data/models/exercise_category_model.dart';
+import 'package:willizo/features/community/logic/cubit/community_cubit.dart';
 
 class ExercisesScreen extends StatelessWidget {
   const ExercisesScreen({super.key});
 
+  static String _getIconAsset(String iconName) {
+    switch (iconName) {
+      case 'push-ups':
+        return ImageAsset.coloredDoumble;
+      case 'squats':
+        return ImageAsset.squatsIcon;
+      case 'pull-ups':
+        return ImageAsset.pullUpsIcon;
+      case 'plank':
+        return ImageAsset.plankIcon;
+      case 'chest-bench':
+        return ImageAsset.coloredDoumble;
+      case 'chest-fly':
+        return ImageAsset.coloredDoumble;
+      case 'deadlift':
+        return ImageAsset.coloredDoumble;
+      case 'rows':
+        return ImageAsset.coloredDoumble;
+      case 'lunges':
+        return ImageAsset.squatsIcon;
+      case 'leg-press':
+        return ImageAsset.squatsIcon;
+      case 'bicep-curl':
+        return ImageAsset.coloredDoumble;
+      case 'tricep-dip':
+        return ImageAsset.coloredDoumble;
+      case 'crunches':
+        return ImageAsset.plankIcon;
+      case 'twists':
+        return ImageAsset.plankIcon;
+      case 'running':
+        return ImageAsset.squatsIcon;
+      case 'cycling':
+        return ImageAsset.squatsIcon;
+      case 'jump-rope':
+        return ImageAsset.squatsIcon;
+      case 'burpees':
+        return ImageAsset.squatsIcon;
+      case 'climbers':
+        return ImageAsset.squatsIcon;
+      case 'yoga':
+        return ImageAsset.plankIcon;
+      case 'overhead-press':
+        return ImageAsset.overheadPressIcon;
+      default:
+        return ImageAsset.coloredDoumble;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        ExerciseCard(
-          icon: ImageAsset.coloredDoumble,
-          title: 'Bench Press',
-          iconColor: AppColors.primaryColor,
-        ),
-        ExerciseCard(
-          icon: ImageAsset.squatsIcon,
-          title: 'Squat',
-          iconColor: AppColors.primaryColor,
-        ),
-        ExerciseCard(
-          icon: ImageAsset.pullUpsIcon,
-          title: 'Pull Ups',
-          iconColor: AppColors.primaryColor,
-        ),
-        ExerciseCard(
-          icon: ImageAsset.plankIcon,
-          title: 'Plank',
-          iconColor: AppColors.primaryColor,
-        ),
-        ExerciseCard(
-          icon: ImageAsset.overheadPressIcon,
-          title: 'Overhead Press',
-          iconColor: AppColors.primaryColor,
-        ),
-        ExerciseCard(
-          icon: ImageAsset.overheadPressIcon,
-          title: 'Bicep Curls',
-          iconColor: AppColors.primaryColor,
-        ),
-      ],
+    return BlocBuilder<CommunityCubit, CommunityState>(
+      builder: (context, state) {
+        if (state is LeaderboardLoadingState) {
+          return const Center(
+            child: CircularProgressIndicator(color: Colors.white),
+          );
+        }
+
+        final categories = state is LeaderboardLoadedState
+            ? state.exerciseCategories
+            : <ExerciseCategoryEntry>[];
+
+        if (categories.isEmpty) {
+          return Center(
+            child: Text(
+              'No exercises yet',
+              style: TextStyle(
+                color: AppColors.greyColorD1,
+                fontSize: 16.sp,
+              ),
+            ),
+          );
+        }
+
+        return ListView(
+          children: [
+            for (final entry in categories)
+              ExerciseCard(
+                icon: _getIconAsset(entry.exercise.icon),
+                title: entry.exercise.name,
+                iconColor: AppColors.primaryColor,
+              ),
+          ],
+        );
+      },
     );
   }
 }

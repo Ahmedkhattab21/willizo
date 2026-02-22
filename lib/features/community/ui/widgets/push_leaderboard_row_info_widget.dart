@@ -6,21 +6,27 @@ import 'package:willizo/core/utils/spacing.dart';
 class PushupLeaderBoardRowInf extends StatelessWidget {
   final int rank;
   final String name;
-  final String image;
+
+  /// Optional image URL. When null or empty, a profile icon is shown instead.
+  final String? image;
   final String reps;
   final String diff;
   final bool highlight;
   final Color? medalColor;
 
+  /// Label after the value in the subtitle (e.g. "reps" or "points"). Defaults to "reps".
+  final String unitLabel;
+
   const PushupLeaderBoardRowInf({
     super.key,
     required this.rank,
     required this.name,
-    required this.image,
+    this.image,
     required this.reps,
     required this.diff,
     this.highlight = false,
     this.medalColor,
+    this.unitLabel = 'reps',
   });
 
   @override
@@ -55,12 +61,15 @@ class PushupLeaderBoardRowInf extends StatelessWidget {
             ),
             horizontalSpace(12),
             ClipOval(
-              child: Image.network(
-                image,
-                width: 36,
-                height: 36,
-                fit: BoxFit.cover,
-              ),
+              child: (image != null && image!.isNotEmpty)
+                  ? Image.network(
+                      image!,
+                      width: 36,
+                      height: 36,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => _buildProfileIcon(),
+                    )
+                  : _buildProfileIcon(),
             ),
             horizontalSpace(12),
             Expanded(
@@ -75,12 +84,10 @@ class PushupLeaderBoardRowInf extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "$reps reps",
+                    "$reps $unitLabel",
                     style: TextStyle(
-                      color: highlight
-                          ? AppColors.greyColorColor80
-                          : Colors.white,
-                      fontSize: 12.sp,
+                      color: const Color.fromARGB(255, 164, 171, 184),
+                      fontSize: 10.sp,
                       fontWeight: FontWeight.w400,
                       fontFamily: "Inter",
                     ),
@@ -110,6 +117,15 @@ class PushupLeaderBoardRowInf extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildProfileIcon() {
+    return Container(
+      width: 36,
+      height: 36,
+      color: AppColors.greyColorD1,
+      child: const Icon(Icons.person, color: Colors.white, size: 24),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/spacing.dart';
@@ -138,43 +139,75 @@ class RegisterWidget extends StatelessWidget {
           keyboardType: TextInputType.emailAddress,
         ),
         verticalSpace(20),
-        AppTextFormField(
-          hintText: "Date of Birth",
-          hintStyle: TextStyles.font14greyColorColorW400,
-          contentPadding: EdgeInsets.symmetric(
-            vertical: 12.h,
-            horizontal: 20.w,
-          ),
-          textStyle: TextStyles.font14whiteColorColorW400,
-          controller: LoginAndSignup.get(context).registerBirthDateController,
-          prefixIcon: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-            child: SvgPicture.asset(ImageAsset.birthDateIcon),
-          ),
-          backgroundColor: AppColors.blackColor,
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
-            borderRadius: BorderRadius.circular(10.r),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
-            borderRadius: BorderRadius.circular(10.r),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.redColor, width: 2),
-            borderRadius: BorderRadius.circular(10.r),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.redColor, width: 2),
-            borderRadius: BorderRadius.circular(10.r),
-          ),
-          validator: (String? value) {
-            if (value == null || value.isEmpty) {
-              return "Enter Value";
+        GestureDetector(
+          onTap: () async {
+            final cubit = LoginAndSignup.get(context);
+            final DateTime? pickedDate = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now().subtract(const Duration(days: 365 * 18)),
+              firstDate: DateTime(1900),
+              lastDate: DateTime.now(),
+              builder: (context, child) {
+                return Theme(
+                  data: Theme.of(context).copyWith(
+                    colorScheme: ColorScheme.dark(
+                      primary: AppColors.primaryColor,
+                      onPrimary: AppColors.blackColor,
+                      surface: AppColors.blackColor,
+                      onSurface: AppColors.whiteColor,
+                    ),
+                    dialogBackgroundColor: AppColors.blackColor,
+                  ),
+                  child: child!,
+                );
+              },
+            );
+            if (pickedDate != null) {
+              final formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+              cubit.registerBirthDateController.text = formattedDate;
             }
-            return null;
           },
-          keyboardType: TextInputType.none,
+          child: AbsorbPointer(
+            child: AppTextFormField(
+              hintText: "Date of Birth",
+              hintStyle: TextStyles.font14greyColorColorW400,
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 12.h,
+                horizontal: 20.w,
+              ),
+              textStyle: TextStyles.font14whiteColorColorW400,
+              controller: LoginAndSignup.get(context).registerBirthDateController,
+              prefixIcon: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                child: SvgPicture.asset(ImageAsset.birthDateIcon),
+              ),
+              backgroundColor: AppColors.blackColor,
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.redColor, width: 2),
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.redColor, width: 2),
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return "Enter Value";
+                }
+                return null;
+              },
+              keyboardType: TextInputType.none,
+              isEnable: false,
+            ),
+          ),
         ),
 
         verticalSpace(20),

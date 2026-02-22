@@ -42,9 +42,7 @@ class ButtonNavBarWidget extends StatelessWidget {
             BlocProvider(
               create: (context) => CategoriesCubit(getIt())..getCategories(),
             ),
-            BlocProvider.value(
-              value: getIt<BadgeCubit>()..fetchBadgeCounts(),
-            ),
+            BlocProvider.value(value: getIt<BadgeCubit>()..fetchBadgeCounts()),
           ],
           child: const ShopScreen(),
         );

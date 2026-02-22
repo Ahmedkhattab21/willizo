@@ -208,21 +208,23 @@ class LoginWidget extends StatelessWidget {
         ),
 
         verticalSpace(32),
-        Center(
-          child: Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Don’t have an account?\t',
-                  style: TextStyles.font14greyColorColorA0W400,
-                ),
-                TextSpan(
-                  text: '\t Sign Up',
-                  style: TextStyles.font14primaryColorW600,
-                ),
-              ],
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Don\'t have an account?\t',
+              style: TextStyles.font14greyColorColorA0W400,
             ),
-          ),
+            GestureDetector(
+              onTap: () {
+                LoginAndSignup.get(context).changeSignInState(2);
+              },
+              child: Text(
+                '\t Sign Up',
+                style: TextStyles.font14primaryColorW600,
+              ),
+            ),
+          ],
         ),
       ],
     );

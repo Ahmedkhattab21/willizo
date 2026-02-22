@@ -88,21 +88,17 @@ class AppConstant {
     DateTime dateTime = DateTime.parse(dateString).toLocal();
     DateTime now = DateTime.now();
 
-    // الفرق بين اليوم والوقت
     Duration difference = now.difference(dateTime);
 
-    // نفس اليوم
     if (dateTime.year == now.year &&
         dateTime.month == now.month &&
         dateTime.day == now.day) {
       return intl.DateFormat.Hm().format(dateTime); // مثال: 14:40
     }
-    // أمس
     else if (difference.inDays == 1 &&
         dateTime.day == now.subtract(const Duration(days: 1)).day) {
       return "Yesterday";
     }
-    // أي يوم آخر
     else {
       return intl.DateFormat('yyyy-MM-dd').format(dateTime); // مثال: 2025-09-26
     }

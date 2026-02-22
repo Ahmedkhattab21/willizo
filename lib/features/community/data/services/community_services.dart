@@ -7,6 +7,10 @@ import 'package:willizo/core/exceptions/failure.dart';
 import 'package:willizo/core/services/cache_helper.dart';
 import 'package:willizo/core/utils/constant_keys.dart';
 import 'package:willizo/features/community/data/models/community_models.dart';
+import 'package:willizo/features/community/data/models/exercise_category_model.dart';
+import 'package:willizo/features/community/data/models/friend_model.dart';
+import 'package:willizo/features/community/data/models/leaderboard_model.dart';
+import 'package:willizo/features/community/data/models/my_leaderboard_model.dart';
 import 'package:willizo/features/community/data/services/community_api_endpoint.dart';
 
 class CommunityServices {
@@ -22,6 +26,125 @@ class CommunityServices {
     if (response.statusCode == StatusCode.ok ||
         response.statusCode == StatusCode.created) {
       return CommunityResponseModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  Future<List<LeaderboardEntry>> getLeaderboards() async {
+    final response = await apiConsumer.get(CommunityApiEndpoint.leaderboardsUrl, {
+      ConstantKeys.appAuthorization:
+          "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+    });
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      final List<dynamic> jsonList = jsonDecode(response.body);
+      return jsonList.map((item) => LeaderboardEntry.fromJson(item)).toList();
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  Future<MyLeaderboardEntry> getMyLeaderboard() async {
+    final response = await apiConsumer.get(
+      CommunityApiEndpoint.leaderboardsMeUrl,
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      return MyLeaderboardEntry.fromJson(jsonDecode(response.body));
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  Future<List<ExerciseCategoryEntry>> getExerciseCategories() async {
+    final response = await apiConsumer.get(
+      CommunityApiEndpoint.exerciseCategoriesUrl,
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      final List<dynamic> jsonList = jsonDecode(response.body);
+      return jsonList
+          .map((item) => ExerciseCategoryEntry.fromJson(item))
+          .toList();
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Fetches leaderboard friends (period is monthly, see [CommunityApiEndpoint.leaderboardsFriendsUrl]).
+  Future<List<LeaderboardEntry>> getLeaderboardFriends() async {
+    final response = await apiConsumer.get(
+      CommunityApiEndpoint.leaderboardsFriendsUrl,
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      final List<dynamic> jsonList = jsonDecode(response.body);
+      return jsonList.map((item) => LeaderboardEntry.fromJson(item)).toList();
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Fetches friends list (All Friends tab) with pagination.
+  Future<FriendsListResponse> getFriends({int page = 1}) async {
+    final response = await apiConsumer.get(
+      CommunityApiEndpoint.friendsUrlWithPage(page),
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      return FriendsListResponse.fromJson(jsonDecode(response.body));
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Fetches exercise details and leaderboard by slug (e.g. "push-ups").
+  Future<LeaderboardExerciseResponse> getLeaderboardExercise(String slug) async {
+    final response = await apiConsumer.get(
+      CommunityApiEndpoint.leaderboardExerciseUrl(slug),
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      return LeaderboardExerciseResponse.fromJson(jsonDecode(response.body));
     } else {
       throw ServerException(
         serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),

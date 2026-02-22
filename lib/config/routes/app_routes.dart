@@ -78,7 +78,7 @@ import 'package:willizo/features/product_details/logic/cubit/product_details_cub
 import 'package:willizo/features/product_details/ui/product_details_screen.dart';
 import 'package:willizo/features/splash/ui/splash_video_screen.dart';
 import 'package:willizo/features/subscrip/ui/subscribe_screen.dart';
-import 'package:willizo/features/top_friends/ui/top_friends_screen.dart';
+import 'package:willizo/features/community/ui/widgets/friends_tab_body_widget.dart';
 import 'package:willizo/features/wishlist/logic/cubit/wishlist_cubit.dart';
 import 'package:willizo/features/wishlist/ui/wishlist_screen.dart';
 
@@ -304,7 +304,7 @@ class RouteGenerator {
       case Routes.notificationScreen:
         return MaterialPageRoute(builder: (_) => const NotificationsScreen());
       case Routes.topFriendsScreen:
-        return MaterialPageRoute(builder: (_) => const TopFriendsScreen());
+        return MaterialPageRoute(builder: (_) => const FriendsTabBodyWidget());
       // ///user routes
       // case Routes.loginScreen:
       //   return MaterialPageRoute(
@@ -316,8 +316,9 @@ class RouteGenerator {
       case Routes.productDetailsScreen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => ProductDetailsCubit(getIt())
-              ..getProductDetails(args['productId']),
+            create: (context) =>
+                ProductDetailsCubit(getIt())
+                  ..getProductDetails(args['productId']),
             child: ProductDetailsScreen(
               productId: args != null ? args['productId'] : "",
             ),

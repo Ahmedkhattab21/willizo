@@ -12,3 +12,62 @@ final class CommunityErrorState extends CommunityState {
   final Failure failure;
   CommunityErrorState(this.failure);
 }
+
+// Leaderboard states
+final class LeaderboardLoadingState extends CommunityState {}
+
+final class LeaderboardLoadedState extends CommunityState {
+  final MyLeaderboardEntry? myEntry;
+  final List<ExerciseCategoryEntry> exerciseCategories;
+  final List<LeaderboardEntry> leaderboardFriends;
+  /// Exercise details for the first card (from GET /leaderboards/exercise/:slug).
+  final ExerciseInfo? firstCardExercise;
+
+  LeaderboardLoadedState({
+    this.myEntry,
+    this.exerciseCategories = const [],
+    this.leaderboardFriends = const [],
+    this.firstCardExercise,
+  });
+}
+
+final class LeaderboardErrorState extends CommunityState {
+  final Failure failure;
+  LeaderboardErrorState(this.failure);
+}
+
+// Friends list states (All Friends tab)
+final class FriendsLoadingState extends CommunityState {}
+
+final class FriendsLoadedState extends CommunityState {
+  final List<FriendListItem> friends;
+  final int currentPage;
+  final int lastPage;
+  final bool hasMore;
+
+  FriendsLoadedState({
+    required this.friends,
+    required this.currentPage,
+    required this.lastPage,
+    required this.hasMore,
+  });
+}
+
+final class FriendsLoadingMoreState extends CommunityState {
+  final List<FriendListItem> friends;
+  final int currentPage;
+  final int lastPage;
+  final bool hasMore;
+
+  FriendsLoadingMoreState({
+    required this.friends,
+    required this.currentPage,
+    required this.lastPage,
+    required this.hasMore,
+  });
+}
+
+final class FriendsErrorState extends CommunityState {
+  final Failure failure;
+  FriendsErrorState(this.failure);
+}
