@@ -52,7 +52,8 @@ class ImageAsset {
   static const String shopCircleIcon = "assets/icons/shop_circle_icon.svg";
   static const String filterIcon = "assets/icons/filter_icon.svg";
   static const String searchIcon = "assets/icons/search_icon.svg";
-  static const String coloredSearchIcon = "assets/icons/colored_search_icon.svg";
+  static const String coloredSearchIcon =
+      "assets/icons/colored_search_icon.svg";
   static const String startIcon = "assets/svgs/star_svg.svg";
   static const String coloredDoumble = "assets/svgs/black_double_icon.svg";
   static const String doubleArrowIcon = "assets/svgs/double_arro_icon.svg";
@@ -91,9 +92,12 @@ class ImageAsset {
   static const String inactiveGymIcon = "assets/svgs/inactive_gym_tool.svg";
   static const String activeRankingIcon = "assets/svgs/ranking_inactive.svg";
   static const String inactiveRankingIcon = "assets/svgs/inactive_ranking.svg";
-  static const String inactiveProfileIcon = "assets/svgs/inactive_profile_icon.svg";
+  static const String inactiveProfileIcon =
+      "assets/svgs/inactive_profile_icon.svg";
   static const String activeProfileIcon = "assets/svgs/active_profile_icon.svg";
   static const String wishlistIcon = "assets/svgs/wishlist_icon.svg";
   static const String shoppingCartIcon = "assets/svgs/cart_icon.svg";
   static const String removeFrindIcon = "assets/icons/remove_frind_icon.svg";
+  static const String fillHeartColorIcon = "assets/icons/fill_heart_color.svg";
+  static const String runningIcon = "assets/icons/running_icon.svg";
 }

@@ -15,6 +15,12 @@ class CommunityApiEndpoint {
   static String friendsUrlWithPage(int page) =>
       '${EndPoints.baseUrl}/friends?page=$page';
 
+  /// Remove friend by friendship record id.
+  static String deleteFriendUrl(String id) => '${EndPoints.baseUrl}/friends/$id';
+
+  /// Generate a friend invite link.
+  static const String generateInviteLinkUrl = '${EndPoints.baseUrl}/friends/invite';
+
   static String leaderboardExerciseUrl(String slug) =>
       '${EndPoints.baseUrl}/leaderboards/exercise/$slug';
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/spacing.dart';
+import 'package:willizo/features/community/ui/widgets/add_friend_dialog.dart';
 import 'package:willizo/features/community/ui/widgets/all_friends_tab_body_widget.dart';
 import 'package:willizo/features/community/ui/widgets/custom_search_bar_widget.dart';
 import 'package:willizo/features/community/ui/widgets/friends_tab_bar_widget.dart';
@@ -24,7 +25,7 @@ class _FriendsTabBodyWidgetState extends State<FriendsTabBodyWidget> {
       floatingActionButton: _currentTabIndex == 0
           ? FloatingActionButton(
               shape: CircleBorder(),
-              onPressed: () {},
+              onPressed: () => showAddFriendDialog(context),
               backgroundColor: AppColors.primaryColor,
               child: const Icon(
                 Icons.person_add_alt_1,

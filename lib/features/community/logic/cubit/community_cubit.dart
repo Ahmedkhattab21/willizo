@@ -60,31 +60,24 @@ class CommunityCubit extends Cubit<CommunityState> {
     );
 
     // Handle exercise categories result
-    exerciseResult.fold(
-      (_) {},
-      (data) {
-        exerciseCategories = data as List<ExerciseCategoryEntry>;
-      },
-    );
+    exerciseResult.fold((_) {}, (data) {
+      exerciseCategories = data as List<ExerciseCategoryEntry>;
+    });
 
     // Handle leaderboard friends (monthly) result
-    friendsResult.fold(
-      (_) {},
-      (data) {
-        leaderboardFriends = data as List<LeaderboardEntry>;
-      },
-    );
+    friendsResult.fold((_) {}, (data) {
+      leaderboardFriends = data as List<LeaderboardEntry>;
+    });
 
     // Fetch first-card exercise name (first category's slug)
     if (exerciseCategories.isNotEmpty) {
       final firstSlug = exerciseCategories.first.exercise.slug;
-      final exerciseResult = await _communityRepo.getLeaderboardExercise(firstSlug);
-      exerciseResult.fold(
-        (_) {},
-        (data) {
-          firstCardExercise = data.exercise;
-        },
+      final exerciseResult = await _communityRepo.getLeaderboardExercise(
+        firstSlug,
       );
+      exerciseResult.fold((_) {}, (data) {
+        firstCardExercise = data.exercise;
+      });
     }
 
     if (failure != null) {
@@ -110,20 +103,35 @@ class CommunityCubit extends Cubit<CommunityState> {
     }
     emit(FriendsLoadingState());
     final result = await _communityRepo.getFriends(page: 1);
-    result.fold(
-      (failure) => emit(FriendsErrorState(failure)),
-      (response) {
-        _friends = List.from(response.data);
-        _friendsCurrentPage = response.currentPage;
-        _friendsLastPage = response.lastPage;
-        emit(FriendsLoadedState(
+    result.fold((failure) => emit(FriendsErrorState(failure)), (response) {
+      _friends = List.from(response.data);
+      _friendsCurrentPage = response.currentPage;
+      _friendsLastPage = response.lastPage;
+      emit(
+        FriendsLoadedState(
           friends: _friends,
           currentPage: _friendsCurrentPage,
           lastPage: _friendsLastPage,
           hasMore: response.hasMore,
-        ));
-      },
-    );
+        ),
+      );
+    });
+  }
+
+  Future<bool> removeFriend(String id) async {
+    final result = await _communityRepo.deleteFriend(id);
+    return result.fold((_) => false, (_) {
+      _friends.removeWhere((item) => item.id == id);
+      emit(
+        FriendsLoadedState(
+          friends: _friends,
+          currentPage: _friendsCurrentPage,
+          lastPage: _friendsLastPage,
+          hasMore: hasMoreFriends,
+        ),
+      );
+      return true;
+    });
   }
 
   /// Loads next page of friends (pagination).
@@ -131,26 +139,27 @@ class CommunityCubit extends Cubit<CommunityState> {
     if (state is FriendsLoadingMoreState) return;
     if (!hasMoreFriends) return;
     final nextPage = _friendsCurrentPage + 1;
-    emit(FriendsLoadingMoreState(
-      friends: _friends,
-      currentPage: _friendsCurrentPage,
-      lastPage: _friendsLastPage,
-      hasMore: hasMoreFriends,
-    ));
+    emit(
+      FriendsLoadingMoreState(
+        friends: _friends,
+        currentPage: _friendsCurrentPage,
+        lastPage: _friendsLastPage,
+        hasMore: hasMoreFriends,
+      ),
+    );
     final result = await _communityRepo.getFriends(page: nextPage);
-    result.fold(
-      (failure) => emit(FriendsErrorState(failure)),
-      (response) {
-        _friends = [..._friends, ...response.data];
-        _friendsCurrentPage = response.currentPage;
-        _friendsLastPage = response.lastPage;
-        emit(FriendsLoadedState(
+    result.fold((failure) => emit(FriendsErrorState(failure)), (response) {
+      _friends = [..._friends, ...response.data];
+      _friendsCurrentPage = response.currentPage;
+      _friendsLastPage = response.lastPage;
+      emit(
+        FriendsLoadedState(
           friends: _friends,
           currentPage: _friendsCurrentPage,
           lastPage: _friendsLastPage,
           hasMore: response.hasMore,
-        ));
-      },
-    );
+        ),
+      );
+    });
   }
 }

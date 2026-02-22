@@ -130,6 +130,12 @@ class TextStyles {
     fontWeight: FontWeight.w700,
     fontFamily: 'Inter',
   );
+   static TextStyle font18WhiteColorW600 = TextStyle(
+    fontSize: 18.sp,
+    color: AppColors.whiteColor,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Inter',
+  );
 
   static TextStyle fon32whiteColorW700 = TextStyle(
     fontSize: 32.sp,

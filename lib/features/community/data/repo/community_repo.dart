@@ -77,4 +77,22 @@ class CommunityRepo {
       return Left(failure.serverFailure);
     }
   }
+
+  Future<Either<Failure, void>> deleteFriend(String id) async {
+    try {
+      await communityServices.deleteFriend(id);
+      return const Right(null);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, String>> generateInviteLink() async {
+    try {
+      final response = await communityServices.generateInviteLink();
+      return Right(response);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
 }

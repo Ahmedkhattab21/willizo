@@ -10,6 +10,8 @@ class FriendInfoCardWidget extends StatelessWidget {
   final String name;
   final String activeStatus;
   final bool isActiveNow;
+  final String? currentActivity;
+  final VoidCallback? onRemoveTap;
 
   const FriendInfoCardWidget({
     super.key,
@@ -17,7 +19,68 @@ class FriendInfoCardWidget extends StatelessWidget {
     required this.name,
     required this.activeStatus,
     this.isActiveNow = false,
+    this.currentActivity,
+    this.onRemoveTap,
   });
+
+  Widget _buildActivityRow(String activity) {
+    String iconPath;
+    Color iconColor;
+    Color textColor;
+
+    switch (activity.toLowerCase()) {
+      case 'cardio':
+        iconPath = ImageAsset.fire;
+        iconColor = AppColors.orangeColorF6;
+        textColor = AppColors.orangeColorF6;
+        break;
+      case 'yoga':
+        iconPath = ImageAsset.fillHeartColorIcon;
+        iconColor = Colors.transparent;
+        textColor = AppColors.greyColor75;
+        break;
+      case 'running':
+        iconPath = ImageAsset.runningIcon;
+        iconColor = Colors.transparent;
+        textColor = AppColors.greyColor75;
+        break;
+      case 'strength':
+        iconPath = ImageAsset.worldCrownIcon;
+        iconColor = AppColors.orangeColorF6;
+        textColor = AppColors.orangeColorF6;
+        break;
+      default:
+        return const SizedBox.shrink();
+    }
+
+    final String capitalizedActivity = activity.isNotEmpty
+        ? '${activity[0].toUpperCase()}${activity.substring(1)}'
+        : '';
+
+    return Padding(
+      padding: EdgeInsets.only(top: 4.h),
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            iconPath,
+            width: 14.w,
+            height: 14.h,
+            colorFilter: iconColor != Colors.transparent
+                ? ColorFilter.mode(iconColor, BlendMode.srcIn)
+                : null,
+          ),
+          SizedBox(width: 4.w),
+          Text(
+            capitalizedActivity,
+            style: TextStyles.font10InterW400.copyWith(
+              color: textColor,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,25 +99,28 @@ class FriendInfoCardWidget extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 28.r,
-                backgroundImage: NetworkImage(imageUrl),
+                backgroundColor: AppColors.greyColor3d,
+                child: Icon(
+                  Icons.person,
+                  color: AppColors.whiteColor,
+                  size: 24.sp,
+                ),
               ),
-              if (isActiveNow)
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    width: 16.w,
-                    height: 16.h,
-                    decoration: BoxDecoration(
-                      color: AppColors.greenColor12,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: AppColors.blackColor,
-                        width: 2.w,
-                      ),
-                    ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Container(
+                  width: 16.w,
+                  height: 16.h,
+                  decoration: BoxDecoration(
+                    color: isActiveNow
+                        ? AppColors.greenColor12
+                        : AppColors.greyColor2F,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.blackColor, width: 2.w),
                   ),
                 ),
+              ),
             ],
           ),
           SizedBox(width: 16.w),
@@ -76,19 +142,25 @@ class FriendInfoCardWidget extends StatelessWidget {
                     color: AppColors.greyColor75,
                   ),
                 ),
+                if (currentActivity != null && currentActivity!.isNotEmpty)
+                  _buildActivityRow(currentActivity!),
               ],
             ),
           ),
-          Container(
-            padding: EdgeInsets.all(8.r),
-            child: SvgPicture.asset(
-              ImageAsset.removeFrindIcon,
-              colorFilter: ColorFilter.mode(
-                AppColors.whiteColor,
-                BlendMode.srcIn,
+          GestureDetector(
+            onTap: onRemoveTap,
+            behavior: HitTestBehavior.opaque,
+            child: Container(
+              padding: EdgeInsets.all(8.r),
+              child: SvgPicture.asset(
+                ImageAsset.removeFrindIcon,
+                colorFilter: ColorFilter.mode(
+                  AppColors.whiteColor,
+                  BlendMode.srcIn,
+                ),
+                width: 17.w,
+                height: 14.h,
               ),
-              width: 17.w,
-              height: 14.h,
             ),
           ),
         ],

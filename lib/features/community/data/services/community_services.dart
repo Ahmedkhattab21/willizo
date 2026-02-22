@@ -132,6 +132,50 @@ class CommunityServices {
     }
   }
 
+  /// Removes a friend (DELETE /friends/:id). [id] is the friendship record id.
+  Future<void> deleteFriend(String id) async {
+    final response = await apiConsumer.delete(
+      CommunityApiEndpoint.deleteFriendUrl(id),
+      null,
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created ||
+        response.statusCode == StatusCode.noContent) {
+      return;
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Generates a friend invite link.
+  Future<String> generateInviteLink() async {
+    final response = await apiConsumer.post(
+      CommunityApiEndpoint.generateInviteLinkUrl,
+      null,
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      final json = jsonDecode(response.body);
+      return json['url'] as String;
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
   /// Fetches exercise details and leaderboard by slug (e.g. "push-ups").
   Future<LeaderboardExerciseResponse> getLeaderboardExercise(String slug) async {
     final response = await apiConsumer.get(

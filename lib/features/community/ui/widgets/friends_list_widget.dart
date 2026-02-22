@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:willizo/features/community/data/models/friend_model.dart';
 import 'package:willizo/features/community/logic/cubit/community_cubit.dart';
+import 'package:willizo/features/community/ui/widgets/friends_list_shimmer_widget.dart';
 import 'package:willizo/features/community/ui/widgets/frind_info_card_widget.dart';
+import 'package:willizo/features/community/ui/widgets/remove_friend_dialog.dart';
 
 /// Placeholder avatar when API does not provide image.
 const String _placeholderAvatarUrl =
@@ -35,22 +37,13 @@ class _FriendsListWidgetState extends State<FriendsListWidget> {
   void _onScroll() {
     final cubit = context.read<CommunityCubit>();
     if (cubit.state is! FriendsLoadedState &&
-        cubit.state is! FriendsLoadingMoreState) return;
+        cubit.state is! FriendsLoadingMoreState)
+      return;
     if (!cubit.hasMoreFriends) return;
     final position = _scrollController.position;
     if (position.pixels >= position.maxScrollExtent - 200) {
       cubit.loadMoreFriends();
     }
-  }
-
-  static String _activeStatus(Friend friend) {
-    if (friend.isActiveNow && friend.currentActivity != null) {
-      return 'Active now · ${friend.currentActivity}';
-    }
-    if (friend.lastActiveAt != null && friend.lastActiveAt!.isNotEmpty) {
-      return 'Last active ${friend.lastActiveAt}';
-    }
-    return 'Inactive';
   }
 
   @override
@@ -77,7 +70,9 @@ class _FriendsListWidgetState extends State<FriendsListWidget> {
             (state is! FriendsLoadedState &&
                 state is! FriendsLoadingMoreState &&
                 state is! FriendsErrorState)) {
-          return const Center(child: CircularProgressIndicator());
+          return const Expanded(
+            child: SingleChildScrollView(child: FriendsListShimmerWidget()),
+          );
         }
         if (state is FriendsErrorState) {
           return Center(
@@ -86,14 +81,12 @@ class _FriendsListWidgetState extends State<FriendsListWidget> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    state.failure.message,
-                    textAlign: TextAlign.center,
-                  ),
+                  Text(state.failure.message, textAlign: TextAlign.center),
                   const SizedBox(height: 16),
                   TextButton(
-                    onPressed: () =>
-                        context.read<CommunityCubit>().getFriends(refresh: true),
+                    onPressed: () => context.read<CommunityCubit>().getFriends(
+                      refresh: true,
+                    ),
                     child: const Text('Retry'),
                   ),
                 ],
@@ -105,8 +98,8 @@ class _FriendsListWidgetState extends State<FriendsListWidget> {
         final friends = state is FriendsLoadedState
             ? state.friends
             : state is FriendsLoadingMoreState
-                ? state.friends
-                : <FriendListItem>[];
+            ? state.friends
+            : <FriendListItem>[];
 
         if (friends.isEmpty) {
           return const Center(child: Text('No friends yet'));
@@ -127,11 +120,53 @@ class _FriendsListWidgetState extends State<FriendsListWidget> {
               }
               final item = friends[index];
               final f = item.friend;
+
+              String activeStatus = 'Inactive';
+              bool isOnline = false;
+
+              if (f.lastActiveAt != null && f.lastActiveAt!.isNotEmpty) {
+                try {
+                  String dateString = f.lastActiveAt!;
+                  if (!dateString.contains('Z')) {
+                    dateString = '${dateString.replaceFirst(' ', 'T')}Z';
+                  }
+                  final lastActive = DateTime.tryParse(dateString);
+                  if (lastActive != null) {
+                    final now = DateTime.now().toUtc();
+                    final difference = now.difference(lastActive);
+
+                    if (difference.isNegative || difference.inMinutes < 1) {
+                      activeStatus = 'Active now';
+                      isOnline = true;
+                    } else if (difference.inMinutes < 60) {
+                      activeStatus = 'Active ${difference.inMinutes} min ago';
+                      isOnline = true;
+                    } else if (difference.inHours < 24) {
+                      activeStatus = 'Last workout ${difference.inHours}h ago';
+                      isOnline = false;
+                    } else {
+                      activeStatus = 'Last workout ${difference.inDays}d ago';
+                      isOnline = false;
+                    }
+                  }
+                } catch (e) {
+                  activeStatus = 'Inactive';
+                  isOnline = false;
+                }
+              }
+
               return FriendInfoCardWidget(
                 name: f.fullName,
-                activeStatus: _activeStatus(f),
-                isActiveNow: f.isActiveNow,
+                activeStatus: activeStatus,
+                isActiveNow: isOnline,
+                currentActivity: f.currentActivity,
                 imageUrl: _placeholderAvatarUrl,
+                onRemoveTap: () => showRemoveFriendDialog(
+                  context: context,
+                  cubit: context.read<CommunityCubit>(),
+                  friendId: item.id,
+                  friendName: f.fullName,
+                ),
               );
             },
           ),
