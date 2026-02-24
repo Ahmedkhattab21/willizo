@@ -6,6 +6,7 @@ import 'package:willizo/features/community/data/models/exercise_category_model.d
 import 'package:willizo/features/community/data/models/friend_model.dart';
 import 'package:willizo/features/community/data/models/leaderboard_model.dart';
 import 'package:willizo/features/community/data/models/my_leaderboard_model.dart';
+import 'package:willizo/features/community/data/models/workout_summary_model.dart';
 import 'package:willizo/features/community/data/services/community_services.dart';
 
 class CommunityRepo {
@@ -69,9 +70,27 @@ class CommunityRepo {
     }
   }
 
+  Future<Either<Failure, WorkoutSummaryModel?>> getWorkoutsSummary() async {
+    try {
+      final response = await communityServices.getWorkoutsSummary();
+      return Right(response);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
   Future<Either<Failure, FriendsListResponse>> getFriends({int page = 1}) async {
     try {
       final response = await communityServices.getFriends(page: page);
+      return Right(response);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, AddFriendResponse>> addFriend(String friendId) async {
+    try {
+      final response = await communityServices.addFriend(friendId);
       return Right(response);
     } on ServerException catch (failure) {
       return Left(failure.serverFailure);

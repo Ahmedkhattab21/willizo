@@ -38,6 +38,7 @@ class CustomHeader extends StatelessWidget {
                 title,
                 style: TextStyles.font24primaryColorW600.copyWith(
                   color: AppColors.whiteColor,
+                  fontSize: 20.sp,
                 ),
               ),
             ),

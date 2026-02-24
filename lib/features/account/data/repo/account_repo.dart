@@ -14,6 +14,8 @@ class AccountRepo {
       return Right(await _accountServices.getAccountData());
     } on ServerException catch (failure) {
       return Left(ServerFailure(message: failure.serverFailure.message));
+    } catch (_) {
+      return const Left(ServerFailure(message: 'Failed to load profile'));
     }
   }
 }

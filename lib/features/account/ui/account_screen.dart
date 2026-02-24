@@ -10,6 +10,7 @@ import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/features/account/data/repo/account_repo.dart';
 import 'package:willizo/features/account/logic/cubit/account_cubit.dart';
 import 'package:willizo/features/account/ui/widgets/infro_tile_widget.dart';
+import 'package:willizo/features/account/ui/widgets/account_shimmer_widget.dart';
 import 'package:willizo/features/account/ui/widgets/profile_header_widget.dart';
 import 'package:willizo/features/account/ui/widgets/subscription_card_widget.dart';
 
@@ -26,7 +27,7 @@ class AccountScreen extends StatelessWidget {
           child: BlocBuilder<AccountCubit, AccountState>(
             builder: (context, state) {
               if (state is FetchAccountLoadingState) {
-                return const Center(child: CircularProgressIndicator());
+                return const AccountShimmerWidget();
               }
 
               if (state is FetchAccountErrorState) {

@@ -6,9 +6,9 @@ import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/features/all_products/ui/all_products_screen.dart';
 import 'package:willizo/features/shop/logic/cubit/categories_cubit.dart';
+import 'package:willizo/features/shop/logic/cubit/shop_cubit.dart';
 import 'package:willizo/features/shop/ui/widgets/all_categories_body_widget.dart';
 import 'package:willizo/features/shop/ui/widgets/featured_products_widget.dart';
-import 'package:willizo/features/shop/ui/widgets/search_and_filter_widget.dart';
 import 'package:willizo/features/shop/ui/widgets/shop_banner_widget.dart';
 import 'package:willizo/features/shop/ui/widgets/shop_header_widget.dart';
 import 'package:willizo/features/shop/ui/widgets/category_products_widget.dart';
@@ -66,60 +66,72 @@ class _ShopScreenState extends State<ShopScreen> {
               const ShopHeaderWidget(),
               verticalSpace(16),
               Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const ShopBannerWidget(),
-                      verticalSpace(10),
-                      Row(
-                        children: [
-                          Text(
-                            "Featured Products",
-                            style: TextStyles.font18InterW600.copyWith(
-                              color: AppColors.whiteColor,
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    await Future.wait([
+                      context.read<ShopCubit>().getFeaturedProducts(),
+                      context.read<CategoriesCubit>().getCategories(),
+                    ]);
+                  },
+                  color: AppColors.primaryColor,
+                  backgroundColor: AppColors.greyColor2727,
+                  strokeWidth: 2,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const ShopBannerWidget(),
+                        verticalSpace(10),
+                        Row(
+                          children: [
+                            Text(
+                              "Featured Products",
+                              style: TextStyles.font18InterW600.copyWith(
+                                color: AppColors.whiteColor,
+                              ),
                             ),
-                          ),
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const AllProductsScreen(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              "View all",
-                              style: TextStyles.font12GreenColorW500,
+                            const Spacer(),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const AllProductsScreen(),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                "View all",
+                                style: TextStyles.font12GreenColorW500,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      verticalSpace(10),
-                      const FeaturedProductsWidget(),
-                      verticalSpace(10),
-                      BlocListener<CategoriesCubit, CategoriesState>(
-                        listener: (context, state) {
-                          if (state is CategoriesLoadedState) {
-                            _autoSelectFirstCategory(context);
-                          }
-                        },
-                        child: ShopCategoriesWidget(
-                          onCategorySelected: (categorySlug) {
-                            debugPrint(
-                              '🟢 [ShopScreen] Category changed to slug: $categorySlug',
-                            );
-                            setState(() => selectedCategorySlug = categorySlug);
-                          },
+                          ],
                         ),
-                      ),
-                      verticalSpace(16),
-                      _buildCategoryBody(),
-                      verticalSpace(16),
-                    ],
+                        verticalSpace(10),
+                        const FeaturedProductsWidget(),
+                        verticalSpace(10),
+                        BlocListener<CategoriesCubit, CategoriesState>(
+                          listener: (context, state) {
+                            if (state is CategoriesLoadedState) {
+                              _autoSelectFirstCategory(context);
+                            }
+                          },
+                          child: ShopCategoriesWidget(
+                            onCategorySelected: (categorySlug) {
+                              debugPrint(
+                                '🟢 [ShopScreen] Category changed to slug: $categorySlug',
+                              );
+                              setState(() => selectedCategorySlug = categorySlug);
+                            },
+                          ),
+                        ),
+                        verticalSpace(16),
+                        _buildCategoryBody(),
+                        verticalSpace(16),
+                      ],
+                    ),
                   ),
                 ),
               ),

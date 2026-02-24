@@ -4,6 +4,7 @@ import 'package:willizo/features/community/data/models/exercise_category_model.d
 import 'package:willizo/features/community/data/models/friend_model.dart';
 import 'package:willizo/features/community/data/models/leaderboard_model.dart';
 import 'package:willizo/features/community/data/models/my_leaderboard_model.dart';
+import 'package:willizo/features/community/data/models/workout_summary_model.dart';
 import 'package:willizo/features/community/data/repo/community_repo.dart';
 
 part 'community_state.dart';
@@ -17,6 +18,7 @@ class CommunityCubit extends Cubit<CommunityState> {
   List<ExerciseCategoryEntry> exerciseCategories = [];
   List<LeaderboardEntry> leaderboardFriends = [];
   ExerciseInfo? firstCardExercise;
+  WorkoutSummaryModel? workoutSummary;
 
   // Friends list (All Friends tab)
   List<FriendListItem> _friends = [];
@@ -34,19 +36,36 @@ class CommunityCubit extends Cubit<CommunityState> {
     );
   }
 
+  /// Re-emits leaderboard state if we already have data (e.g. when switching back to Leaderboard tab).
+  void restoreLeaderboardState() {
+    if (exerciseCategories.isNotEmpty || myEntry != null) {
+      emit(
+        LeaderboardLoadedState(
+          myEntry: myEntry,
+          exerciseCategories: exerciseCategories,
+          leaderboardFriends: leaderboardFriends,
+          firstCardExercise: firstCardExercise,
+          workoutSummary: workoutSummary,
+        ),
+      );
+    }
+  }
+
   Future<void> getLeaderboards() async {
     emit(LeaderboardLoadingState());
 
-    // Fetch current user's leaderboard, exercise categories, and friends in parallel
+    // Fetch current user's leaderboard, exercise categories, friends, and workout summary in parallel
     final results = await Future.wait([
       _communityRepo.getMyLeaderboard(),
       _communityRepo.getExerciseCategories(),
       _communityRepo.getLeaderboardFriends(),
+      _communityRepo.getWorkoutsSummary(),
     ]);
 
     final myLeaderboardResult = results[0] as dynamic;
     final exerciseResult = results[1] as dynamic;
     final friendsResult = results[2] as dynamic;
+    final workoutSummaryResult = results[3] as dynamic;
 
     // Handle current user's leaderboard result
     Failure? failure;
@@ -69,6 +88,11 @@ class CommunityCubit extends Cubit<CommunityState> {
       leaderboardFriends = data as List<LeaderboardEntry>;
     });
 
+    // Handle workout summary (weekly challenge)
+    workoutSummaryResult.fold((_) {}, (data) {
+      workoutSummary = data as WorkoutSummaryModel?;
+    });
+
     // Fetch first-card exercise name (first category's slug)
     if (exerciseCategories.isNotEmpty) {
       final firstSlug = exerciseCategories.first.exercise.slug;
@@ -89,17 +113,30 @@ class CommunityCubit extends Cubit<CommunityState> {
           exerciseCategories: exerciseCategories,
           leaderboardFriends: leaderboardFriends,
           firstCardExercise: firstCardExercise,
+          workoutSummary: workoutSummary,
         ),
       );
     }
   }
 
   /// Fetches friends list for All Friends tab (page 1, or refresh).
+  /// If we already have cached friends and [refresh] is false, re-emits cached state without loading.
   Future<void> getFriends({bool refresh = false}) async {
     if (refresh) {
       _friends = [];
       _friendsCurrentPage = 1;
       _friendsLastPage = 1;
+    }
+    if (!refresh && _friends.isNotEmpty) {
+      emit(
+        FriendsLoadedState(
+          friends: _friends,
+          currentPage: _friendsCurrentPage,
+          lastPage: _friendsLastPage,
+          hasMore: hasMoreFriends,
+        ),
+      );
+      return;
     }
     emit(FriendsLoadingState());
     final result = await _communityRepo.getFriends(page: 1);

@@ -10,6 +10,7 @@ import 'package:willizo/features/community/ui/widgets/create_invitational_league
 import 'package:willizo/features/community/ui/widgets/create_league_form_widget.dart';
 import 'package:willizo/features/community/ui/widgets/custom_header_widget.dart';
 import 'package:willizo/features/community/ui/widgets/join_invitational_league_widget.dart';
+import 'package:willizo/features/community/ui/widgets/all_top_friends_body_widget.dart';
 import 'package:willizo/features/community/ui/widgets/leaderboard_body_widget.dart';
 import 'package:willizo/features/community/ui/widgets/leagues_body_widget.dart';
 import 'package:willizo/features/push_ups_leaderboard/ui/puhs_ups_leaderboard_screen.dart';
@@ -39,6 +40,7 @@ class CommunityScreenState extends State<CommunityScreenBody> {
 
   bool showTopFriends = false;
   bool showPushupsLeaderboard = false;
+  String? fullLeaderboardExerciseName;
   bool showExercises = false;
   bool showJoinInvitationalLeague = false;
   bool showCreateLeague = false;
@@ -63,6 +65,9 @@ class CommunityScreenState extends State<CommunityScreenBody> {
                     showCreateLeague = false;
                     showCreateLeagueForm = false;
                   });
+                  if (index == 0) {
+                    context.read<CommunityCubit>().restoreLeaderboardState();
+                  }
                 },
               ),
               Container(
@@ -81,13 +86,14 @@ class CommunityScreenState extends State<CommunityScreenBody> {
                   });
                 },
               ),
-              const Expanded(child: FriendsTabBodyWidget()),
+              const Expanded(child: TopFriendsContent()),
             ] else if (showPushupsLeaderboard) ...[
               CustomHeader(
-                title: "Push-ups Leaderboard",
+                title: "${fullLeaderboardExerciseName ?? 'Leaderboard'} Leaderboard",
                 onBack: () {
                   setState(() {
                     showPushupsLeaderboard = false;
+                    fullLeaderboardExerciseName = null;
                   });
                 },
               ),
@@ -123,8 +129,9 @@ class CommunityScreenState extends State<CommunityScreenBody> {
               showTopFriends = true;
             });
           },
-          onViewFullLeaderboardPressed: () {
+          onViewFullLeaderboardPressed: (String exerciseName) {
             setState(() {
+              fullLeaderboardExerciseName = exerciseName;
               showPushupsLeaderboard = true;
             });
           },

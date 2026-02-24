@@ -14,7 +14,8 @@ import 'package:willizo/features/community/ui/widgets/push_leaderboard_row_info_
 class PushupLeaderBoardCard extends StatelessWidget {
   const PushupLeaderBoardCard({super.key, this.onViewFullLeaderboardPressed});
 
-  final VoidCallback? onViewFullLeaderboardPressed;
+  /// Called with the exercise name (e.g. "Bench Press") when "View Full Leaderboard" is pressed.
+  final void Function(String exerciseName)? onViewFullLeaderboardPressed;
 
   static Color _medalColor(int rank) {
     switch (rank) {
@@ -166,7 +167,9 @@ class PushupLeaderBoardCard extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 20.h),
                   child: GestureDetector(
-                    onTap: onViewFullLeaderboardPressed,
+                    onTap: () => onViewFullLeaderboardPressed?.call(
+                      titleLoaded ?? 'Leaderboard',
+                    ),
                     child: const Text(
                       "View Full Leaderboard",
                       style: TextStyle(

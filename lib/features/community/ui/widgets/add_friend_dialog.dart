@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:willizo/core/services/services_locator.dart';
@@ -9,6 +10,7 @@ import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/core/widgets/app_text_field.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
 import 'package:willizo/features/community/data/repo/community_repo.dart';
+import 'package:willizo/features/community/logic/cubit/community_cubit.dart';
 
 void showAddFriendDialog(BuildContext context) {
   showDialog(
@@ -28,7 +30,8 @@ class _AddFriendDialogContent extends StatefulWidget {
 
 class _AddFriendDialogContentState extends State<_AddFriendDialogContent> {
   final TextEditingController _controller = TextEditingController();
-  final bool _isLoading = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isAddingFriend = false;
   bool _isInviteLinkGenerated = false;
   String _generatedInviteUrl = '';
   bool _isLoadingInvite = false;
@@ -39,9 +42,33 @@ class _AddFriendDialogContentState extends State<_AddFriendDialogContent> {
     super.dispose();
   }
 
-  void _handleAddFriend() {
-    // Add logic here when backend is ready
-    Navigator.of(context).pop();
+  Future<void> _handleAddFriend() async {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+    final friendId = _controller.text.trim();
+    if (friendId.isEmpty) return;
+
+    setState(() => _isAddingFriend = true);
+
+    final repo = getIt<CommunityRepo>();
+    final result = await repo.addFriend(friendId);
+
+    if (!mounted) return;
+    setState(() => _isAddingFriend = false);
+
+    result.fold(
+      (failure) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(failure.message)),
+        );
+      },
+      (response) {
+        context.read<CommunityCubit>().getFriends(refresh: true);
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(response.message)),
+        );
+      },
+    );
   }
 
   void _handleCopyLink() {
@@ -137,7 +164,9 @@ class _AddFriendDialogContentState extends State<_AddFriendDialogContent> {
               ),
               verticalSpace(12),
             ],
-            AppTextFormField(
+            Form(
+              key: _formKey,
+              child: AppTextFormField(
               hintText: _isInviteLinkGenerated ? '' : 'Your Friend ID',
               hintStyle: TextStyles.font14InterW400.copyWith(
                 color: AppColors.greyColorColor,
@@ -182,11 +211,12 @@ class _AddFriendDialogContentState extends State<_AddFriendDialogContent> {
               ),
               validator: (String? value) {
                 if (value == null || value.isEmpty) {
-                  return "Enter Value";
+                  return "Enter your friend's ID";
                 }
                 return null;
               },
               keyboardType: TextInputType.text,
+            ),
             ),
             verticalSpace(40),
             Row(
@@ -212,7 +242,7 @@ class _AddFriendDialogContentState extends State<_AddFriendDialogContent> {
                 horizontalSpace(12),
                 Expanded(
                   child: ButtonWidget(
-                    isLoading: _isInviteLinkGenerated ? false : _isLoading,
+                    isLoading: _isInviteLinkGenerated ? false : _isAddingFriend,
                     buttonText: _isInviteLinkGenerated
                         ? 'Copy Link'
                         : 'Add Friend',

@@ -16,7 +16,8 @@ import 'package:willizo/features/community/ui/widgets/weekly_challenge_card_widg
 class LeaderboardBody extends StatelessWidget {
   final VoidCallback? onViewAllPressed;
   final VoidCallback? onViewAllFriendsPressed;
-  final VoidCallback? onViewFullLeaderboardPressed;
+  /// Called with the exercise name (e.g. "Bench Press") when "View Full Leaderboard" is pressed.
+  final void Function(String exerciseName)? onViewFullLeaderboardPressed;
 
   const LeaderboardBody({
     super.key,
@@ -168,7 +169,19 @@ class LeaderboardBody extends StatelessWidget {
             verticalSpace(15),
             TopFriendsBoardCard(onViewAllFriendsPressed: onViewAllFriendsPressed),
             verticalSpace(20),
-            WeeklyChallengeCard(),
+            BlocBuilder<CommunityCubit, CommunityState>(
+              buildWhen: (prev, curr) =>
+                  prev is LeaderboardLoadedState != curr is LeaderboardLoadedState ||
+                  (curr is LeaderboardLoadedState &&
+                      prev is LeaderboardLoadedState &&
+                      curr.workoutSummary != prev.workoutSummary),
+              builder: (context, state) {
+                final summary = state is LeaderboardLoadedState
+                    ? state.workoutSummary
+                    : null;
+                return WeeklyChallengeCard(workoutSummary: summary);
+              },
+            ),
             verticalSpace(20),
           ],
         ),

@@ -22,12 +22,15 @@ final class LeaderboardLoadedState extends CommunityState {
   final List<LeaderboardEntry> leaderboardFriends;
   /// Exercise details for the first card (from GET /leaderboards/exercise/:slug).
   final ExerciseInfo? firstCardExercise;
+  /// Workout summary for weekly challenge (from GET /workouts/summary).
+  final WorkoutSummaryModel? workoutSummary;
 
   LeaderboardLoadedState({
     this.myEntry,
     this.exerciseCategories = const [],
     this.leaderboardFriends = const [],
     this.firstCardExercise,
+    this.workoutSummary,
   });
 }
 

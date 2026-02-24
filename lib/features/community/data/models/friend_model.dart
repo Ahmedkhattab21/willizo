@@ -64,6 +64,23 @@ class FriendListItem {
   }
 }
 
+/// Response from POST /friends/add (add friend by friend_id).
+class AddFriendResponse {
+  final String message;
+  final FriendListItem friendship;
+
+  AddFriendResponse({required this.message, required this.friendship});
+
+  factory AddFriendResponse.fromJson(Map<String, dynamic> json) {
+    return AddFriendResponse(
+      message: json['message'] ?? '',
+      friendship: FriendListItem.fromJson(
+        json['friendship'] as Map<String, dynamic>? ?? {},
+      ),
+    );
+  }
+}
+
 /// Paginated response for GET /friends.
 class FriendsListResponse {
   final int currentPage;

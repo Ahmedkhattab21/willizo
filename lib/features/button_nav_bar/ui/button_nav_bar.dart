@@ -22,38 +22,32 @@ class ButtonNavBarWidget extends StatelessWidget {
       extendBody: true,
       body: BlocBuilder<ButtonNavBarCubit, NavigationState>(
         builder: (context, state) {
-          return _getScreenForIndex(state.selectedIndex);
+          return IndexedStack(
+            index: state.selectedIndex.clamp(0, 4),
+            children: _navScreens,
+          );
         },
       ),
       bottomNavigationBar: const ElevatedBottomNavBar(),
     );
   }
 
-  Widget _getScreenForIndex(int index) {
-    switch (index) {
-      case 0:
-        return const HomeScreen();
-      case 1:
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => ShopCubit(getIt())..getFeaturedProducts(),
-            ),
-            BlocProvider(
-              create: (context) => CategoriesCubit(getIt())..getCategories(),
-            ),
-            BlocProvider.value(value: getIt<BadgeCubit>()..fetchBadgeCounts()),
-          ],
-          child: const ShopScreen(),
-        );
-      case 2:
-        return const WorkoutScreen();
-      case 3:
-        return const CommunityScreen();
-      case 4:
-        return const AccountScreen();
-      default:
-        return const HomeScreen();
-    }
-  }
+  static final List<Widget> _navScreens = [
+    const HomeScreen(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ShopCubit(getIt())..getFeaturedProducts(),
+        ),
+        BlocProvider(
+          create: (context) => CategoriesCubit(getIt())..getCategories(),
+        ),
+        BlocProvider.value(value: getIt<BadgeCubit>()..fetchBadgeCounts()),
+      ],
+      child: const ShopScreen(),
+    ),
+    const WorkoutScreen(),
+    const CommunityScreen(),
+    const AccountScreen(),
+  ];
 }

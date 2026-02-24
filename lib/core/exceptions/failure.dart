@@ -14,8 +14,12 @@ class ServerFailure extends Failure {
     required super.message,
   });
 
-  factory ServerFailure.fromJson(Map<String, dynamic> json) => ServerFailure(
-        message: json["message"],
-      );
+  factory ServerFailure.fromJson(Map<String, dynamic> json) {
+    final m = json["message"];
+    final String message = m == null
+        ? 'Unknown error'
+        : (m is String ? m : m.toString());
+    return ServerFailure(message: message);
+  }
 }
 
