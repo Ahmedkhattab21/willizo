@@ -31,7 +31,11 @@ class SuggestedFriendCardWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CircleAvatar(radius: 28.r, backgroundImage: NetworkImage(imageUrl)),
+          CircleAvatar(
+            radius: 28.r,
+            child: Icon(Icons.person, size: 28.r),
+          ),
+
           horizontalSpace(16),
           Expanded(
             child: Column(

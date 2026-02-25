@@ -1,10 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:willizo/core/exceptions/failure.dart';
 import 'package:willizo/features/community/data/models/exercise_category_model.dart';
 import 'package:willizo/features/community/data/models/friend_model.dart';
 import 'package:willizo/features/community/data/models/leaderboard_model.dart';
 import 'package:willizo/features/community/data/models/my_leaderboard_model.dart';
 import 'package:willizo/features/community/data/models/workout_summary_model.dart';
+import 'package:willizo/features/community/data/models/sync_contacts_model.dart';
 import 'package:willizo/features/community/data/repo/community_repo.dart';
 
 part 'community_state.dart';
@@ -26,6 +28,12 @@ class CommunityCubit extends Cubit<CommunityState> {
   int _friendsLastPage = 1;
   List<FriendListItem> get friends => List.unmodifiable(_friends);
   bool get hasMoreFriends => _friendsCurrentPage < _friendsLastPage;
+
+  // Top followers suggestions (Suggested tab)
+  List<TopFollowerSuggestionItem> topFollowers = [];
+
+  // From-your-contacts suggestions (Suggested tab)
+  List<ContactSuggestionItem> suggestionsFromContacts = [];
 
   Future<void> getCommunity() async {
     emit(CommunityLoadingState());
@@ -54,7 +62,6 @@ class CommunityCubit extends Cubit<CommunityState> {
   Future<void> getLeaderboards() async {
     emit(LeaderboardLoadingState());
 
-    // Fetch current user's leaderboard, exercise categories, friends, and workout summary in parallel
     final results = await Future.wait([
       _communityRepo.getMyLeaderboard(),
       _communityRepo.getExerciseCategories(),
@@ -199,4 +206,49 @@ class CommunityCubit extends Cubit<CommunityState> {
       );
     });
   }
+
+  /// Fetches top followers suggestions for Suggested tab.
+  /// If already cached, re-emits [TopFollowersLoadedState] without calling API.
+  Future<void> getTopFollowers() async {
+    if (topFollowers.isNotEmpty) {
+      emit(TopFollowersLoadedState());
+      return;
+    }
+    emit(TopFollowersLoadingState());
+    final result = await _communityRepo.getTopFollowers();
+    result.fold(
+      (failure) => emit(TopFollowersErrorState(failure)),
+      (list) {
+        topFollowers = list;
+        emit(TopFollowersLoadedState());
+      },
+    );
+  }
+
+  /// Fetches suggestions from contacts (GET /suggestions/from-contacts).
+  Future<void> getSuggestionsFromContacts() async {
+    emit(ContactsSuggestionsLoadingState());
+    final result = await _communityRepo.getSuggestionsFromContacts();
+    result.fold(
+      (failure) => emit(ContactsSuggestionsErrorState(failure)),
+      (list) {
+        suggestionsFromContacts = list;
+        emit(ContactsSuggestionsLoadedState());
+      },
+    );
+  }
+
+  /// Syncs device contacts to server (POST /suggestions/sync-contacts).
+  /// On success, fetches suggestions and emits [ContactsSuggestionsLoadedState].
+  Future<void> syncContacts(SyncContactsRequest request) async {
+    emit(ContactsSuggestionsLoadingState());
+    final result = await _communityRepo.syncContacts(request);
+    result.fold(
+      (failure) => emit(ContactsSuggestionsErrorState(failure)),
+      (_) => getSuggestionsFromContacts(),
+    );
+  }
+
+  static CommunityCubit get(context) =>
+      BlocProvider.of<CommunityCubit>(context);
 }

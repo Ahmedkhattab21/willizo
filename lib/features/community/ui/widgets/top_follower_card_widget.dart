@@ -6,13 +6,13 @@ import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
 
 class TopFollowerCardWidget extends StatelessWidget {
-  final String imageUrl;
+  // final String imageUrl;
   final String name;
   final String followersCount;
 
   const TopFollowerCardWidget({
     super.key,
-    required this.imageUrl,
+    // required this.imageUrl,
     required this.name,
     required this.followersCount,
   });
@@ -28,7 +28,11 @@ class TopFollowerCardWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CircleAvatar(radius: 36.r, backgroundImage: NetworkImage(imageUrl)),
+          CircleAvatar(
+            radius: 28.r,
+            child: Icon(Icons.person, size: 28.r),
+          ),
+
           verticalSpace(12),
           Text(
             name,

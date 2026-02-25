@@ -12,6 +12,7 @@ import 'package:willizo/features/community/data/models/friend_model.dart';
 import 'package:willizo/features/community/data/models/leaderboard_model.dart';
 import 'package:willizo/features/community/data/models/my_leaderboard_model.dart';
 import 'package:willizo/features/community/data/models/workout_summary_model.dart';
+import 'package:willizo/features/community/data/models/sync_contacts_model.dart';
 import 'package:willizo/features/community/data/services/community_api_endpoint.dart';
 
 class CommunityServices {
@@ -238,6 +239,77 @@ class CommunityServices {
         return WorkoutSummaryModel.fromJson(list.first as Map<String, dynamic>);
       }
       return WorkoutSummaryModel.fromJson(body as Map<String, dynamic>);
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Syncs device contacts for friend suggestions. POST /suggestions/sync-contacts.
+  Future<SyncContactsResponse> syncContacts(SyncContactsRequest request) async {
+    final response = await apiConsumer.post(
+      CommunityApiEndpoint.syncContactsUrl,
+      request.toJson(),
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      return SyncContactsResponse.fromJson(jsonDecode(response.body));
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Fetches suggestions from contacts (users found in your contacts). GET /suggestions/from-contacts.
+  Future<List<ContactSuggestionItem>> getSuggestionsFromContacts() async {
+    final response = await apiConsumer.get(
+      CommunityApiEndpoint.suggestionsFromContactsUrl,
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      final body = jsonDecode(response.body);
+      if (body is! List) return [];
+      return body
+          .map((e) =>
+              ContactSuggestionItem.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Fetches top followers suggestions. GET /suggestions/top-followers.
+  Future<List<TopFollowerSuggestionItem>> getTopFollowers() async {
+    final response = await apiConsumer.get(
+      CommunityApiEndpoint.suggestionsTopFollowersUrl,
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      final body = jsonDecode(response.body);
+      if (body is! List) return [];
+      return body
+          .map((e) =>
+              TopFollowerSuggestionItem.fromJson(e as Map<String, dynamic>))
+          .toList();
     } else {
       throw ServerException(
         serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),

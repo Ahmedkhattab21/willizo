@@ -27,4 +27,16 @@ class CommunityApiEndpoint {
 
   static const String workoutsSummaryUrl =
       '${EndPoints.baseUrl}/workouts/summary';
+
+  /// Sync device contacts for friend suggestions. POST with body {"contacts": [{ "phone_number", "name" }, ...]}.
+  static const String syncContactsUrl =
+      '${EndPoints.baseUrl}/suggestions/sync-contacts';
+
+  /// Fetch suggestions from contacts (users found in your contacts). GET /suggestions/from-contacts.
+  static const String suggestionsFromContactsUrl =
+      '${EndPoints.baseUrl}/suggestions/from-contacts';
+
+  /// Fetch top followers suggestions. GET /suggestions/top-followers.
+  static const String suggestionsTopFollowersUrl =
+      '${EndPoints.baseUrl}/suggestions/top-followers';
 }

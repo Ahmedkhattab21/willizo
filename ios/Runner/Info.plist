@@ -45,5 +45,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSContactsUsageDescription</key>
+	<string>Willizo needs access to your contacts to help you find and connect with friends who use the app.</string>
 </dict>
 </plist>

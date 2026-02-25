@@ -74,3 +74,23 @@ final class FriendsErrorState extends CommunityState {
   final Failure failure;
   FriendsErrorState(this.failure);
 }
+
+// Top followers suggestions (Suggested tab)
+final class TopFollowersLoadingState extends CommunityState {}
+
+final class TopFollowersLoadedState extends CommunityState {}
+
+final class TopFollowersErrorState extends CommunityState {
+  final Failure failure;
+  TopFollowersErrorState(this.failure);
+}
+
+// From-your-contacts suggestions (Suggested tab)
+final class ContactsSuggestionsLoadingState extends CommunityState {}
+
+final class ContactsSuggestionsLoadedState extends CommunityState {}
+
+final class ContactsSuggestionsErrorState extends CommunityState {
+  final Failure failure;
+  ContactsSuggestionsErrorState(this.failure);
+}

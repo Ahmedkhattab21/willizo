@@ -7,6 +7,7 @@ import 'package:willizo/features/community/data/models/friend_model.dart';
 import 'package:willizo/features/community/data/models/leaderboard_model.dart';
 import 'package:willizo/features/community/data/models/my_leaderboard_model.dart';
 import 'package:willizo/features/community/data/models/workout_summary_model.dart';
+import 'package:willizo/features/community/data/models/sync_contacts_model.dart';
 import 'package:willizo/features/community/data/services/community_services.dart';
 
 class CommunityRepo {
@@ -73,6 +74,36 @@ class CommunityRepo {
   Future<Either<Failure, WorkoutSummaryModel?>> getWorkoutsSummary() async {
     try {
       final response = await communityServices.getWorkoutsSummary();
+      return Right(response);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, SyncContactsResponse>> syncContacts(
+      SyncContactsRequest request) async {
+    try {
+      final response = await communityServices.syncContacts(request);
+      return Right(response);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, List<ContactSuggestionItem>>>
+      getSuggestionsFromContacts() async {
+    try {
+      final response = await communityServices.getSuggestionsFromContacts();
+      return Right(response);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, List<TopFollowerSuggestionItem>>>
+      getTopFollowers() async {
+    try {
+      final response = await communityServices.getTopFollowers();
       return Right(response);
     } on ServerException catch (failure) {
       return Left(failure.serverFailure);
