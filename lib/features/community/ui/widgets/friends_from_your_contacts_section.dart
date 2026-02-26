@@ -107,7 +107,7 @@ class _FriendsFromYourContactsSectionState
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       final cubit = CommunityCubit.get(context);
-      if (cubit.suggestionsFromContacts.isNotEmpty) {
+      if (cubit.hasFetchedContactsSuggestions) {
         setState(() => _permissionGranted = true);
         return;
       }
@@ -139,11 +139,11 @@ class _FriendsFromYourContactsSectionState
             current is ContactsSuggestionsLoadedState ||
             current is ContactsSuggestionsErrorState,
         builder: (context, state) {
-          final isLoading =
-              state is ContactsSuggestionsLoadingState;
-          final list = state is ContactsSuggestionsLoadedState
-              ? CommunityCubit.get(context).suggestionsFromContacts
-              : null;
+          final cubit = CommunityCubit.get(context);
+          final isLoading = state is ContactsSuggestionsLoadingState;
+          final hasLoaded = state is ContactsSuggestionsLoadedState ||
+              cubit.hasFetchedContactsSuggestions;
+          final list = hasLoaded ? cubit.suggestionsFromContacts : null;
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,7 +221,7 @@ class _FriendsFromYourContactsSectionState
                   ),
                 ),
               ] else ...[
-                if (isLoading)
+                if (isLoading || _isRequesting)
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 24.h),
                     child: Center(

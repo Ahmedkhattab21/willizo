@@ -31,9 +31,11 @@ class CommunityCubit extends Cubit<CommunityState> {
 
   // Top followers suggestions (Suggested tab)
   List<TopFollowerSuggestionItem> topFollowers = [];
+  bool hasFetchedTopFollowers = false;
 
   // From-your-contacts suggestions (Suggested tab)
   List<ContactSuggestionItem> suggestionsFromContacts = [];
+  bool hasFetchedContactsSuggestions = false;
 
   Future<void> getCommunity() async {
     emit(CommunityLoadingState());
@@ -210,7 +212,7 @@ class CommunityCubit extends Cubit<CommunityState> {
   /// Fetches top followers suggestions for Suggested tab.
   /// If already cached, re-emits [TopFollowersLoadedState] without calling API.
   Future<void> getTopFollowers() async {
-    if (topFollowers.isNotEmpty) {
+    if (hasFetchedTopFollowers) {
       emit(TopFollowersLoadedState());
       return;
     }
@@ -220,6 +222,7 @@ class CommunityCubit extends Cubit<CommunityState> {
       (failure) => emit(TopFollowersErrorState(failure)),
       (list) {
         topFollowers = list;
+        hasFetchedTopFollowers = true;
         emit(TopFollowersLoadedState());
       },
     );
@@ -233,6 +236,7 @@ class CommunityCubit extends Cubit<CommunityState> {
       (failure) => emit(ContactsSuggestionsErrorState(failure)),
       (list) {
         suggestionsFromContacts = list;
+        hasFetchedContactsSuggestions = true;
         emit(ContactsSuggestionsLoadedState());
       },
     );

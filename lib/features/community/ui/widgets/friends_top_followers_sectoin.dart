@@ -110,8 +110,12 @@ class _FriendsTopFollowersSectionState
         ),
       );
     }
-    if (state is TopFollowersLoadedState) {
-      final list = CommunityCubit.get(context).topFollowers;
+    
+    final cubit = CommunityCubit.get(context);
+    final hasLoaded = state is TopFollowersLoadedState || cubit.hasFetchedTopFollowers;
+    
+    if (hasLoaded) {
+      final list = cubit.topFollowers;
       if (list.isEmpty) {
         return Padding(
           padding: EdgeInsets.symmetric(vertical: 24.h),
@@ -142,6 +146,7 @@ class _FriendsTopFollowersSectionState
             .toList(),
       );
     }
+    
     if (state is TopFollowersErrorState) {
       return Padding(
         padding: EdgeInsets.symmetric(vertical: 24.h),
