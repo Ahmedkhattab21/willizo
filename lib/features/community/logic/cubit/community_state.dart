@@ -85,7 +85,15 @@ final class TopFollowersErrorState extends CommunityState {
   TopFollowersErrorState(this.failure);
 }
 
-// From-your-contacts suggestions (Suggested tab)
+// Near you suggestions (Suggested tab)
+final class NearYouSuggestionsLoadingState extends CommunityState {}
+
+final class NearYouSuggestionsLoadedState extends CommunityState {}
+
+final class NearYouSuggestionsErrorState extends CommunityState {
+  final Failure failure;
+  NearYouSuggestionsErrorState(this.failure);
+}
 final class ContactsSuggestionsLoadingState extends CommunityState {}
 
 final class ContactsSuggestionsLoadedState extends CommunityState {}

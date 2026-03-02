@@ -33,6 +33,27 @@ class CommunityCubit extends Cubit<CommunityState> {
   List<TopFollowerSuggestionItem> topFollowers = [];
   bool hasFetchedTopFollowers = false;
 
+  // Near you suggestions (Suggested tab)
+  List<NearYouSuggestionItem> nearYouSuggestions = [];
+  bool hasFetchedNearYouSuggestions = false;
+
+  /// Fetches suggestions near you (GET /suggestions/near-you).
+  Future<void> getSuggestionsNearYou() async {
+    if (hasFetchedNearYouSuggestions) {
+      emit(NearYouSuggestionsLoadedState());
+      return;
+    }
+    emit(NearYouSuggestionsLoadingState());
+    final result = await _communityRepo.getSuggestionsNearYou();
+    result.fold((failure) => emit(NearYouSuggestionsErrorState(failure)), (
+      list,
+    ) {
+      nearYouSuggestions = list;
+      hasFetchedNearYouSuggestions = true;
+      emit(NearYouSuggestionsLoadedState());
+    });
+  }
+
   // From-your-contacts suggestions (Suggested tab)
   List<ContactSuggestionItem> suggestionsFromContacts = [];
   bool hasFetchedContactsSuggestions = false;
@@ -218,32 +239,26 @@ class CommunityCubit extends Cubit<CommunityState> {
     }
     emit(TopFollowersLoadingState());
     final result = await _communityRepo.getTopFollowers();
-    result.fold(
-      (failure) => emit(TopFollowersErrorState(failure)),
-      (list) {
-        topFollowers = list;
-        hasFetchedTopFollowers = true;
-        emit(TopFollowersLoadedState());
-      },
-    );
+    result.fold((failure) => emit(TopFollowersErrorState(failure)), (list) {
+      topFollowers = list;
+      hasFetchedTopFollowers = true;
+      emit(TopFollowersLoadedState());
+    });
   }
 
   /// Fetches suggestions from contacts (GET /suggestions/from-contacts).
   Future<void> getSuggestionsFromContacts() async {
     emit(ContactsSuggestionsLoadingState());
     final result = await _communityRepo.getSuggestionsFromContacts();
-    result.fold(
-      (failure) => emit(ContactsSuggestionsErrorState(failure)),
-      (list) {
-        suggestionsFromContacts = list;
-        hasFetchedContactsSuggestions = true;
-        emit(ContactsSuggestionsLoadedState());
-      },
-    );
+    result.fold((failure) => emit(ContactsSuggestionsErrorState(failure)), (
+      list,
+    ) {
+      suggestionsFromContacts = list;
+      hasFetchedContactsSuggestions = true;
+      emit(ContactsSuggestionsLoadedState());
+    });
   }
 
-  /// Syncs device contacts to server (POST /suggestions/sync-contacts).
-  /// On success, fetches suggestions and emits [ContactsSuggestionsLoadedState].
   Future<void> syncContacts(SyncContactsRequest request) async {
     emit(ContactsSuggestionsLoadingState());
     final result = await _communityRepo.syncContacts(request);

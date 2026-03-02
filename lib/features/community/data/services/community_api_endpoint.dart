@@ -36,6 +36,10 @@ class CommunityApiEndpoint {
   static const String suggestionsFromContactsUrl =
       '${EndPoints.baseUrl}/suggestions/from-contacts';
 
+  /// Fetch suggestions near you. GET /suggestions/near-you.
+  static const String suggestionsNearYouUrl =
+      '${EndPoints.baseUrl}/suggestions/near-you';
+
   /// Fetch top followers suggestions. GET /suggestions/top-followers.
   static const String suggestionsTopFollowersUrl =
       '${EndPoints.baseUrl}/suggestions/top-followers';

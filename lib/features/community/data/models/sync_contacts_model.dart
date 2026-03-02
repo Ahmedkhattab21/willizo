@@ -64,6 +64,49 @@ class ContactSuggestionItem {
   }
 }
 
+/// Item from GET /suggestions/near-you.
+class NearYouSuggestionItem {
+  final String id;
+  final String fullName;
+  final String? friendId;
+  final int followersCount;
+  final double distance;
+
+  NearYouSuggestionItem({
+    required this.id,
+    required this.fullName,
+    this.friendId,
+    required this.followersCount,
+    required this.distance,
+  });
+
+  factory NearYouSuggestionItem.fromJson(Map<String, dynamic> json) {
+    double parsedDistance = 0.0;
+    if (json['distance'] != null) {
+      if (json['distance'] is String) {
+        parsedDistance = double.tryParse(json['distance']) ?? 0.0;
+      } else if (json['distance'] is num) {
+        parsedDistance = (json['distance'] as num).toDouble();
+      }
+    }
+
+    return NearYouSuggestionItem(
+      id: json['id']?.toString() ?? '',
+      fullName: json['full_name']?.toString() ?? '',
+      friendId: json['friend_id']?.toString(),
+      followersCount: _toInt(json['followers_count']),
+      distance: parsedDistance,
+    );
+  }
+
+  static int _toInt(dynamic value) {
+    if (value == null) return 0;
+    if (value is int) return value;
+    if (value is double) return value.toInt();
+    return 0;
+  }
+}
+
 /// Item from GET /suggestions/top-followers.
 class TopFollowerSuggestionItem {
   final String id;

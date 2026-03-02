@@ -110,6 +110,16 @@ class CommunityRepo {
     }
   }
 
+  Future<Either<Failure, List<NearYouSuggestionItem>>>
+      getSuggestionsNearYou() async {
+    try {
+      final response = await communityServices.getSuggestionsNearYou();
+      return Right(response);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
   Future<Either<Failure, FriendsListResponse>> getFriends({int page = 1}) async {
     try {
       final response = await communityServices.getFriends(page: page);

@@ -316,4 +316,29 @@ class CommunityServices {
       );
     }
   }
+
+  /// Fetches suggestions near you. GET /suggestions/near-you.
+  Future<List<NearYouSuggestionItem>> getSuggestionsNearYou() async {
+    final response = await apiConsumer.get(
+      CommunityApiEndpoint.suggestionsNearYouUrl,
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      final body = jsonDecode(response.body);
+      if (body is! List) return [];
+      return body
+          .map((e) =>
+              NearYouSuggestionItem.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
 }
