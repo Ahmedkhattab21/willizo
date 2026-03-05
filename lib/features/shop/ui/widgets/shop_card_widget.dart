@@ -48,6 +48,7 @@ class ShopProductCard extends StatelessWidget {
           );
         },
         child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
             color: Colors.black,
             borderRadius: BorderRadius.circular(7.r),
@@ -57,41 +58,43 @@ class ShopProductCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 12.h),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(7.r),
-                  child:
-                      image.startsWith('http://') ||
-                          image.startsWith('https://')
-                      ? Image.network(
-                          image,
-                          height: 101.h,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Image.asset(
-                              "assets/images/banner_image.png",
-                              height: 101.h,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            );
-                          },
-                        )
-                      : Image.asset(
-                          image,
-                          height: 101.h,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Image.asset(
-                              "assets/images/banner_image.png",
-                              height: 101.h,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            );
-                          },
-                        ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 12.h),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(7.r),
+                    child:
+                        image.startsWith('http://') ||
+                            image.startsWith('https://')
+                        ? Image.network(
+                            image,
+                            height: 101.h,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                "assets/images/banner_image.png",
+                                height: 101.h,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              );
+                            },
+                          )
+                        : Image.asset(
+                            image,
+                            height: 101.h,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                "assets/images/banner_image.png",
+                                height: 101.h,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              );
+                            },
+                          ),
+                  ),
                 ),
               ),
               Padding(
