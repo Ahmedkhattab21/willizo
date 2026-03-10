@@ -4,133 +4,145 @@ import 'package:flutter_svg/svg.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/spacing.dart';
+import 'package:willizo/core/utils/styles.dart';
+import 'package:willizo/features/community/ui/widgets/general_leagues_section_widget.dart';
+import 'package:willizo/features/community/ui/widgets/invitational_leagues_section_widget.dart';
+import 'package:willizo/features/community/ui/widgets/create_league_widget.dart';
+import 'package:willizo/features/community/ui/widgets/join_league_widget.dart';
 
-class LeaguesBody extends StatelessWidget {
-  final VoidCallback? onJoinInvitationalLeague;
-  final VoidCallback? onJoinGeneralLeague;
+class LeaguesBody extends StatefulWidget {
+  final VoidCallback? onCreateLeague;
 
-  const LeaguesBody({
-    super.key,
-    this.onJoinInvitationalLeague,
-    this.onJoinGeneralLeague,
-  });
+  const LeaguesBody({super.key, this.onCreateLeague});
+
+  @override
+  State<LeaguesBody> createState() => _LeaguesBodyState();
+}
+
+class _LeaguesBodyState extends State<LeaguesBody> {
+  bool _showJoinLeague = false;
+  bool _showCreateLeague = false;
 
   @override
   Widget build(BuildContext context) {
+    if (_showJoinLeague) {
+      return SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const JoinLeagueWidget(),
+          ],
+        ),
+      );
+    }
+
+    if (_showCreateLeague) {
+      return SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CreateLeagueWidget(onCreateLeague: widget.onCreateLeague),
+          ],
+        ),
+      );
+    }
+
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Choose a League Type to Join",
-            style: TextStyle(
-              color: AppColors.whiteColor,
-              fontSize: 20.sp,
-              fontWeight: FontWeight.w700,
-              fontFamily: 'Inter',
+          Container(
+            width: double.infinity,
+            height: 50.h,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [AppColors.greenColorEF, AppColors.greenColorFD],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              borderRadius: BorderRadius.circular(30.r),
             ),
-          ),
-          verticalSpace(8),
-          Text(
-            "You can join up to 20 invitational leagues and 8 public leagues.",
-            style: TextStyle(
-              color: AppColors.greyColorColor80,
-              fontSize: 14.sp,
-              fontFamily: 'Inter',
-              height: 1.5,
-            ),
-          ),
-          verticalSpace(32),
-
-          // Invitational Leagues
-          Text(
-            "Invitational Leagues",
-            style: TextStyle(
-              color: AppColors.whiteColor,
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Inter',
-            ),
-          ),
-          verticalSpace(8),
-          Text(
-            "Join an invitational league if somebody has given you a league code to enter.",
-            style: TextStyle(
-              color: AppColors.greyColorColor80,
-              fontSize: 14.sp,
-              fontFamily: 'Inter',
-              height: 1.5,
-            ),
-          ),
-          verticalSpace(24),
-          _buildJoinButton(context, onTap: onJoinInvitationalLeague),
-
-          verticalSpace(24),
-          Divider(color: AppColors.greyColorColor80.withOpacity(0.3)),
-          verticalSpace(24),
-
-          // General Leagues
-          Text(
-            "General Leagues",
-            style: TextStyle(
-              color: AppColors.whiteColor,
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Inter',
-            ),
-          ),
-          verticalSpace(8),
-          Text(
-            "Join a public league to play with a small, randomly selected group of other game players.",
-            style: TextStyle(
-              color: AppColors.greyColorColor80,
-              fontSize: 14.sp,
-              fontFamily: 'Inter',
-              height: 1.5,
-            ),
-          ),
-          verticalSpace(24),
-          _buildJoinButton(context, onTap: onJoinGeneralLeague),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildJoinButton(BuildContext context, {VoidCallback? onTap}) {
-    return Container(
-      width: double.infinity,
-      height: 50.h,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [AppColors.greenColorEF, AppColors.greenColorFD],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
-        borderRadius: BorderRadius.circular(30.r),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap ?? () {},
-          borderRadius: BorderRadius.circular(30.r),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(ImageAsset.enterIcon),
-              horizontalSpace(8),
-              Text(
-                "Join a league",
-                style: TextStyle(
-                  color: AppColors.blackColor,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Inter',
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () => setState(() => _showJoinLeague = true),
+                borderRadius: BorderRadius.circular(30.r),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      ImageAsset.enterIcon,
+                      colorFilter: const ColorFilter.mode(
+                        AppColors.blackColor,
+                        BlendMode.srcIn,
+                      ),
+                      height: 20.r,
+                      width: 20.r,
+                    ),
+                    horizontalSpace(8),
+                    Text(
+                      "Join a league",
+                      style: TextStyles.font16WhiteColorW600.copyWith(
+                        color: AppColors.blackColor,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+          verticalSpace(16),
+          Container(
+            width: double.infinity,
+            height: 50.h,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [AppColors.greenColorEF, AppColors.greenColorFD],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              borderRadius: BorderRadius.circular(30.r),
+            ),
+            padding: EdgeInsets.all(1.5),
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.backgroundColor,
+                borderRadius: BorderRadius.circular(28.5.r),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () => setState(() => _showCreateLeague = true),
+                  borderRadius: BorderRadius.circular(28.5.r),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.add,
+                        color: AppColors.primaryColor,
+                        size: 22.r,
+                      ),
+                      horizontalSpace(8),
+                      Text(
+                        "Create a league",
+                        style: TextStyles.font16WhiteColorW600.copyWith(
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          verticalSpace(24),
+          const GeneralLeaguesSectionWidget(),
+          verticalSpace(24),
+          const InvitationalLeaguesSectionWidget(),
+        ],
       ),
     );
   }

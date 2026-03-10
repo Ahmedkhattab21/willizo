@@ -89,7 +89,8 @@ class CommunityScreenState extends State<CommunityScreenBody> {
               const Expanded(child: TopFriendsContent()),
             ] else if (showPushupsLeaderboard) ...[
               CustomHeader(
-                title: "${fullLeaderboardExerciseName ?? 'Leaderboard'} Leaderboard",
+                title:
+                    "${fullLeaderboardExerciseName ?? 'Leaderboard'} Leaderboard",
                 onBack: () {
                   setState(() {
                     showPushupsLeaderboard = false;
@@ -153,12 +154,7 @@ class CommunityScreenState extends State<CommunityScreenBody> {
           );
         }
         return LeaguesBody(
-          onJoinInvitationalLeague: () {
-            setState(() {
-              showJoinInvitationalLeague = true;
-            });
-          },
-          onJoinGeneralLeague: () {
+          onCreateLeague: () {
             setState(() {
               showCreateLeague = true;
             });

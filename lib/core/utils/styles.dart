@@ -130,7 +130,7 @@ class TextStyles {
     fontWeight: FontWeight.w700,
     fontFamily: 'Inter',
   );
-   static TextStyle font18WhiteColorW600 = TextStyle(
+  static TextStyle font18WhiteColorW600 = TextStyle(
     fontSize: 18.sp,
     color: AppColors.whiteColor,
     fontWeight: FontWeight.w600,
@@ -165,6 +165,13 @@ class TextStyles {
     fontSize: 16.sp,
     color: AppColors.whiteColor,
     fontWeight: FontWeight.w600,
+    fontFamily: 'Inter',
+  );
+
+  static TextStyle font14WhiteColorW500 = TextStyle(
+    fontSize: 14.sp,
+    color: AppColors.whiteColorEb,
+    fontWeight: FontWeight.w500,
     fontFamily: 'Inter',
   );
 
@@ -214,7 +221,18 @@ class TextStyles {
     fontWeight: FontWeight.w400,
     fontFamily: 'Inter',
   );
-  
+  static TextStyle font12greyColorColor79W400 = TextStyle(
+    fontSize: 12.sp,
+    color: AppColors.greyColorColor79,
+    fontWeight: FontWeight.w400,
+    fontFamily: 'Inter',
+  );
+  static TextStyle font10WhiteColorW400 = TextStyle(
+    fontSize: 10.sp,
+    color: AppColors.whiteColorEb,
+    fontWeight: FontWeight.w400,
+    fontFamily: 'Inter',
+  );
   static TextStyle font14primaryColorW600 = TextStyle(
     fontSize: 14.sp,
     color: AppColors.primaryColor,

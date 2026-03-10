@@ -100,4 +100,6 @@ class ImageAsset {
   static const String removeFrindIcon = "assets/icons/remove_frind_icon.svg";
   static const String fillHeartColorIcon = "assets/icons/fill_heart_color.svg";
   static const String runningIcon = "assets/icons/running_icon.svg";
+  static const String arrowCircleDownIcon = "assets/svgs/arrow_circle_down_icon.svg";
+  static const String arrowCircleUpIcon = "assets/svgs/arrow_circle_up_icon.svg";
 }

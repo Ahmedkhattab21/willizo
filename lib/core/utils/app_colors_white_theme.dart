@@ -23,6 +23,7 @@ class AppColors {
   static const Color greenColor5e6 = Color(0xff5e6e4a);
   static const Color backgroundColor = Color(0xff111400);
   static const Color whiteColorD8 = Color(0xffd9d7d8);
+  static const Color whiteColorD9 = Color(0xffD9D9D9);
   static const Color greenColor = Color(0xFF01EB00);
   static const Color neonGreenColor = Color(
     0xFF00FF00,
