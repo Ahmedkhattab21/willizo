@@ -4,6 +4,7 @@ import 'package:willizo/core/exceptions/failure.dart';
 import 'package:willizo/features/community/data/models/community_models.dart';
 import 'package:willizo/features/community/data/models/exercise_category_model.dart';
 import 'package:willizo/features/community/data/models/friend_model.dart';
+import 'package:willizo/features/community/data/models/league_model.dart';
 import 'package:willizo/features/community/data/models/leaderboard_model.dart';
 import 'package:willizo/features/community/data/models/my_leaderboard_model.dart';
 import 'package:willizo/features/community/data/models/workout_summary_model.dart';
@@ -150,6 +151,15 @@ class CommunityRepo {
   Future<Either<Failure, String>> generateInviteLink() async {
     try {
       final response = await communityServices.generateInviteLink();
+      return Right(response);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, List<LeagueModel>>> getLeagues() async {
+    try {
+      final response = await communityServices.getLeagues();
       return Right(response);
     } on ServerException catch (failure) {
       return Left(failure.serverFailure);

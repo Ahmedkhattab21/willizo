@@ -43,4 +43,7 @@ class CommunityApiEndpoint {
   /// Fetch top followers suggestions. GET /suggestions/top-followers.
   static const String suggestionsTopFollowersUrl =
       '${EndPoints.baseUrl}/suggestions/top-followers';
+
+  /// Fetch all leagues (general + invitational). GET /leagues.
+  static const String leaguesUrl = '${EndPoints.baseUrl}/leagues';
 }

@@ -9,6 +9,7 @@ import 'package:willizo/core/utils/constant_keys.dart';
 import 'package:willizo/features/community/data/models/community_models.dart';
 import 'package:willizo/features/community/data/models/exercise_category_model.dart';
 import 'package:willizo/features/community/data/models/friend_model.dart';
+import 'package:willizo/features/community/data/models/league_model.dart';
 import 'package:willizo/features/community/data/models/leaderboard_model.dart';
 import 'package:willizo/features/community/data/models/my_leaderboard_model.dart';
 import 'package:willizo/features/community/data/models/workout_summary_model.dart';
@@ -309,6 +310,29 @@ class CommunityServices {
       return body
           .map((e) =>
               TopFollowerSuggestionItem.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Fetches all leagues. GET /leagues.
+  Future<List<LeagueModel>> getLeagues() async {
+    final response = await apiConsumer.get(
+      CommunityApiEndpoint.leaguesUrl,
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      final List<dynamic> jsonList = jsonDecode(response.body);
+      return jsonList
+          .map((item) => LeagueModel.fromJson(item as Map<String, dynamic>))
           .toList();
     } else {
       throw ServerException(

@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:willizo/core/exceptions/failure.dart';
 import 'package:willizo/features/community/data/models/exercise_category_model.dart';
+import 'package:willizo/features/community/data/models/league_model.dart';
 import 'package:willizo/features/community/data/models/friend_model.dart';
 import 'package:willizo/features/community/data/models/leaderboard_model.dart';
 import 'package:willizo/features/community/data/models/my_leaderboard_model.dart';
@@ -53,6 +54,10 @@ class CommunityCubit extends Cubit<CommunityState> {
       emit(NearYouSuggestionsLoadedState());
     });
   }
+
+  // Leagues
+  List<LeagueModel> generalLeagues = [];
+  List<LeagueModel> invitationalLeagues = [];
 
   // From-your-contacts suggestions (Suggested tab)
   List<ContactSuggestionItem> suggestionsFromContacts = [];
@@ -266,6 +271,22 @@ class CommunityCubit extends Cubit<CommunityState> {
       (failure) => emit(ContactsSuggestionsErrorState(failure)),
       (_) => getSuggestionsFromContacts(),
     );
+  }
+
+  Future<void> getLeagues() async {
+    if (generalLeagues.isNotEmpty || invitationalLeagues.isNotEmpty) {
+      emit(LeaguesLoadedState());
+      return;
+    }
+    emit(LeaguesLoadingState());
+    final result = await _communityRepo.getLeagues();
+    result.fold((failure) => emit(LeaguesErrorState(failure)), (leagues) {
+      generalLeagues = leagues.where((l) => l.type == 'general').toList();
+      invitationalLeagues = leagues
+          .where((l) => l.type == 'invitational')
+          .toList();
+      emit(LeaguesLoadedState());
+    });
   }
 
   static CommunityCubit get(context) =>

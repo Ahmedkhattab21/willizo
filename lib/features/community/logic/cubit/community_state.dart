@@ -102,3 +102,13 @@ final class ContactsSuggestionsErrorState extends CommunityState {
   final Failure failure;
   ContactsSuggestionsErrorState(this.failure);
 }
+
+// Leagues states
+final class LeaguesLoadingState extends CommunityState {}
+
+final class LeaguesLoadedState extends CommunityState {}
+
+final class LeaguesErrorState extends CommunityState {
+  final Failure failure;
+  LeaguesErrorState(this.failure);
+}

@@ -67,6 +67,8 @@ class CommunityScreenState extends State<CommunityScreenBody> {
                   });
                   if (index == 0) {
                     context.read<CommunityCubit>().restoreLeaderboardState();
+                  } else if (index == 1) {
+                    context.read<CommunityCubit>().getLeagues();
                   }
                 },
               ),

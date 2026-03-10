@@ -19,10 +19,11 @@ class TopFriendsBoardCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CommunityCubit, CommunityState>(
       builder: (context, state) {
+        final cubit = CommunityCubit.get(context);
         final isLoading = state is LeaderboardLoadingState;
         final friends = state is LeaderboardLoadedState
             ? state.leaderboardFriends
-            : <LeaderboardEntry>[];
+            : cubit.leaderboardFriends;
         final displayList = friends.take(4).toList();
 
         return Container(
@@ -94,12 +95,10 @@ class TopFriendsBoardCard extends StatelessWidget {
                 if (displayList.isEmpty)
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 16.h),
-                    child: SizedBox(
-                      height: 24.w,
-                      width: 24.w,
-                      child: const CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
+                    child: Center(
+                      child: Text(
+                        "No friends yet",
+                        style: TextStyle(color: Colors.white70),
                       ),
                     ),
                   )
