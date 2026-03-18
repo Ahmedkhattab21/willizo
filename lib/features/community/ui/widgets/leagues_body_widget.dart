@@ -5,6 +5,7 @@ import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
+import 'package:willizo/features/community/ui/widgets/available_leagues_section_widget.dart';
 import 'package:willizo/features/community/ui/widgets/general_leagues_section_widget.dart';
 import 'package:willizo/features/community/ui/widgets/invitational_leagues_section_widget.dart';
 import 'package:willizo/features/community/ui/widgets/create_league_widget.dart';
@@ -30,20 +31,21 @@ class _LeaguesBodyState extends State<LeaguesBody> {
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const JoinLeagueWidget(),
-          ],
+          children: [const JoinLeagueWidget()],
         ),
       );
     }
 
     if (_showCreateLeague) {
       return SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CreateLeagueWidget(onCreateLeague: widget.onCreateLeague),
+            CreateLeagueWidget(
+              onCreateLeague: widget.onCreateLeague,
+              onSuccess: () => setState(() => _showCreateLeague = false),
+            ),
           ],
         ),
       );
@@ -138,6 +140,8 @@ class _LeaguesBodyState extends State<LeaguesBody> {
               ),
             ),
           ),
+          verticalSpace(24),
+          const AvailableLeaguesSectionWidget(),
           verticalSpace(24),
           const GeneralLeaguesSectionWidget(),
           verticalSpace(24),

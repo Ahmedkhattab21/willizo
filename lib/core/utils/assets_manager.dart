@@ -92,6 +92,7 @@ class ImageAsset {
   static const String inactiveGymIcon = "assets/svgs/inactive_gym_tool.svg";
   static const String activeRankingIcon = "assets/svgs/ranking_inactive.svg";
   static const String inactiveRankingIcon = "assets/svgs/inactive_ranking.svg";
+  static const String leagueIcon = "assets/svgs/league_icon.svg";
   static const String inactiveProfileIcon =
       "assets/svgs/inactive_profile_icon.svg";
   static const String activeProfileIcon = "assets/svgs/active_profile_icon.svg";
@@ -100,6 +101,9 @@ class ImageAsset {
   static const String removeFrindIcon = "assets/icons/remove_frind_icon.svg";
   static const String fillHeartColorIcon = "assets/icons/fill_heart_color.svg";
   static const String runningIcon = "assets/icons/running_icon.svg";
-  static const String arrowCircleDownIcon = "assets/svgs/arrow_circle_down_icon.svg";
-  static const String arrowCircleUpIcon = "assets/svgs/arrow_circle_up_icon.svg";
+  static const String arrowCircleDownIcon =
+      "assets/svgs/arrow_circle_down_icon.svg";
+  static const String arrowCircleUpIcon =
+      "assets/svgs/arrow_circle_up_icon.svg";
+  static const String whiteCrownIcon = "assets/svgs/white_crown.svg";
 }

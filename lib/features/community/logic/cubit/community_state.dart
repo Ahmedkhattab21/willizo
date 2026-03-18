@@ -112,3 +112,33 @@ final class LeaguesErrorState extends CommunityState {
   final Failure failure;
   LeaguesErrorState(this.failure);
 }
+
+// Available leagues states
+final class AvailableLeaguesLoadingState extends CommunityState {}
+
+final class AvailableLeaguesLoadedState extends CommunityState {}
+
+final class AvailableLeaguesErrorState extends CommunityState {
+  final Failure failure;
+  AvailableLeaguesErrorState(this.failure);
+}
+
+// Create league states
+final class LeagueCreatingState extends CommunityState {}
+
+final class LeagueCreatedState extends CommunityState {}
+
+final class LeagueCreationErrorState extends CommunityState {
+  final Failure failure;
+  LeagueCreationErrorState(this.failure);
+}
+
+// Join league states
+final class LeagueJoiningState extends CommunityState {}
+
+final class LeagueJoinedState extends CommunityState {}
+
+final class LeagueJoinErrorState extends CommunityState {
+  final Failure failure;
+  LeagueJoinErrorState(this.failure);
+}

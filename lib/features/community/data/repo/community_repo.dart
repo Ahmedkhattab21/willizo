@@ -4,6 +4,8 @@ import 'package:willizo/core/exceptions/failure.dart';
 import 'package:willizo/features/community/data/models/community_models.dart';
 import 'package:willizo/features/community/data/models/exercise_category_model.dart';
 import 'package:willizo/features/community/data/models/friend_model.dart';
+import 'package:willizo/features/community/data/models/create_league_request_model.dart';
+import 'package:willizo/features/community/data/models/create_league_response_model.dart';
 import 'package:willizo/features/community/data/models/league_model.dart';
 import 'package:willizo/features/community/data/models/leaderboard_model.dart';
 import 'package:willizo/features/community/data/models/my_leaderboard_model.dart';
@@ -20,6 +22,24 @@ class CommunityRepo {
     try {
       final response = await communityServices.getCommunity();
       return Right(response);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, void>> joinLeagueByCode(String code) async {
+    try {
+      await communityServices.joinLeagueByCode(code);
+      return const Right(null);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, void>> joinLeague(String leagueId) async {
+    try {
+      await communityServices.joinLeague(leagueId);
+      return const Right(null);
     } on ServerException catch (failure) {
       return Left(failure.serverFailure);
     }
@@ -157,9 +177,28 @@ class CommunityRepo {
     }
   }
 
+  Future<Either<Failure, CreateLeagueResponseModel>> createLeague(
+      CreateLeagueRequestModel request) async {
+    try {
+      final response = await communityServices.createLeague(request);
+      return Right(response);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
   Future<Either<Failure, List<LeagueModel>>> getLeagues() async {
     try {
       final response = await communityServices.getLeagues();
+      return Right(response);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, List<LeagueModel>>> getAvailableLeagues() async {
+    try {
+      final response = await communityServices.getAvailableLeagues();
       return Right(response);
     } on ServerException catch (failure) {
       return Left(failure.serverFailure);

@@ -46,4 +46,11 @@ class CommunityApiEndpoint {
 
   /// Fetch all leagues (general + invitational). GET /leagues.
   static const String leaguesUrl = '${EndPoints.baseUrl}/leagues';
+
+  /// Fetch available leagues the user can join. GET /leagues/available.
+  static const String availableLeaguesUrl =
+      '${EndPoints.baseUrl}/leagues/available';
+
+  /// Join a league by ID. POST /leagues/join.
+  static const String joinLeagueUrl = '${EndPoints.baseUrl}/leagues/join';
 }

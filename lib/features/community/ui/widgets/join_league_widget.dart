@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
+import 'package:willizo/core/utils/app_constant.dart';
 import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/core/widgets/app_text_field.dart';
+import 'package:willizo/features/community/logic/cubit/community_cubit.dart';
 
 class JoinLeagueWidget extends StatefulWidget {
   final VoidCallback? onJoinInvitationalLeague;
@@ -18,8 +21,21 @@ class JoinLeagueWidget extends StatefulWidget {
 
 class _JoinLeagueWidgetState extends State<JoinLeagueWidget> {
   bool _showInvitationalForm = false;
+  bool _showGeneralForm = false;
   final _leagueCodeController = TextEditingController();
+  final _leagueIdController = TextEditingController();
   bool _hasCode = false;
+  bool _hasId = false;
+
+  OutlineInputBorder get _border => OutlineInputBorder(
+        borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
+        borderRadius: BorderRadius.circular(10.r),
+      );
+
+  OutlineInputBorder get _errorBorder => OutlineInputBorder(
+        borderSide: BorderSide(color: AppColors.redColor, width: 2),
+        borderRadius: BorderRadius.circular(10.r),
+      );
 
   @override
   void initState() {
@@ -28,66 +44,126 @@ class _JoinLeagueWidgetState extends State<JoinLeagueWidget> {
       final hasText = _leagueCodeController.text.isNotEmpty;
       if (hasText != _hasCode) setState(() => _hasCode = hasText);
     });
+    _leagueIdController.addListener(() {
+      final hasText = _leagueIdController.text.isNotEmpty;
+      if (hasText != _hasId) setState(() => _hasId = hasText);
+    });
   }
 
   @override
   void dispose() {
     _leagueCodeController.dispose();
+    _leagueIdController.dispose();
     super.dispose();
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String hint,
+  }) {
+    return AppTextFormField(
+      hintText: hint,
+      hintStyle: TextStyles.font14greyColorColorW400,
+      contentPadding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
+      textStyle: TextStyles.font14whiteColorColorW400,
+      controller: controller,
+      backgroundColor: AppColors.blackColor,
+      prefixIcon: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+        child: SvgPicture.asset(ImageAsset.nameIcon),
+      ),
+      enabledBorder: _border,
+      focusedBorder: _border,
+      errorBorder: _errorBorder,
+      focusedErrorBorder: _errorBorder,
+      validator: (value) => null,
+      keyboardType: TextInputType.text,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     if (_showInvitationalForm) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Join an Invitational League",
-            style: TextStyles.font18WhiteColor700.copyWith(fontSize: 20.sp),
-          ),
-          verticalSpace(24),
-          Text("League Code", style: TextStyles.font14WhiteColorW500),
-          verticalSpace(8),
-          AppTextFormField(
-            hintText: "Enter League Code",
-            hintStyle: TextStyles.font14greyColorColorW400,
-            contentPadding: EdgeInsets.symmetric(
-              vertical: 12.h,
-              horizontal: 20.w,
-            ),
-            textStyle: TextStyles.font14whiteColorColorW400,
-            controller: _leagueCodeController,
-            backgroundColor: AppColors.blackColor,
-            prefixIcon: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-              child: SvgPicture.asset(ImageAsset.nameIcon),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
-              borderRadius: BorderRadius.circular(10.r),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
-              borderRadius: BorderRadius.circular(10.r),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.redColor, width: 2),
-              borderRadius: BorderRadius.circular(10.r),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.redColor, width: 2),
-              borderRadius: BorderRadius.circular(10.r),
-            ),
-            validator: (value) => null,
-            keyboardType: TextInputType.text,
-          ),
-          verticalSpace(24),
-          GradientJoinButtonWidget(
-            isEnabled: _hasCode,
-            onTap: _hasCode ? widget.onJoinInvitationalLeague : null,
-          ),
-        ],
+      return BlocConsumer<CommunityCubit, CommunityState>(
+        listener: (context, state) {
+          if (state is LeagueJoinedState) {
+            AppConstant.toast("Joined league successfully", AppColors.primaryColor);
+            CommunityCubit.get(context).getLeagues();
+            CommunityCubit.get(context).getAvailableLeagues();
+            widget.onJoinInvitationalLeague?.call();
+          } else if (state is LeagueJoinErrorState) {
+            AppConstant.toast(state.failure.message, AppColors.redColor);
+          }
+        },
+        builder: (context, state) {
+          final isLoading = state is LeagueJoiningState;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Join an Invitational League",
+                style: TextStyles.font18WhiteColor700.copyWith(fontSize: 20.sp),
+              ),
+              verticalSpace(24),
+              Text("League Code", style: TextStyles.font14WhiteColorW500),
+              verticalSpace(8),
+              _buildTextField(
+                controller: _leagueCodeController,
+                hint: "Enter League Code",
+              ),
+              verticalSpace(24),
+              GradientJoinButtonWidget(
+                isEnabled: _hasCode && !isLoading,
+                onTap: _hasCode && !isLoading
+                    ? () => CommunityCubit.get(context).joinLeagueByCode(_leagueCodeController.text.trim())
+                    : null,
+                label: isLoading ? "Joining..." : "Join a league",
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    if (_showGeneralForm) {
+      return BlocConsumer<CommunityCubit, CommunityState>(
+        listener: (context, state) {
+          if (state is LeagueJoinedState) {
+            AppConstant.toast("Joined league successfully", AppColors.primaryColor);
+            CommunityCubit.get(context).getLeagues();
+            CommunityCubit.get(context).getAvailableLeagues();
+            widget.onJoinInvitationalLeague?.call();
+          } else if (state is LeagueJoinErrorState) {
+            AppConstant.toast(state.failure.message, AppColors.redColor);
+          }
+        },
+        builder: (context, state) {
+          final isLoading = state is LeagueJoiningState;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Join a General League",
+                style: TextStyles.font18WhiteColor700.copyWith(fontSize: 20.sp),
+              ),
+              verticalSpace(24),
+              Text("League ID", style: TextStyles.font14WhiteColorW500),
+              verticalSpace(8),
+              _buildTextField(
+                controller: _leagueIdController,
+                hint: "Enter League ID",
+              ),
+              verticalSpace(24),
+              GradientJoinButtonWidget(
+                isEnabled: _hasId && !isLoading,
+                onTap: _hasId && !isLoading
+                    ? () => CommunityCubit.get(context).joinLeague(_leagueIdController.text.trim())
+                    : null,
+                label: isLoading ? "Joining..." : "Join a league",
+              ),
+            ],
+          );
+        },
       );
     }
 
@@ -134,7 +210,9 @@ class _JoinLeagueWidgetState extends State<JoinLeagueWidget> {
             style: TextStyles.font10WhiteColorW400,
           ),
           verticalSpace(24),
-          GradientJoinButtonWidget(onTap: widget.onJoinInvitationalLeague),
+          GradientJoinButtonWidget(
+            onTap: () => setState(() => _showGeneralForm = true),
+          ),
         ],
       ),
     );

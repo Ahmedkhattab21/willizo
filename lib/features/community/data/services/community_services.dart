@@ -9,6 +9,8 @@ import 'package:willizo/core/utils/constant_keys.dart';
 import 'package:willizo/features/community/data/models/community_models.dart';
 import 'package:willizo/features/community/data/models/exercise_category_model.dart';
 import 'package:willizo/features/community/data/models/friend_model.dart';
+import 'package:willizo/features/community/data/models/create_league_request_model.dart';
+import 'package:willizo/features/community/data/models/create_league_response_model.dart';
 import 'package:willizo/features/community/data/models/league_model.dart';
 import 'package:willizo/features/community/data/models/leaderboard_model.dart';
 import 'package:willizo/features/community/data/models/my_leaderboard_model.dart';
@@ -201,7 +203,9 @@ class CommunityServices {
   }
 
   /// Fetches exercise details and leaderboard by slug (e.g. "push-ups").
-  Future<LeaderboardExerciseResponse> getLeaderboardExercise(String slug) async {
+  Future<LeaderboardExerciseResponse> getLeaderboardExercise(
+    String slug,
+  ) async {
     final response = await apiConsumer.get(
       CommunityApiEndpoint.leaderboardExerciseUrl(slug),
       {
@@ -283,8 +287,7 @@ class CommunityServices {
       final body = jsonDecode(response.body);
       if (body is! List) return [];
       return body
-          .map((e) =>
-              ContactSuggestionItem.fromJson(e as Map<String, dynamic>))
+          .map((e) => ContactSuggestionItem.fromJson(e as Map<String, dynamic>))
           .toList();
     } else {
       throw ServerException(
@@ -308,9 +311,100 @@ class CommunityServices {
       final body = jsonDecode(response.body);
       if (body is! List) return [];
       return body
-          .map((e) =>
-              TopFollowerSuggestionItem.fromJson(e as Map<String, dynamic>))
+          .map(
+            (e) =>
+                TopFollowerSuggestionItem.fromJson(e as Map<String, dynamic>),
+          )
           .toList();
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Creates a new league. POST /leagues.
+  Future<CreateLeagueResponseModel> createLeague(
+    CreateLeagueRequestModel request,
+  ) async {
+    final response = await apiConsumer.post(
+      CommunityApiEndpoint.leaguesUrl,
+      request.toJson(),
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      return CreateLeagueResponseModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Fetches available leagues the user can join. GET /leagues/available.
+  Future<List<LeagueModel>> getAvailableLeagues() async {
+    final response = await apiConsumer.get(
+      CommunityApiEndpoint.availableLeaguesUrl,
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      final body = jsonDecode(response.body) as Map<String, dynamic>;
+      final List<dynamic> data = body['data'] as List<dynamic>;
+      return data
+          .map((item) => LeagueModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Joins an invitational league by code. POST /leagues/join.
+  Future<void> joinLeagueByCode(String code) async {
+    final response = await apiConsumer.post(
+      CommunityApiEndpoint.joinLeagueUrl,
+      {'code': code},
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      return;
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Joins a league by ID. POST /leagues/join.
+  Future<void> joinLeague(String leagueId) async {
+    final response = await apiConsumer.post(
+      CommunityApiEndpoint.joinLeagueUrl,
+      {'league_id': leagueId},
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      return;
     } else {
       throw ServerException(
         serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
@@ -320,13 +414,10 @@ class CommunityServices {
 
   /// Fetches all leagues. GET /leagues.
   Future<List<LeagueModel>> getLeagues() async {
-    final response = await apiConsumer.get(
-      CommunityApiEndpoint.leaguesUrl,
-      {
-        ConstantKeys.appAuthorization:
-            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
-      },
-    );
+    final response = await apiConsumer.get(CommunityApiEndpoint.leaguesUrl, {
+      ConstantKeys.appAuthorization:
+          "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+    });
 
     if (response.statusCode == StatusCode.ok ||
         response.statusCode == StatusCode.created) {
@@ -356,8 +447,7 @@ class CommunityServices {
       final body = jsonDecode(response.body);
       if (body is! List) return [];
       return body
-          .map((e) =>
-              NearYouSuggestionItem.fromJson(e as Map<String, dynamic>))
+          .map((e) => NearYouSuggestionItem.fromJson(e as Map<String, dynamic>))
           .toList();
     } else {
       throw ServerException(

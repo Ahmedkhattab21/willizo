@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
+import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/features/community/data/models/league_model.dart';
@@ -53,18 +55,26 @@ class InvitationalLeaguesSectionWidget extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
-                          Icon(
-                            Icons.emoji_events,
-                            color: AppColors.blueColorFB,
-                            size: 24.sp,
+                          Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: AppColors.blueColorFB,
+                              shape: BoxShape.circle,
+                            ),
+                            width: 24.w,
+                            height: 24.h,
+                            child: SvgPicture.asset(ImageAsset.whiteCrownIcon),
                           ),
                           horizontalSpace(8),
-                          Text("League", style: TextStyles.font16WhiteColorW600),
+                          Text(
+                            "League",
+                            style: TextStyles.font16WhiteColorW600,
+                          ),
                           const Spacer(),
                           Text(
-                            "Members",
-                            style: TextStyles.font12greyColorColor79W400.copyWith(
-                              color: AppColors.whiteColorD9,
+                            "Current Rank",
+                            style: TextStyles.font10InterW400.copyWith(
+                              color: AppColors.greyColorColor79,
                             ),
                           ),
                         ],

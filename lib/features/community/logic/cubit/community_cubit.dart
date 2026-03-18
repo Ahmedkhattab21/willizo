@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:willizo/core/exceptions/failure.dart';
 import 'package:willizo/features/community/data/models/exercise_category_model.dart';
+import 'package:willizo/features/community/data/models/create_league_request_model.dart';
 import 'package:willizo/features/community/data/models/league_model.dart';
 import 'package:willizo/features/community/data/models/friend_model.dart';
 import 'package:willizo/features/community/data/models/leaderboard_model.dart';
@@ -58,6 +59,7 @@ class CommunityCubit extends Cubit<CommunityState> {
   // Leagues
   List<LeagueModel> generalLeagues = [];
   List<LeagueModel> invitationalLeagues = [];
+  List<LeagueModel> availableLeagues = [];
 
   // From-your-contacts suggestions (Suggested tab)
   List<ContactSuggestionItem> suggestionsFromContacts = [];
@@ -273,6 +275,46 @@ class CommunityCubit extends Cubit<CommunityState> {
     );
   }
 
+  Future<void> joinLeagueByCode(String code) async {
+    emit(LeagueJoiningState());
+    final result = await _communityRepo.joinLeagueByCode(code);
+    result.fold(
+      (failure) => emit(LeagueJoinErrorState(failure)),
+      (_) {
+        availableLeagues = [];
+        generalLeagues = [];
+        invitationalLeagues = [];
+        emit(LeagueJoinedState());
+      },
+    );
+  }
+
+  Future<void> joinLeague(String leagueId) async {
+    emit(LeagueJoiningState());
+    final result = await _communityRepo.joinLeague(leagueId);
+    result.fold(
+      (failure) => emit(LeagueJoinErrorState(failure)),
+      (_) {
+        availableLeagues = [];
+        generalLeagues = [];
+        invitationalLeagues = [];
+        emit(LeagueJoinedState());
+      },
+    );
+  }
+
+  Future<void> createLeague(CreateLeagueRequestModel request) async {
+    emit(LeagueCreatingState());
+    final result = await _communityRepo.createLeague(request);
+    result.fold((failure) => emit(LeagueCreationErrorState(failure)), (
+      response,
+    ) {
+      generalLeagues = [];
+      invitationalLeagues = [];
+      emit(LeagueCreatedState());
+    });
+  }
+
   Future<void> getLeagues() async {
     if (generalLeagues.isNotEmpty || invitationalLeagues.isNotEmpty) {
       emit(LeaguesLoadedState());
@@ -287,6 +329,22 @@ class CommunityCubit extends Cubit<CommunityState> {
           .toList();
       emit(LeaguesLoadedState());
     });
+  }
+
+  Future<void> getAvailableLeagues() async {
+    if (availableLeagues.isNotEmpty) {
+      emit(AvailableLeaguesLoadedState());
+      return;
+    }
+    emit(AvailableLeaguesLoadingState());
+    final result = await _communityRepo.getAvailableLeagues();
+    result.fold(
+      (failure) => emit(AvailableLeaguesErrorState(failure)),
+      (leagues) {
+        availableLeagues = leagues;
+        emit(AvailableLeaguesLoadedState());
+      },
+    );
   }
 
   static CommunityCubit get(context) =>
