@@ -33,6 +33,8 @@ import 'package:willizo/features/checkout/data/services/checkout_services.dart';
 import 'package:willizo/features/shop/logic/cubit/badge_cubit.dart';
 import 'package:willizo/features/community/data/services/community_services.dart';
 import 'package:willizo/features/community/data/repo/community_repo.dart';
+import 'package:willizo/features/home/data/repo/home_repo.dart';
+import 'package:willizo/features/home/data/services/home_services.dart';
 
 import '../api/api_consumer.dart';
 import '../api/app_interceptor.dart';
@@ -132,6 +134,10 @@ class ServicesLocator {
     getIt.registerLazySingleton<CommunityRepo>(
       () => CommunityRepo(communityServices: getIt()),
     );
+
+    // Home
+    getIt.registerLazySingleton<HomeServices>(() => HomeServices(getIt()));
+    getIt.registerLazySingleton<HomeRepo>(() => HomeRepo(getIt()));
 
     getIt.registerLazySingleton<Step18Services>(() => Step18Services(getIt()));
     getIt.registerLazySingleton<Step18Repo>(() => Step18Repo(getIt()));

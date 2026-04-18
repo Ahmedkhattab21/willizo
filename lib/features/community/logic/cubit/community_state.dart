@@ -133,6 +133,26 @@ final class LeagueCreationErrorState extends CommunityState {
   LeagueCreationErrorState(this.failure);
 }
 
+// Feeds states
+final class FeedsLoadingState extends CommunityState {}
+
+final class FeedsLoadedState extends CommunityState {}
+
+final class FeedsErrorState extends CommunityState {
+  final Failure failure;
+  FeedsErrorState(this.failure);
+}
+
+// Create post states
+final class PostCreatingState extends CommunityState {}
+
+final class PostCreatedState extends CommunityState {}
+
+final class PostCreationErrorState extends CommunityState {
+  final Failure failure;
+  PostCreationErrorState(this.failure);
+}
+
 // Join league states
 final class LeagueJoiningState extends CommunityState {}
 

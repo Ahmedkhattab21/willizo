@@ -6,9 +6,37 @@ import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
+import 'package:willizo/features/home/data/models/my_meal_plans_response_model.dart';
 
 class MealCard extends StatelessWidget {
-  const MealCard({super.key});
+  final String mealTypeLabel;
+  final String recipeName;
+  final String description;
+  final String? totalTimeLabel;
+
+  const MealCard._({
+    required this.mealTypeLabel,
+    required this.recipeName,
+    required this.description,
+    this.totalTimeLabel,
+  });
+
+  factory MealCard.fromMeal(ScheduledMealModel meal) {
+    final recipe = meal.recipe;
+    final typeRaw = meal.mealType;
+    final mealTypeLabel = typeRaw.isNotEmpty
+        ? typeRaw.replaceAll('_', ' ').toUpperCase()
+        : 'MEAL';
+    final tt = recipe.totalTime;
+    final totalTimeLabel =
+        tt != null && tt > 0 ? '$tt Min' : null;
+    return MealCard._(
+      mealTypeLabel: mealTypeLabel,
+      recipeName: recipe.name.isNotEmpty ? recipe.name : 'Meal',
+      description: recipe.description,
+      totalTimeLabel: totalTimeLabel,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +44,10 @@ class MealCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage( ImageAsset.backgroundCardImage),fit: BoxFit.fill),
+        image: DecorationImage(
+          image: AssetImage(ImageAsset.backgroundCardImage),
+          fit: BoxFit.fill,
+        ),
         gradient: const LinearGradient(
           colors: [AppColors.kCardBlueStart, AppColors.kCardBlueEnd],
           begin: Alignment.topLeft,
@@ -31,7 +62,7 @@ class MealCard extends StatelessWidget {
           ),
         ],
       ),
-      child:   Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -40,8 +71,8 @@ class MealCard extends StatelessWidget {
               Container(
                 width: 48,
                 height: 48,
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
                   color: AppColors.whiteColorEb,
                   shape: BoxShape.circle,
                 ),
@@ -53,23 +84,21 @@ class MealCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'DIET MEAL',
+                      mealTypeLabel,
                       style: TextStyles.font16BlackColorW400.copyWith(
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
                     Text(
-                      'Eat Breakfast Meal',
+                      recipeName,
                       style: TextStyles.font12whiteColorColorW400,
                     ),
                   ],
                 ),
               ),
-
-              // menu
-              Column(
-                children: const [
+              const Column(
+                children: [
                   Icon(Icons.more_vert, color: Colors.white54),
                 ],
               ),
@@ -77,18 +106,22 @@ class MealCard extends StatelessWidget {
           ),
           verticalSpace(14),
           Text(
-            'Breakfast is important because it gives the body the energy it needs to start the day.',
+            description.isNotEmpty
+                ? description
+                : 'No description',
             style: TextStyles.font12whiteColorColorW400.copyWith(
               fontWeight: FontWeight.w500,
             ),
           ),
           verticalSpace(16),
-
-          Row(
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               ButtonWidget(
                 isLoading: false,
-                buttonText: "Start",
+                buttonText: 'Start',
                 textStyle: TextStyles.font14PrimaryColorW600.copyWith(
                   color: AppColors.blueColor1ED,
                   fontWeight: FontWeight.w800,
@@ -103,9 +136,36 @@ class MealCard extends StatelessWidget {
                 verticalPadding: 10.h,
                 onPressed: () {},
               ),
-
-              const SizedBox(width: 12),
-
+              if (totalTimeLabel != null)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    border: Border.all(color: Colors.white24, width: 2),
+                    borderRadius: BorderRadius.circular(28),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.access_time,
+                        size: 18.r,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        totalTimeLabel!,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               OutlinedButton.icon(
                 onPressed: () {},
                 icon: const Icon(Icons.print, color: Colors.white),

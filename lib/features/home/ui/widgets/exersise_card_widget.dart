@@ -6,16 +6,59 @@ import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
+import 'package:willizo/features/home/data/models/my_workout_plans_response_model.dart';
 
 class ExerciseCard extends StatelessWidget {
-  const ExerciseCard({super.key});
+  final String topCategoryLabel;
+  final String planName;
+  final String description;
+  final String durationLabel;
+  final String? scheduledTimeLabel;
+
+  const ExerciseCard._({
+    required this.topCategoryLabel,
+    required this.planName,
+    required this.description,
+    required this.durationLabel,
+    this.scheduledTimeLabel,
+  });
+
+  factory ExerciseCard.fromWorkout(ScheduledWorkoutModel workout) {
+    final plan = workout.workoutPlan;
+    final top = plan.category.isNotEmpty
+        ? plan.category.replaceAll('_', ' ').toUpperCase()
+        : 'EXERCISES';
+    final du = plan.durationMinutes;
+    final durationLabel =
+        du != null && du > 0 ? '$du Min' : '--';
+    final sched = _formatScheduledTime(workout.scheduledTime);
+    return ExerciseCard._(
+      topCategoryLabel: top,
+      planName: plan.name.isNotEmpty ? plan.name : 'Workout',
+      description: plan.description,
+      durationLabel: durationLabel,
+      scheduledTimeLabel: sched,
+    );
+  }
+
+  static String? _formatScheduledTime(String raw) {
+    if (raw.isEmpty) return null;
+    final parts = raw.split(':');
+    if (parts.length >= 2) {
+      return '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}';
+    }
+    return raw;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage( ImageAsset.backgroundCardImage),fit: BoxFit.fill),
+        image: DecorationImage(
+          image: AssetImage(ImageAsset.backgroundCardImage),
+          fit: BoxFit.fill,
+        ),
         gradient: const LinearGradient(
           colors: [AppColors.kCardGreenStart, AppColors.kCardGreenEnd],
           begin: Alignment.topLeft,
@@ -32,7 +75,7 @@ class ExerciseCard extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(14),
-        child:Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
@@ -43,10 +86,9 @@ class ExerciseCard extends StatelessWidget {
                   child: Container(
                     width: 48,
                     height: 48,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.all(12),
+                    decoration: const BoxDecoration(
                       color: Colors.black,
-
                       shape: BoxShape.circle,
                     ),
                     child: SvgPicture.asset(
@@ -62,30 +104,40 @@ class ExerciseCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'EXERCISES',
+                        topCategoryLabel,
                         style: TextStyles.font16BlackColorW400.copyWith(
                           fontSize: 18.sp,
                         ),
                       ),
                       Text(
-                        'Do biceps exercise',
+                        planName,
                         style: TextStyles.font12BlackColorColorW500,
                       ),
+                      if (scheduledTimeLabel != null) ...[
+                        verticalSpace(4),
+                        Text(
+                          scheduledTimeLabel!,
+                          style: TextStyles.font12BlackColorColorW500.copyWith(
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ],
                       verticalSpace(8),
                     ],
                   ),
                 ),
-                // menu
                 const SizedBox(width: 8),
-                Column(
-                  children: const [
+                const Column(
+                  children: [
                     Icon(Icons.more_vert, color: Colors.black54),
                   ],
                 ),
               ],
             ),
             Text(
-              'The biceps curl is a basic strength training exercise that targets.',
+              description.isNotEmpty
+                  ? description
+                  : 'No description',
               style: TextStyles.font12W700.copyWith(
                 fontWeight: FontWeight.w500,
                 height: 1.7,
@@ -96,7 +148,7 @@ class ExerciseCard extends StatelessWidget {
               children: [
                 ButtonWidget(
                   isLoading: false,
-                  buttonText: "Start",
+                  buttonText: 'Start',
                   textStyle: TextStyles.font14PrimaryColorW600,
                   icon: Icons.arrow_forward,
                   iconColor: AppColors.primaryColor,
@@ -108,7 +160,6 @@ class ExerciseCard extends StatelessWidget {
                   verticalPadding: 10.h,
                   onPressed: () {},
                 ),
-
                 horizontalSpace(12),
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -127,9 +178,9 @@ class ExerciseCard extends StatelessWidget {
                         size: 18.r,
                         color: Colors.black,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Text(
-                        '50 Min',
+                        durationLabel,
                         style: TextStyles.font14BlackColorW700.copyWith(
                           fontWeight: FontWeight.w600,
                         ),

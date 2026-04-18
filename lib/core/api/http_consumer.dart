@@ -343,6 +343,10 @@ class HttpConsumer implements ApiConsumer {
         request.files.add(
           await http.MultipartFile.fromPath(key, value.toString()),
         );
+      } else if (key == "media") {
+        request.files.add(
+          await http.MultipartFile.fromPath(key, value.toString()),
+        );
       } else {
         request.fields[key] = value.toString();
       }

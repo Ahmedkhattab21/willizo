@@ -106,4 +106,5 @@ class ImageAsset {
   static const String arrowCircleUpIcon =
       "assets/svgs/arrow_circle_up_icon.svg";
   static const String whiteCrownIcon = "assets/svgs/white_crown.svg";
+  static const String sharePostIcon = "assets/icons/share_post_icon.svg";
 }

@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:willizo/core/exceptions/exceptions.dart';
 import 'package:willizo/core/exceptions/failure.dart';
 import 'package:willizo/features/community/data/models/community_models.dart';
+import 'package:willizo/features/community/data/models/feed_model.dart';
 import 'package:willizo/features/community/data/models/exercise_category_model.dart';
 import 'package:willizo/features/community/data/models/friend_model.dart';
 import 'package:willizo/features/community/data/models/create_league_request_model.dart';
@@ -199,6 +200,66 @@ class CommunityRepo {
   Future<Either<Failure, List<LeagueModel>>> getAvailableLeagues() async {
     try {
       final response = await communityServices.getAvailableLeagues();
+      return Right(response);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, void>> saveFeed(String feedId) async {
+    try {
+      await communityServices.saveFeed(feedId);
+      return const Right(null);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, void>> unsaveFeed(String feedId) async {
+    try {
+      await communityServices.unsaveFeed(feedId);
+      return const Right(null);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, void>> removeReaction(String feedId) async {
+    try {
+      await communityServices.removeReaction(feedId);
+      return const Right(null);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, void>> reactToFeed(String feedId, String type) async {
+    try {
+      await communityServices.reactToFeed(feedId, type);
+      return const Right(null);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, FeedModel>> createPost({
+    required String mediaPath,
+    String visibility = 'public',
+  }) async {
+    try {
+      final response = await communityServices.createPost(
+        mediaPath: mediaPath,
+        visibility: visibility,
+      );
+      return Right(response);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, List<FeedModel>>> getFeeds() async {
+    try {
+      final response = await communityServices.getFeeds();
       return Right(response);
     } on ServerException catch (failure) {
       return Left(failure.serverFailure);

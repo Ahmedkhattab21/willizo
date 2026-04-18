@@ -53,4 +53,17 @@ class CommunityApiEndpoint {
 
   /// Join a league by ID. POST /leagues/join.
   static const String joinLeagueUrl = '${EndPoints.baseUrl}/leagues/join';
+
+  /// Fetch feeds. GET /feeds.
+  static const String feedsUrl = '${EndPoints.baseUrl}/feeds';
+
+  /// React to a feed post. POST /feeds/:id/react.
+  static String feedReactUrl(String id) =>
+      '${EndPoints.baseUrl}/feeds/$id/react';
+
+  /// Save a feed post. POST /feeds/:id/save.
+  static String feedSaveUrl(String id) => '${EndPoints.baseUrl}/feeds/$id/save';
+
+  /// Create a new feed post. POST /feeds (multipart form-data).
+  static const String createFeedUrl = '${EndPoints.baseUrl}/feeds';
 }

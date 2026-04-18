@@ -14,6 +14,7 @@ import 'package:willizo/features/community/ui/widgets/all_top_friends_body_widge
 import 'package:willizo/features/community/ui/widgets/leaderboard_body_widget.dart';
 import 'package:willizo/features/community/ui/widgets/leagues_body_widget.dart';
 import 'package:willizo/features/push_ups_leaderboard/ui/puhs_ups_leaderboard_screen.dart';
+import 'package:willizo/features/community/ui/widgets/feed_body_widget.dart';
 import 'package:willizo/features/community/ui/widgets/friends_tab_body_widget.dart';
 
 class CommunityScreen extends StatelessWidget {
@@ -164,6 +165,8 @@ class CommunityScreenState extends State<CommunityScreenBody> {
         );
       case 2:
         return const FriendsTabBodyWidget();
+      case 3:
+        return const FeedBodyWidget();
       default:
         return const SizedBox.shrink();
     }

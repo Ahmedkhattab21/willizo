@@ -6,6 +6,7 @@ import 'package:willizo/features/button_nav_bar/logic/cubit/button_nav_bar_cubit
 import 'package:willizo/features/button_nav_bar/logic/cubit/button_nav_bar_state.dart';
 import 'package:willizo/features/button_nav_bar/ui/widgets/eleveated_bottom_nav_bar.dart';
 import 'package:willizo/features/community/ui/community_screen.dart';
+import 'package:willizo/features/home/logic/cubit/home_cubit.dart';
 import 'package:willizo/features/home/ui/home_screen.dart';
 import 'package:willizo/features/shop/logic/cubit/badge_cubit.dart';
 import 'package:willizo/features/shop/logic/cubit/categories_cubit.dart';
@@ -33,7 +34,10 @@ class ButtonNavBarWidget extends StatelessWidget {
   }
 
   static final List<Widget> _navScreens = [
-    const HomeScreen(),
+    BlocProvider(
+      create: (context) => HomeCubit(getIt())..fetchPlans(),
+      child: const HomeScreen(),
+    ),
     MultiBlocProvider(
       providers: [
         BlocProvider(

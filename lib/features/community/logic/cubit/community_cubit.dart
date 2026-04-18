@@ -1,8 +1,10 @@
-import 'package:bloc/bloc.dart';
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:willizo/core/exceptions/failure.dart';
 import 'package:willizo/features/community/data/models/exercise_category_model.dart';
 import 'package:willizo/features/community/data/models/create_league_request_model.dart';
+import 'package:willizo/features/community/data/models/feed_model.dart';
 import 'package:willizo/features/community/data/models/league_model.dart';
 import 'package:willizo/features/community/data/models/friend_model.dart';
 import 'package:willizo/features/community/data/models/leaderboard_model.dart';
@@ -60,6 +62,13 @@ class CommunityCubit extends Cubit<CommunityState> {
   List<LeagueModel> generalLeagues = [];
   List<LeagueModel> invitationalLeagues = [];
   List<LeagueModel> availableLeagues = [];
+
+  // Feeds
+  List<FeedModel> feeds = [];
+  final Map<String, Timer> _reactionTimers = {};
+  final Map<String, FeedModel> _originalFeeds = {};
+  final Map<String, Timer> _saveTimers = {};
+  final Map<String, FeedModel> _originalSaveFeeds = {};
 
   // From-your-contacts suggestions (Suggested tab)
   List<ContactSuggestionItem> suggestionsFromContacts = [];
@@ -278,29 +287,23 @@ class CommunityCubit extends Cubit<CommunityState> {
   Future<void> joinLeagueByCode(String code) async {
     emit(LeagueJoiningState());
     final result = await _communityRepo.joinLeagueByCode(code);
-    result.fold(
-      (failure) => emit(LeagueJoinErrorState(failure)),
-      (_) {
-        availableLeagues = [];
-        generalLeagues = [];
-        invitationalLeagues = [];
-        emit(LeagueJoinedState());
-      },
-    );
+    result.fold((failure) => emit(LeagueJoinErrorState(failure)), (_) {
+      availableLeagues = [];
+      generalLeagues = [];
+      invitationalLeagues = [];
+      emit(LeagueJoinedState());
+    });
   }
 
   Future<void> joinLeague(String leagueId) async {
     emit(LeagueJoiningState());
     final result = await _communityRepo.joinLeague(leagueId);
-    result.fold(
-      (failure) => emit(LeagueJoinErrorState(failure)),
-      (_) {
-        availableLeagues = [];
-        generalLeagues = [];
-        invitationalLeagues = [];
-        emit(LeagueJoinedState());
-      },
-    );
+    result.fold((failure) => emit(LeagueJoinErrorState(failure)), (_) {
+      availableLeagues = [];
+      generalLeagues = [];
+      invitationalLeagues = [];
+      emit(LeagueJoinedState());
+    });
   }
 
   Future<void> createLeague(CreateLeagueRequestModel request) async {
@@ -338,13 +341,194 @@ class CommunityCubit extends Cubit<CommunityState> {
     }
     emit(AvailableLeaguesLoadingState());
     final result = await _communityRepo.getAvailableLeagues();
+    result.fold((failure) => emit(AvailableLeaguesErrorState(failure)), (
+      leagues,
+    ) {
+      availableLeagues = leagues;
+      emit(AvailableLeaguesLoadedState());
+    });
+  }
+
+  void saveFeed(String feedId) {
+    final index = feeds.indexWhere((f) => f.id == feedId);
+    if (index == -1) return;
+
+    final feed = feeds[index];
+
+    // Save original state before first tap
+    _originalSaveFeeds.putIfAbsent(feedId, () => feed);
+
+    final newSaved = !feed.isSaved;
+
+    feeds[index] = FeedModel(
+      id: feed.id,
+      user: feed.user,
+      content: feed.content,
+      mediaType: feed.mediaType,
+      mediaUrl: feed.mediaUrl,
+      visibility: feed.visibility,
+      reactionsCount: feed.reactionsCount,
+      reactions: feed.reactions,
+      savesCount: newSaved ? feed.savesCount + 1 : feed.savesCount - 1,
+      isSaved: newSaved,
+      userReaction: feed.userReaction,
+      createdAt: feed.createdAt,
+      timeAgo: feed.timeAgo,
+    );
+    emit(FeedsLoadedState());
+
+    // Debounce: only send after 3s of no taps
+    _saveTimers[feedId]?.cancel();
+    _saveTimers[feedId] = Timer(const Duration(seconds: 3), () {
+      _sendSave(feedId);
+    });
+  }
+
+  Future<void> _sendSave(String feedId) async {
+    final index = feeds.indexWhere((f) => f.id == feedId);
+    final original = _originalSaveFeeds[feedId];
+    if (index == -1 || original == null) return;
+
+    // Only call API if state actually changed from original
+    if (feeds[index].isSaved == original.isSaved) {
+      _originalSaveFeeds.remove(feedId);
+      _saveTimers.remove(feedId);
+      return;
+    }
+
+    final result = feeds[index].isSaved
+        ? await _communityRepo.saveFeed(feedId)
+        : await _communityRepo.unsaveFeed(feedId);
+    result.fold((failure) {
+      feeds[index] = original;
+      emit(FeedsLoadedState());
+    }, (_) {});
+    _originalSaveFeeds.remove(feedId);
+    _saveTimers.remove(feedId);
+  }
+
+  void reactToFeed(String feedId, String type) {
+    final index = feeds.indexWhere((f) => f.id == feedId);
+    if (index == -1) return;
+
+    final feed = feeds[index];
+
+    // Save original state before first tap (for revert on error)
+    _originalFeeds.putIfAbsent(feedId, () => feed);
+
+    final alreadyReacted = feed.userReaction == type;
+
+    // Toggle: if same reaction, remove it; otherwise set new one
+    final newReaction = alreadyReacted ? null : type;
+    final newCount = alreadyReacted
+        ? feed.reactionsCount - 1
+        : (feed.userReaction != null
+              ? feed.reactionsCount
+              : feed.reactionsCount + 1);
+
+    // Update reactions list (keep per-type counts accurate)
+    List<FeedReaction> newReactions = List.from(feed.reactions);
+    final existingIndex = newReactions.indexWhere((r) => r.type == type);
+    if (alreadyReacted) {
+      if (existingIndex != -1) {
+        final newTypeCount = newReactions[existingIndex].count - 1;
+        if (newTypeCount <= 0) {
+          newReactions.removeAt(existingIndex);
+        } else {
+          newReactions[existingIndex] = FeedReaction(
+            type: type,
+            count: newTypeCount,
+          );
+        }
+      }
+    } else {
+      if (existingIndex != -1) {
+        newReactions[existingIndex] = FeedReaction(
+          type: type,
+          count: newReactions[existingIndex].count + 1,
+        );
+      } else {
+        newReactions.add(FeedReaction(type: type, count: 1));
+      }
+    }
+
+    feeds[index] = FeedModel(
+      id: feed.id,
+      user: feed.user,
+      content: feed.content,
+      mediaType: feed.mediaType,
+      mediaUrl: feed.mediaUrl,
+      visibility: feed.visibility,
+      reactionsCount: newCount,
+      reactions: newReactions,
+      savesCount: feed.savesCount,
+      isSaved: feed.isSaved,
+      userReaction: newReaction,
+      createdAt: feed.createdAt,
+      timeAgo: feed.timeAgo,
+    );
+    emit(FeedsLoadedState());
+
+    // Cancel previous timer and start new 3s debounce
+    _reactionTimers[feedId]?.cancel();
+    _reactionTimers[feedId] = Timer(const Duration(seconds: 3), () {
+      _sendReaction(feedId, type);
+    });
+  }
+
+  Future<void> _sendReaction(String feedId, String type) async {
+    final index = feeds.indexWhere((f) => f.id == feedId);
+    final currentReaction = index != -1 ? feeds[index].userReaction : null;
+
+    // If user removed their reaction, use DELETE; otherwise POST
+    final result = currentReaction == null
+        ? await _communityRepo.removeReaction(feedId)
+        : await _communityRepo.reactToFeed(feedId, currentReaction);
     result.fold(
-      (failure) => emit(AvailableLeaguesErrorState(failure)),
-      (leagues) {
-        availableLeagues = leagues;
-        emit(AvailableLeaguesLoadedState());
+      (failure) {
+        // Revert to original on error
+        final original = _originalFeeds.remove(feedId);
+        if (original != null) {
+          final index = feeds.indexWhere((f) => f.id == feedId);
+          if (index != -1) {
+            feeds[index] = original;
+            emit(FeedsLoadedState());
+          }
+        }
+      },
+      (_) {
+        _originalFeeds.remove(feedId);
       },
     );
+    _reactionTimers.remove(feedId);
+  }
+
+  Future<void> createPost({
+    required String mediaPath,
+    String visibility = 'public',
+  }) async {
+    emit(PostCreatingState());
+    final result = await _communityRepo.createPost(
+      mediaPath: mediaPath,
+      visibility: visibility,
+    );
+    result.fold((failure) => emit(PostCreationErrorState(failure)), (newFeed) {
+      feeds = [newFeed, ...feeds];
+      emit(PostCreatedState());
+    });
+  }
+
+  Future<void> getFeeds() async {
+    if (feeds.isNotEmpty) {
+      emit(FeedsLoadedState());
+      return;
+    }
+    emit(FeedsLoadingState());
+    final result = await _communityRepo.getFeeds();
+    result.fold((failure) => emit(FeedsErrorState(failure)), (list) {
+      feeds = list;
+      emit(FeedsLoadedState());
+    });
   }
 
   static CommunityCubit get(context) =>

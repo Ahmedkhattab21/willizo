@@ -1,19 +1,111 @@
 import 'package:bloc/bloc.dart';
+import 'package:willizo/features/home/data/models/my_meal_plans_response_model.dart';
+import 'package:willizo/features/home/data/models/my_workout_plans_response_model.dart';
 import 'package:willizo/features/home/data/repo/home_repo.dart';
 
 part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit(this.homeRepo) : super(HomeInitial());
+  HomeCubit(this.homeRepo) : super(HomeState.initial());
 
   final HomeRepo homeRepo;
 
-  Future<void> getHome() async {
-    emit(HomeLoading());
-    final result = await homeRepo.getHome();
-    result.fold(
-      (failure) => emit(HomeError(message: failure.message)),
-      (home) => emit(HomeLoaded()),
+  Future<void> fetchPlans() async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    await _fetchPlansForDate(date: state.selectedDate, today: today);
+  }
+
+  Future<void> selectDate(DateTime date) async {
+    final normalized = DateTime(date.year, date.month, date.day);
+    emit(state.copyWith(selectedDate: normalized));
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    await _fetchPlansForDate(date: normalized, today: today);
+  }
+
+  Future<void> _fetchPlansForDate({
+    required DateTime date,
+    required DateTime today,
+  }) async {
+    emit(
+      state.copyWith(
+        workoutPlansStatus: HomeLoadStatus.loading,
+        mealPlansStatus: HomeLoadStatus.loading,
+        workouts: const [],
+        meals: const [],
+        clearWorkoutPlansError: true,
+        clearMealPlansError: true,
+      ),
     );
+
+    final isToday = date == today;
+    final dateParam = _formatDateParam(date);
+
+    final workoutFuture = isToday
+        ? homeRepo.getTodayWorkoutPlans()
+        : homeRepo.getWorkoutPlansByDate(dateParam);
+    final mealFuture =
+        isToday ? homeRepo.getTodayMealPlans() : homeRepo.getMealPlansByDate(dateParam);
+
+    final workoutResult = await workoutFuture;
+    final mealResult = await mealFuture;
+
+    HomeLoadStatus workoutStatus = HomeLoadStatus.initial;
+    HomeLoadStatus mealStatus = HomeLoadStatus.initial;
+    List<ScheduledWorkoutModel> workouts = const [];
+    List<ScheduledMealModel> meals = const [];
+    String? workoutDate;
+    String? mealDate;
+    String? workoutErr;
+    String? mealErr;
+
+    workoutResult.fold(
+      (failure) {
+        workoutStatus = HomeLoadStatus.failure;
+        workoutErr = failure.message;
+        workouts = const [];
+      },
+      (data) {
+        workoutStatus = HomeLoadStatus.success;
+        workouts = data.workouts;
+        workoutDate = data.date.isNotEmpty ? data.date : null;
+      },
+    );
+
+    mealResult.fold(
+      (failure) {
+        mealStatus = HomeLoadStatus.failure;
+        mealErr = failure.message;
+        meals = const [];
+      },
+      (data) {
+        mealStatus = HomeLoadStatus.success;
+        meals = data.meals;
+        mealDate = data.date.isNotEmpty ? data.date : null;
+      },
+    );
+
+    emit(
+      HomeState(
+        selectedDate: state.selectedDate,
+        workoutPlansStatus: workoutStatus,
+        mealPlansStatus: mealStatus,
+        workouts: workouts,
+        meals: meals,
+        workoutPlansResponseDate:
+            workoutStatus == HomeLoadStatus.success ? workoutDate : null,
+        mealPlansResponseDate: mealStatus == HomeLoadStatus.success ? mealDate : null,
+        workoutPlansError:
+            workoutStatus == HomeLoadStatus.failure ? workoutErr : null,
+        mealPlansError: mealStatus == HomeLoadStatus.failure ? mealErr : null,
+      ),
+    );
+  }
+
+  String _formatDateParam(DateTime date) {
+    String two(int v) => v.toString().padLeft(2, '0');
+    return '${date.year}-${two(date.month)}-${two(date.day)}';
   }
 }

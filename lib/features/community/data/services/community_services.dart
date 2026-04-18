@@ -7,6 +7,7 @@ import 'package:willizo/core/exceptions/failure.dart';
 import 'package:willizo/core/services/cache_helper.dart';
 import 'package:willizo/core/utils/constant_keys.dart';
 import 'package:willizo/features/community/data/models/community_models.dart';
+import 'package:willizo/features/community/data/models/feed_model.dart';
 import 'package:willizo/features/community/data/models/exercise_category_model.dart';
 import 'package:willizo/features/community/data/models/friend_model.dart';
 import 'package:willizo/features/community/data/models/create_league_request_model.dart';
@@ -425,6 +426,146 @@ class CommunityServices {
       return jsonList
           .map((item) => LeagueModel.fromJson(item as Map<String, dynamic>))
           .toList();
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Fetches feeds. GET /feeds.
+  Future<List<FeedModel>> getFeeds() async {
+    final response = await apiConsumer.get(
+      CommunityApiEndpoint.feedsUrl,
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      final body = jsonDecode(response.body) as Map<String, dynamic>;
+      final List<dynamic> data = body['data'] as List<dynamic>;
+      return data
+          .map((item) => FeedModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Saves a feed post. POST /feeds/:id/save.
+  Future<void> saveFeed(String feedId) async {
+    final response = await apiConsumer.post(
+      CommunityApiEndpoint.feedSaveUrl(feedId),
+      null,
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      return;
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Unsaves a feed post. DELETE /feeds/:id/save.
+  Future<void> unsaveFeed(String feedId) async {
+    final response = await apiConsumer.delete(
+      CommunityApiEndpoint.feedSaveUrl(feedId),
+      null,
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created ||
+        response.statusCode == StatusCode.noContent) {
+      return;
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Removes a reaction from a feed post. DELETE /feeds/:id/react.
+  Future<void> removeReaction(String feedId) async {
+    final response = await apiConsumer.delete(
+      CommunityApiEndpoint.feedReactUrl(feedId),
+      null,
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created ||
+        response.statusCode == StatusCode.noContent) {
+      return;
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Reacts to a feed post. POST /feeds/:id/react.
+  Future<void> reactToFeed(String feedId, String type) async {
+    final response = await apiConsumer.post(
+      CommunityApiEndpoint.feedReactUrl(feedId),
+      {'type': type},
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      return;
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  /// Creates a new feed post. POST /feeds (multipart form-data).
+  /// [mediaPath] is the local file path, [visibility] defaults to "public".
+  Future<FeedModel> createPost({
+    required String mediaPath,
+    String visibility = 'public',
+  }) async {
+    final response = await apiConsumer.multiPost(
+      CommunityApiEndpoint.createFeedUrl,
+      {
+        'media': mediaPath,
+        'visibility': visibility,
+      },
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      final body = jsonDecode(response.body) as Map<String, dynamic>;
+      final data = body['data'] as Map<String, dynamic>;
+      return FeedModel.fromJson(data);
     } else {
       throw ServerException(
         serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
