@@ -24,8 +24,7 @@ class RecipeTabItem extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 7.w),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primaryColor : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.primaryColor, width: 1.5),
+          borderRadius: BorderRadius.circular(16),
         ),
         child: Center(
           child: Text(
@@ -33,7 +32,7 @@ class RecipeTabItem extends StatelessWidget {
             style: TextStyles.font14W700.copyWith(
               fontSize: 14.sp,
               fontWeight: FontWeight.w500,
-              color: isSelected ? Colors.black : AppColors.primaryColor,
+              color: isSelected ? Colors.black : AppColors.greyColorColor80,
             ),
           ),
         ),

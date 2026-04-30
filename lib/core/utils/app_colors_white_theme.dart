@@ -41,6 +41,8 @@ class AppColors {
   static const Color redColorF7 = Color(0xff730909);
   static const Color greyColorF2 = Color(0xff2F343C);
   static const Color greenColor19 = Color(0xff19b954);
+  static const Color orangeColorFA = Color(0xffFA832F);
+  static const Color yellowColorF7 = Color(0xffF7BE15);
 
   ///remove
 

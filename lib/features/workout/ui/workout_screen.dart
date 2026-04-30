@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:willizo/core/services/services_locator.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/spacing.dart';
+import 'package:willizo/features/workout/logic/cubit/recipes_cubit.dart';
 import 'package:willizo/features/workout/ui/widgets/excercises_body_widget.dart';
 import 'package:willizo/features/workout/ui/widgets/recipe_screen.dart';
 import 'package:willizo/features/workout/ui/widgets/workout_tap_bar_widget.dart';
@@ -15,11 +18,30 @@ class WorkoutScreen extends StatefulWidget {
 
 class _WorkoutScreenState extends State<WorkoutScreen> {
   int _selectedIndex = 0;
+  late final RecipesCubit _recipesCubit;
 
-  final List<Widget> _tabs = const [WorkoutListScreen(), RecipeScreen()];
+  @override
+  void initState() {
+    super.initState();
+    _recipesCubit = RecipesCubit(getIt())..fetchRecipes();
+  }
+
+  @override
+  void dispose() {
+    _recipesCubit.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final tabs = [
+      const WorkoutListScreen(),
+      BlocProvider.value(
+        value: _recipesCubit,
+        child: const RecipeScreen(),
+      ),
+    ];
+
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: SafeArea(
@@ -33,7 +55,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     setState(() => _selectedIndex = index),
               ),
               verticalSpace(30),
-              Expanded(child: _tabs[_selectedIndex]),
+              Expanded(child: tabs[_selectedIndex]),
             ],
           ),
         ),
