@@ -35,7 +35,9 @@ import 'package:willizo/features/community/data/services/community_services.dart
 import 'package:willizo/features/community/data/repo/community_repo.dart';
 import 'package:willizo/features/home/data/repo/home_repo.dart';
 import 'package:willizo/features/home/data/services/home_services.dart';
+import 'package:willizo/features/workout/data/repo/body_parts_repo.dart';
 import 'package:willizo/features/workout/data/repo/recipes_repo.dart';
+import 'package:willizo/features/workout/data/services/body_parts_services.dart';
 import 'package:willizo/features/workout/data/services/recipes_services.dart';
 
 import '../api/api_consumer.dart';
@@ -144,6 +146,12 @@ class ServicesLocator {
     // Workout Recipes
     getIt.registerLazySingleton<RecipesServices>(() => RecipesServices(getIt()));
     getIt.registerLazySingleton<RecipesRepo>(() => RecipesRepo(getIt()));
+
+    // Workout Body Parts
+    getIt.registerLazySingleton<BodyPartsServices>(
+      () => BodyPartsServices(getIt()),
+    );
+    getIt.registerLazySingleton<BodyPartsRepo>(() => BodyPartsRepo(getIt()));
 
     getIt.registerLazySingleton<Step18Services>(() => Step18Services(getIt()));
     getIt.registerLazySingleton<Step18Repo>(() => Step18Repo(getIt()));

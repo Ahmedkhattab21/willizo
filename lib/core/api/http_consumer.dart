@@ -20,8 +20,18 @@ class HttpConsumer implements ApiConsumer {
   bool _isRefreshing = false;
   Completer<bool>? _refreshCompleter;
 
+  static const _authEndpointsWithoutTokenRefresh = [
+    '/auth/login',
+    '/auth/signup',
+    '/auth/refresh',
+  ];
+
   HttpConsumer(this._client) {
     _client = InterceptedClient.build(interceptors: [getIt<AppInterceptor>()]);
+  }
+
+  bool _shouldSkipTokenRefresh(String path) {
+    return _authEndpointsWithoutTokenRefresh.any(path.contains);
   }
 
   /// Handles logout when refresh token fails
@@ -127,10 +137,15 @@ class HttpConsumer implements ApiConsumer {
 
   /// Handles 401 response with proper queue management for concurrent requests
   Future<http.Response> _handle401Response(
+    String path,
     http.Response response,
     Future<http.Response> Function() retryFunction,
   ) async {
     if (response.statusCode != StatusCode.unauthorized) {
+      return response;
+    }
+
+    if (_shouldSkipTokenRefresh(path)) {
       return response;
     }
 
@@ -204,7 +219,7 @@ class HttpConsumer implements ApiConsumer {
   @override
   Future<http.Response> get(String path, Map<String, String>? headers) async {
     final response = await _client.get(Uri.parse(path), headers: headers);
-    return await _handle401Response(response, () async {
+    return await _handle401Response(path, response, () async {
       final updatedHeaders = await _getUpdatedHeaders(headers);
       return await _client.get(Uri.parse(path), headers: updatedHeaders);
     });
@@ -221,7 +236,7 @@ class HttpConsumer implements ApiConsumer {
       body: json.encode(body),
       headers: headers,
     );
-    return await _handle401Response(response, () async {
+    return await _handle401Response(path, response, () async {
       final updatedHeaders = await _getUpdatedHeaders(headers);
       return await _client.put(
         Uri.parse(path),
@@ -242,7 +257,7 @@ class HttpConsumer implements ApiConsumer {
       body: json.encode(body),
       headers: headers,
     );
-    return await _handle401Response(response, () async {
+    return await _handle401Response(path, response, () async {
       final updatedHeaders = await _getUpdatedHeaders(headers);
       return await _client.post(
         Uri.parse(path),
@@ -263,7 +278,7 @@ class HttpConsumer implements ApiConsumer {
       body: json.encode(body),
       headers: headers,
     );
-    return await _handle401Response(response, () async {
+    return await _handle401Response(path, response, () async {
       final updatedHeaders = await _getUpdatedHeaders(headers);
       return await _client.delete(
         Uri.parse(path),
@@ -281,7 +296,7 @@ class HttpConsumer implements ApiConsumer {
   ) async {
     final response = await _executeMultiPost(path, body, headers);
     
-    return await _handle401Response(response, () async {
+    return await _handle401Response(path, response, () async {
       final updatedHeaders = await _getUpdatedHeaders(headers);
       return await _executeMultiPost(path, body, updatedHeaders);
     });

@@ -4,4 +4,5 @@ class WorkoutApiEndpoints {
   static const String recipes = '${EndPoints.baseUrl}/recipes';
   static const String featuredRecipes = '${EndPoints.baseUrl}/recipes/featured';
   static const String popularRecipes = '${EndPoints.baseUrl}/recipes/popular';
+  static const String bodyParts = '${EndPoints.baseUrl}/body-parts';
 }

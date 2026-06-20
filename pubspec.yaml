@@ -97,6 +97,9 @@ flutter:
     - assets/svgs/
     - assets/icons/
     - assets/languages/
+    - assets/body_360/male/
+    - assets/body_360/details/
+    - assets/body_360/hotspots.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

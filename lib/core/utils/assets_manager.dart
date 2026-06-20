@@ -107,4 +107,18 @@ class ImageAsset {
       "assets/svgs/arrow_circle_up_icon.svg";
   static const String whiteCrownIcon = "assets/svgs/white_crown.svg";
   static const String sharePostIcon = "assets/icons/share_post_icon.svg";
+  static const String modelBody = "assets/images/model_body_from_front.png";
+  static const String modelBodyFromBack =
+      "assets/images/model_body_from_back.png";
+  static const String modelBodyFromSide = "assets/images/model_body_side.png";
+  static const String modelBodyFromOtherSide =
+      "assets/images/model_body_from_other_side.png";
+  static const String modelBodyLowerPart =
+      "assets/images/model_body_lower_part.png";
+  static const String modelBodyUpperPart = "assets/images/model_body_upper_part.png";
+  
+  static const String dumbleFillIcon = "assets/svgs/dumble_svg_icon.svg";
+  static const String coreIcon = "assets/svgs/core_icon.svg";
+  static const String lowerBodyIcon = "assets/svgs/lower_body_icon.svg";
+  static const String cardioIcon = "assets/svgs/cardio_icon.svg";
 }
