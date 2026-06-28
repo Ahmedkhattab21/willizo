@@ -3,6 +3,7 @@ import 'package:willizo/core/errors_and_success_response/success/success_respons
 import 'package:willizo/core/exceptions/exceptions.dart';
 import 'package:willizo/core/exceptions/failure.dart';
 import 'package:willizo/features/account/data/models/account_resonse.dart';
+import 'package:willizo/features/account/data/models/update_profile_request_model.dart';
 import 'package:willizo/features/account/data/services/account_services.dart';
 
 class AccountRepo {
@@ -27,6 +28,18 @@ class AccountRepo {
       return Left(ServerFailure(message: failure.serverFailure.message));
     } catch (_) {
       return const Left(ServerFailure(message: 'Failed to logout'));
+    }
+  }
+
+  Future<Either<Failure, AccountResponseModel>> updateProfile(
+    UpdateProfileRequestModel requestModel,
+  ) async {
+    try {
+      return Right(await _accountServices.updateProfile(requestModel));
+    } on ServerException catch (failure) {
+      return Left(ServerFailure(message: failure.serverFailure.message));
+    } catch (_) {
+      return const Left(ServerFailure(message: 'Failed to update profile'));
     }
   }
 }

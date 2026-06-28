@@ -63,9 +63,21 @@ class AccountScreen extends StatelessWidget {
                       email: accountData?.email ?? 'Loading...',
                     ),
                     verticalSpace(38),
-                    const _SectionHeader(
+                    _SectionHeader(
                       title: 'Personal Info',
                       showEdit: true,
+                      onEdit: accountData == null
+                          ? null
+                          : () async {
+                              final updated = await Navigator.pushNamed(
+                                context,
+                                Routes.personalInfoScreen,
+                                arguments: accountData,
+                              );
+                              if (updated == true && context.mounted) {
+                                context.read<AccountCubit>().getAccountData();
+                              }
+                            },
                     ),
                     verticalSpace(16),
                     _DarkCard(
@@ -85,9 +97,10 @@ class AccountScreen extends StatelessWidget {
                             label: 'Phone',
                             value: accountData?.phoneNumber ?? 'N/A',
                           ),
-                          const InfoTile(label: 'Gender', value: 'Male'),
-                          const InfoTile(label: 'Weight', value: '72.4 kg'),
-                          const InfoTile(label: 'Height', value: '172 cm'),
+                          InfoTile(
+                            label: 'Date of Birth',
+                            value: accountData?.formattedDateOfBirth ?? 'N/A',
+                          ),
                         ],
                       ),
                     ),
@@ -225,10 +238,15 @@ class _AccountAppBar extends StatelessWidget {
 }
 
 class _SectionHeader extends StatelessWidget {
-  const _SectionHeader({required this.title, this.showEdit = false});
+  const _SectionHeader({
+    required this.title,
+    this.showEdit = false,
+    this.onEdit,
+  });
 
   final String title;
   final bool showEdit;
+  final VoidCallback? onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -242,13 +260,16 @@ class _SectionHeader extends StatelessWidget {
           ),
         ),
         if (showEdit)
-          SvgPicture.asset(
-            ImageAsset.editIcon,
-            width: 22.r,
-            height: 22.r,
-            colorFilter: const ColorFilter.mode(
-              AppColors.primaryColor,
-              BlendMode.srcIn,
+          GestureDetector(
+            onTap: onEdit,
+            child: SvgPicture.asset(
+              ImageAsset.editIcon,
+              width: 22.r,
+              height: 22.r,
+              colorFilter: const ColorFilter.mode(
+                AppColors.primaryColor,
+                BlendMode.srcIn,
+              ),
             ),
           ),
       ],

@@ -48,6 +48,15 @@ class AccountData {
       onboarding: Onboarding.fromJson(json['onboarding'] ?? {}),
     );
   }
+
+  String get formattedDateOfBirth {
+    if (dateOfBirth.isEmpty) return '';
+    final parsedDate = DateTime.tryParse(dateOfBirth);
+    if (parsedDate != null) {
+      return parsedDate.toIso8601String().split('T').first;
+    }
+    return dateOfBirth.split('T').first;
+  }
 }
 
 class Onboarding {

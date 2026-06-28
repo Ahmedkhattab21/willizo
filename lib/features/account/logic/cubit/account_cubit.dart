@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:willizo/core/services/cache_helper.dart';
 import 'package:willizo/core/utils/constant_keys.dart';
 import 'package:willizo/features/account/data/models/account_resonse.dart';
+import 'package:willizo/features/account/data/models/update_profile_request_model.dart';
 import 'package:willizo/features/account/data/repo/account_repo.dart';
 
 part 'account_state.dart';
@@ -48,6 +49,25 @@ class AccountCubit extends Cubit<AccountState> {
             actionType: actionType,
           ),
         );
+      },
+    );
+  }
+
+  Future<void> updateProfile(UpdateProfileRequestModel requestModel) async {
+    emit(UpdateProfileLoadingState(accountData: _accountData));
+    final result = await _accountRepo.updateProfile(requestModel);
+    result.fold(
+      (failure) {
+        emit(
+          UpdateProfileErrorState(
+            message: failure.message,
+            accountData: _accountData,
+          ),
+        );
+      },
+      (data) {
+        _accountData = data;
+        emit(UpdateProfileSuccessState(accountData: data));
       },
     );
   }

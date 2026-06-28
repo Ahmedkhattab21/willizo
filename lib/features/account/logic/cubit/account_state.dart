@@ -40,3 +40,22 @@ final class AccountActionErrorState extends AccountState {
 
   AccountActionErrorState({required this.message, this.accountData});
 }
+
+final class UpdateProfileLoadingState extends AccountState {
+  final AccountResponseModel? accountData;
+
+  UpdateProfileLoadingState({this.accountData});
+}
+
+final class UpdateProfileSuccessState extends AccountState {
+  final AccountResponseModel accountData;
+
+  UpdateProfileSuccessState({required this.accountData});
+}
+
+final class UpdateProfileErrorState extends AccountState {
+  final String message;
+  final AccountResponseModel? accountData;
+
+  UpdateProfileErrorState({required this.message, this.accountData});
+}

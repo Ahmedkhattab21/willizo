@@ -8,6 +8,7 @@ import 'package:willizo/core/exceptions/failure.dart';
 import 'package:willizo/core/services/cache_helper.dart';
 import 'package:willizo/core/utils/constant_keys.dart';
 import 'package:willizo/features/account/data/models/account_resonse.dart';
+import 'package:willizo/features/account/data/models/update_profile_request_model.dart';
 import 'package:willizo/features/account/data/services/account_api_endpoint.dart';
 
 class AccountService {
@@ -50,6 +51,30 @@ class AccountService {
     if (response.statusCode == StatusCode.ok ||
         response.statusCode == StatusCode.created) {
       return SuccessResponseModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  Future<AccountResponseModel> updateProfile(
+    UpdateProfileRequestModel requestModel,
+  ) async {
+    final response = await apiConsumer.put(
+      AccountApiEndpoint.account,
+      requestModel.toJson(),
+      {
+        ConstantKeys.contentType: ConstantKeys.applicationJson,
+        ConstantKeys.acceptText: ConstantKeys.applicationJson,
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      return AccountResponseModel.fromJson(jsonDecode(response.body));
     } else {
       throw ServerException(
         serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),

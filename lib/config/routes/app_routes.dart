@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:willizo/config/routes/routes.dart';
 import 'package:willizo/core/services/services_locator.dart';
+import 'package:willizo/features/account/data/models/account_resonse.dart';
+import 'package:willizo/features/account/data/repo/account_repo.dart';
+import 'package:willizo/features/account/logic/cubit/account_cubit.dart';
+import 'package:willizo/features/account/ui/personal_info_screen.dart';
 import 'package:willizo/features/billing/ui/billing_screen.dart';
 import 'package:willizo/features/cart/ui/cart_screen.dart';
 import 'package:willizo/features/cart/logic/cubit/cart_cubit.dart';
@@ -359,6 +363,15 @@ class RouteGenerator {
             cartItems: args is Map && args['cartItems'] != null
                 ? (args['cartItems'] as List).cast<CartItem>()
                 : [],
+          ),
+        );
+      case Routes.personalInfoScreen:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => AccountCubit(getIt<AccountRepo>()),
+            child: PersonalInfoScreen(
+              accountData: args is AccountData ? args : null,
+            ),
           ),
         );
       default:
