@@ -11,24 +11,25 @@ class InfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 160.w,
+      width: 130.w,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
             style: TextStyles.font12BlackColorColorW500.copyWith(
-              color: AppColors.whiteColor,
+              color: AppColors.greyColorColor80,
+              fontWeight: FontWeight.w500,
             ),
           ),
-          // verticalSpace(10),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: Text(
-              value,
-              style: TextStyles.font14BlackColorW700.copyWith(
-                color: AppColors.greenColor5e6,
-              ),
+          SizedBox(height: 6.h),
+          Text(
+            value,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyles.font14BlackColorW700.copyWith(
+              color: AppColors.whiteColorEb,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],

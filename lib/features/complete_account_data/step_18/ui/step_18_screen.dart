@@ -46,7 +46,7 @@ class _Step18ScreenState extends State<Step18Screen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      context.pop();
+                      context.clearAuthAndOpenSignIn();
                     },
                     child: Container(
                       height: 30.r,
@@ -147,9 +147,8 @@ class _Step18ScreenState extends State<Step18Screen> {
                                 horizontalSpace(10),
                                 Text(
                                   "Select All",
-                                  style: TextStyles.font12WhiteColorW500.copyWith(
-                                    color: AppColors.whiteColor,
-                                  ),
+                                  style: TextStyles.font12WhiteColorW500
+                                      .copyWith(color: AppColors.whiteColor),
                                 ),
                               ],
                             ),
@@ -172,7 +171,7 @@ class _Step18ScreenState extends State<Step18Screen> {
                 },
                 builder: (context, state) {
                   final cubit = Step18Cubit.get(context);
-                  
+
                   if (state is GetGymEquipmenLoadingtState) {
                     return Center(
                       child: CircularProgressIndicator(
@@ -180,7 +179,7 @@ class _Step18ScreenState extends State<Step18Screen> {
                       ),
                     );
                   }
-                  
+
                   if (state is GetGymEquipmentsErrorState) {
                     return Center(
                       child: Text(
@@ -191,7 +190,7 @@ class _Step18ScreenState extends State<Step18Screen> {
                       ),
                     );
                   }
-                  
+
                   if (cubit.gymEquipments.isEmpty) {
                     return Center(
                       child: Text(
@@ -202,7 +201,7 @@ class _Step18ScreenState extends State<Step18Screen> {
                       ),
                     );
                   }
-                  
+
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 14.w),
                     child: GridView.builder(
@@ -269,7 +268,10 @@ class _Step18ScreenState extends State<Step18Screen> {
                       if (cubit.isValid) {
                         cubit.sendStep();
                       } else {
-                        AppConstant.toast("Please select at least one gym equipment", AppColors.redColor);
+                        AppConstant.toast(
+                          "Please select at least one gym equipment",
+                          AppColors.redColor,
+                        );
                       }
                     },
                   ),

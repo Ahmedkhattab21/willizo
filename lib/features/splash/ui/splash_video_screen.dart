@@ -52,8 +52,10 @@ class _SplashVideoScreenState extends State<SplashVideoScreen> {
                 context.pushReplacementNamed(Routes.buttonNavBarWidget);
               }
             } else {
-              // Navigate to the current step
-              final stepRoute = Routes.getStepRoute(response.data.currentStep);
+              final stepRoute =
+                  response.data.nextStep > response.data.totalSteps
+                  ? Routes.buttonNavBarWidget
+                  : Routes.getStepRoute(response.data.nextStep);
               if (mounted) {
                 context.pushReplacementNamed(stepRoute);
               }

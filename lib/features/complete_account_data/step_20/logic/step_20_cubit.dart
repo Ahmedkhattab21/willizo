@@ -31,8 +31,10 @@ class Step20Cubit extends Cubit<Step20State> {
   }
 
   void toggleTool(Equipment tool) {
-    if (selectedTools.any((item) => item.id == tool.id)) {
-      selectedTools.removeWhere((item) => item.id == tool.id);
+    if (selectedTools.any((item) => item.selectionKey == tool.selectionKey)) {
+      selectedTools.removeWhere(
+        (item) => item.selectionKey == tool.selectionKey,
+      );
     } else {
       selectedTools.add(tool);
     }
@@ -51,7 +53,7 @@ class Step20Cubit extends Cubit<Step20State> {
   }
 
   bool isToolSelected(Equipment tool) {
-    return selectedTools.any((item) => item.id == tool.id);
+    return selectedTools.any((item) => item.selectionKey == tool.selectionKey);
   }
 
   bool get isAllSelected {

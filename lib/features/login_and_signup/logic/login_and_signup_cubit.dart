@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:willizo/config/routes/routes.dart';
 import 'package:willizo/core/services/cache_helper.dart';
 import 'package:willizo/core/utils/constant_keys.dart';
 import 'package:willizo/features/login_and_signup/data/models/login_request_model.dart';
@@ -70,7 +71,10 @@ class LoginAndSignup extends Cubit<LoginAndSignupState> {
                   r.data!.user!.fullName!,
                 );
               }
-              emit(LoginSuccessState());
+              final nextRoute = await _getNextRouteAfterAuth(
+                fallbackRoute: Routes.buttonNavBarWidget,
+              );
+              emit(LoginSuccessState(nextRoute));
             },
           );
         })
@@ -128,7 +132,10 @@ class LoginAndSignup extends Cubit<LoginAndSignupState> {
                   r.data!.user!.fullName!,
                 );
               }
-              emit(SignupSuccessState());
+              final nextRoute = await _getNextRouteAfterAuth(
+                fallbackRoute: Routes.step1Screen,
+              );
+              emit(SignupSuccessState(nextRoute));
             },
           );
         })
@@ -140,6 +147,19 @@ class LoginAndSignup extends Cubit<LoginAndSignupState> {
   changeAgreeForTerms() {
     isAgreeForTerms = !isAgreeForTerms;
     emit(OnChangeAgreeForTermsState());
+  }
+
+  Future<String> _getNextRouteAfterAuth({required String fallbackRoute}) async {
+    final result = await loginRepo.getOnboardingStatus();
+    return result.fold((_) => fallbackRoute, (response) {
+      if (response.data.isCompleted) {
+        return Routes.buttonNavBarWidget;
+      }
+      if (response.data.nextStep > response.data.totalSteps) {
+        return Routes.buttonNavBarWidget;
+      }
+      return Routes.getStepRoute(response.data.nextStep);
+    });
   }
 
   static LoginAndSignup get(context) => BlocProvider.of(context);

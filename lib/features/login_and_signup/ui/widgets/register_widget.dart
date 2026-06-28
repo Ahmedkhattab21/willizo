@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:willizo/config/routes/routes.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/app_constant.dart';
 import 'package:willizo/core/utils/assets_manager.dart';
@@ -147,7 +146,9 @@ class RegisterWidget extends StatelessWidget {
             final cubit = LoginAndSignup.get(context);
             final DateTime? pickedDate = await showDatePicker(
               context: context,
-              initialDate: DateTime.now().subtract(const Duration(days: 365 * 18)),
+              initialDate: DateTime.now().subtract(
+                const Duration(days: 365 * 18),
+              ),
               firstDate: DateTime(1900),
               lastDate: DateTime.now(),
               builder: (context, child) {
@@ -159,7 +160,9 @@ class RegisterWidget extends StatelessWidget {
                       surface: AppColors.blackColor,
                       onSurface: AppColors.whiteColor,
                     ),
-                    dialogBackgroundColor: AppColors.blackColor,
+                    dialogTheme: DialogThemeData(
+                      backgroundColor: AppColors.blackColor,
+                    ),
                   ),
                   child: child!,
                 );
@@ -179,7 +182,9 @@ class RegisterWidget extends StatelessWidget {
                 horizontal: 20.w,
               ),
               textStyle: TextStyles.font14whiteColorColorW400,
-              controller: LoginAndSignup.get(context).registerBirthDateController,
+              controller: LoginAndSignup.get(
+                context,
+              ).registerBirthDateController,
               prefixIcon: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
                 child: SvgPicture.asset(ImageAsset.birthDateIcon),
@@ -320,7 +325,10 @@ class RegisterWidget extends StatelessWidget {
           listener: (context, state) {
             if (state is SignupSuccessState) {
               AppConstant.toast("Signup successfully", AppColors.primaryColor);
-              context.pushNamed(Routes.step1Screen);
+              context.pushNamedAndRemoveUntil(
+                state.nextRoute,
+                predicate: (route) => false,
+              );
             } else if (state is SignupFailureState) {
               AppConstant.toast(state.error, AppColors.redColor);
             }
@@ -425,10 +433,7 @@ class RegisterWidget extends StatelessWidget {
               onTap: () {
                 LoginAndSignup.get(context).changeSignInState(1);
               },
-              child: Text(
-                'Sign In',
-                style: TextStyles.font14primaryColorW600,
-              ),
+              child: Text('Sign In', style: TextStyles.font14primaryColorW600),
             ),
           ],
         ),

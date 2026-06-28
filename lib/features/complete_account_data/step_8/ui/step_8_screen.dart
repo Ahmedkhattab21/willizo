@@ -8,7 +8,6 @@ import 'package:willizo/core/utils/extentions.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/core/utils/app_constant.dart';
-import 'package:willizo/core/widgets/app_text_field.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
 import 'package:willizo/features/complete_account_data/step_8/logic/step_8_cubit.dart';
 import 'package:willizo/features/complete_account_data/step_8/logic/step_8_state.dart';
@@ -31,7 +30,7 @@ class Step8Screen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      context.pop();
+                      context.clearAuthAndOpenSignIn();
                     },
                     child: Container(
                       height: 30.r,
@@ -162,7 +161,9 @@ class Step8Screen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(8.r),
                                   border: Border.all(
                                     color:
-                                    Step8Cubit.get(context).containItem(item)
+                                        Step8Cubit.get(
+                                          context,
+                                        ).containItem(item)
                                         ? AppColors.primaryColor
                                         : AppColors.greyColorColor00,
                                     width: 2,
@@ -170,7 +171,8 @@ class Step8Screen extends StatelessWidget {
                                 ),
                                 child: Text(
                                   item.name,
-                                  style: Step8Cubit.get(context).containItem(item)
+                                  style:
+                                      Step8Cubit.get(context).containItem(item)
                                       ? TextStyles.font16primaryColorW600
                                       : TextStyles.font16WhiteColorW600,
                                 ),
@@ -221,7 +223,10 @@ class Step8Screen extends StatelessWidget {
                       if (cubit.isValid) {
                         cubit.sendStep();
                       } else {
-                        AppConstant.toast("Please select at least one day", AppColors.redColor);
+                        AppConstant.toast(
+                          "Please select at least one day",
+                          AppColors.redColor,
+                        );
                       }
                     },
                   ),

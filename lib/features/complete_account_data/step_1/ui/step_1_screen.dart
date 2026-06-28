@@ -33,7 +33,7 @@ class Step1Screen extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        context.pop();
+                        context.clearAuthAndOpenSignIn();
                       },
                       child: Container(
                         height: 30.r,

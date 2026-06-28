@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:willizo/config/routes/routes.dart';
+import 'package:willizo/core/services/cache_helper.dart';
+import 'package:willizo/core/utils/constant_keys.dart';
 
 extension NavigationScreens on BuildContext {
   Future<dynamic> pushNamed(String routeName, {Object? arguments}) {
@@ -6,14 +9,33 @@ extension NavigationScreens on BuildContext {
   }
 
   Future<dynamic> pushReplacementNamed(String routeName, {Object? arguments}) {
-    return Navigator.of(this)
-        .pushReplacementNamed(routeName, arguments: arguments);
+    return Navigator.of(
+      this,
+    ).pushReplacementNamed(routeName, arguments: arguments);
   }
 
-  Future<dynamic> pushNamedAndRemoveUntil(String routeName,
-      {Object? arguments, required RoutePredicate predicate}) {
-    return Navigator.of(this)
-        .pushNamedAndRemoveUntil(routeName, predicate, arguments: arguments);
+  Future<dynamic> pushNamedAndRemoveUntil(
+    String routeName, {
+    Object? arguments,
+    required RoutePredicate predicate,
+  }) {
+    return Navigator.of(
+      this,
+    ).pushNamedAndRemoveUntil(routeName, predicate, arguments: arguments);
+  }
+
+  Future<void> clearAuthAndOpenSignIn() async {
+    await CacheHelper.removeSecureData(ConstantKeys.saveTokenToShared);
+    await CacheHelper.removeSecureData(ConstantKeys.saveRefreshTokenToShared);
+    await CacheHelper.removeSecureData(ConstantKeys.saveNameToShared);
+    await CacheHelper.removeSecureData(ConstantKeys.saveEmailToShared);
+    await CacheHelper.removeSecureData(ConstantKeys.savePhoneToShared);
+
+    if (!mounted) return;
+    await pushNamedAndRemoveUntil(
+      Routes.signInScreen,
+      predicate: (route) => false,
+    );
   }
 
   void pop() => Navigator.of(this).pop();

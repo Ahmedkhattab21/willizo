@@ -1,47 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
-import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 
-class SubscriptionCard extends StatefulWidget {
+class SubscriptionCard extends StatelessWidget {
   const SubscriptionCard({super.key});
-
-  @override
-  State<SubscriptionCard> createState() => _SubscriptionCardState();
-}
-
-class _SubscriptionCardState extends State<SubscriptionCard>
-    with SingleTickerProviderStateMixin {
-  int _selected = 0;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
+      padding: EdgeInsets.all(18.r),
       decoration: BoxDecoration(
-        color: AppColors.backgroundColor,
-        borderRadius: BorderRadius.circular(12),
+        color: AppColors.greyColor27,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.2),
+            blurRadius: 18.r,
+            offset: Offset(0, 8.h),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Subscription',
-                style: TextStyles.font14whiteColorColorW400.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              SvgPicture.asset(ImageAsset.editIcon, width: 20.w, height: 20.h),
-            ],
-          ),
-          verticalSpace(16),
-          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Column(
@@ -50,114 +36,43 @@ class _SubscriptionCardState extends State<SubscriptionCard>
                     Text(
                       'Plan',
                       style: TextStyles.font14whiteColorColorW400.copyWith(
-                        fontWeight: FontWeight.w700,
+                        color: AppColors.greyColorColor80,
                       ),
+                    ),
+                    verticalSpace(8),
+                    Text(
+                      'Premium, Family',
+                      style: TextStyles.font16WhiteColorW600,
                     ),
                     verticalSpace(6),
                     Text(
-                      'Premium, Family',
-                      style: TextStyles.font14whiteColorColorW400.copyWith(
-                        color: AppColors.greenColor5e6,
+                      'Next renewal: Jan 1, 2025',
+                      style: TextStyles.font12greyColorColor79W400.copyWith(
+                        color: AppColors.greyColorColor80,
                       ),
                     ),
                   ],
                 ),
               ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Family',
-                      style: TextStyles.font14whiteColorColorW400.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(height: 6),
-                    Text(
-                      '2 members',
-                      style: TextStyles.font14whiteColorColorW400.copyWith(
-                        color: AppColors.greenColor5e6,
-                      ),
-                    ),
-                  ],
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColor.withValues(alpha: 0.16),
+                  borderRadius: BorderRadius.circular(24.r),
                 ),
+                child: Text('ACTIVE', style: TextStyles.font14primaryColorW600),
               ),
             ],
           ),
-          verticalSpace(14),
-          Stack(
-            alignment: Alignment.bottomLeft,
-            clipBehavior: Clip.none,
-            children: [
-              Positioned(
-                left: -16,
-                right: -16,
-                child: Container(height: 1, color: AppColors.greyColor4d),
-              ),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => setState(() => _selected = 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Analytics',
-                          style: TextStyle(
-                            color: _selected == 0
-                                ? AppColors.primaryColor
-                                : Colors.white54,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Container(
-                          width: 70,
-                          height: 4,
-                          decoration: BoxDecoration(
-                            color: _selected == 0
-                                ? AppColors.primaryColor
-                                : Colors.grey.withOpacity(0.4),
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  horizontalSpace(22),
-                  GestureDetector(
-                    onTap: () => setState(() => _selected = 1),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Progress',
-                          style: TextStyle(
-                            color: _selected == 1
-                                ? AppColors.primaryColor
-                                : AppColors.greyColorColor79,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Container(
-                          width: 70,
-                          height: 4,
-                          decoration: BoxDecoration(
-                            color: _selected == 1
-                                ? AppColors.primaryColor
-                                : Color(0xffd3d3d3),
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
+          verticalSpace(20),
+          Text(
+            'Family',
+            style: TextStyles.font14whiteColorColorW400.copyWith(
+              color: AppColors.greyColorColor80,
+            ),
           ),
+          verticalSpace(8),
+          Text('2 members', style: TextStyles.font16WhiteColorW600),
         ],
       ),
     );

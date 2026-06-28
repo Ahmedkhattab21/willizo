@@ -30,7 +30,7 @@ class Step13Screen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      context.pop();
+                      context.clearAuthAndOpenSignIn();
                     },
                     child: Container(
                       height: 30.r,
@@ -175,7 +175,7 @@ class Step13Screen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8.r),
                                 border: Border.all(
                                   color:
-                                  Step13Cubit.get(
+                                      Step13Cubit.get(
                                             context,
                                           ).selectedWeightId ==
                                           item.id
@@ -187,7 +187,7 @@ class Step13Screen extends StatelessWidget {
                               child: Text(
                                 item.name,
                                 style:
-                                Step13Cubit.get(context).selectedWeightId ==
+                                    Step13Cubit.get(context).selectedWeightId ==
                                         item.id
                                     ? TextStyles.font16primaryColorW600
                                     : TextStyles.font16WhiteColorW600,

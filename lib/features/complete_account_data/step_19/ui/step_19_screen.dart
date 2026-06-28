@@ -46,7 +46,7 @@ class _Step19ScreenState extends State<Step19Screen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      context.pop();
+                      context.clearAuthAndOpenSignIn();
                     },
                     child: Container(
                       height: 30.r,
@@ -147,9 +147,8 @@ class _Step19ScreenState extends State<Step19Screen> {
                                 horizontalSpace(10),
                                 Text(
                                   "Select All",
-                                  style: TextStyles.font12WhiteColorW500.copyWith(
-                                    color: AppColors.whiteColor,
-                                  ),
+                                  style: TextStyles.font12WhiteColorW500
+                                      .copyWith(color: AppColors.whiteColor),
                                 ),
                               ],
                             ),
@@ -172,7 +171,7 @@ class _Step19ScreenState extends State<Step19Screen> {
                 },
                 builder: (context, state) {
                   final cubit = Step19Cubit.get(context);
-                  
+
                   if (state is GetFreeWeightsLoading) {
                     return Center(
                       child: CircularProgressIndicator(
@@ -180,7 +179,7 @@ class _Step19ScreenState extends State<Step19Screen> {
                       ),
                     );
                   }
-                  
+
                   if (state is GetFreeWeightsError) {
                     return Center(
                       child: Text(
@@ -191,7 +190,7 @@ class _Step19ScreenState extends State<Step19Screen> {
                       ),
                     );
                   }
-                  
+
                   if (cubit.freeWeights.isEmpty) {
                     return Center(
                       child: Text(
@@ -202,7 +201,7 @@ class _Step19ScreenState extends State<Step19Screen> {
                       ),
                     );
                   }
-                  
+
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 14.w),
                     child: GridView.builder(
@@ -267,7 +266,10 @@ class _Step19ScreenState extends State<Step19Screen> {
                       if (cubit.isValid) {
                         cubit.sendStep();
                       } else {
-                        AppConstant.toast("Please select at least one free weight", AppColors.redColor);
+                        AppConstant.toast(
+                          "Please select at least one free weight",
+                          AppColors.redColor,
+                        );
                       }
                     },
                   ),

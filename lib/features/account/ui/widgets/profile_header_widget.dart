@@ -8,11 +8,7 @@ class ProfileHeader extends StatelessWidget {
   final String name;
   final String email;
 
-  const ProfileHeader({
-    super.key,
-    required this.name,
-    required this.email,
-  });
+  const ProfileHeader({super.key, required this.name, required this.email});
 
   @override
   Widget build(BuildContext context) {
@@ -21,24 +17,48 @@ class ProfileHeader extends StatelessWidget {
         Center(
           child: Stack(
             alignment: Alignment.bottomRight,
+            clipBehavior: Clip.none,
             children: [
-              CircleAvatar(
-                radius: 46.r,
-                backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
+              Container(
+                width: 104.r,
+                height: 104.r,
+                padding: EdgeInsets.all(3.r),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primaryColor.withValues(alpha: 0.24),
+                      blurRadius: 20.r,
+                      spreadRadius: 1.r,
+                    ),
+                  ],
+                ),
+                child: CircleAvatar(
+                  backgroundColor: AppColors.greyColor20,
+                  backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
+                ),
               ),
               Positioned(
-                right: 0,
-                bottom: 0,
+                right: -2.r,
+                bottom: 4.r,
                 child: Container(
-                  padding: const EdgeInsets.all(6),
+                  width: 36.r,
+                  height: 36.r,
                   decoration: BoxDecoration(
-                    color: Colors.black,
+                    color: AppColors.primaryColor,
                     shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primaryColor.withValues(alpha: 0.45),
+                        blurRadius: 16.r,
+                      ),
+                    ],
                   ),
                   child: Icon(
-                    Icons.camera_alt_outlined,
-                    size: 16.r,
-                    color: AppColors.whiteColor,
+                    Icons.camera_alt,
+                    size: 18.r,
+                    color: AppColors.blackColor,
                   ),
                 ),
               ),
@@ -48,12 +68,16 @@ class ProfileHeader extends StatelessWidget {
         verticalSpace(12),
         Text(
           name,
-          style: TextStyles.font22WhiteColorW600.copyWith(fontSize: 18.sp),
+          textAlign: TextAlign.center,
+          style: TextStyles.font22WhiteColorW600.copyWith(fontSize: 20.sp),
         ),
         verticalSpace(6),
         Text(
           email,
-          style: TextStyles.font14whiteColorColorW400.copyWith(fontSize: 10.sp),
+          textAlign: TextAlign.center,
+          style: TextStyles.font14whiteColorColorW400.copyWith(
+            color: AppColors.greyColorColorA0,
+          ),
         ),
       ],
     );

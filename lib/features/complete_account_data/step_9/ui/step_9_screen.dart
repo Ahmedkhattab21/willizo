@@ -8,7 +8,6 @@ import 'package:willizo/core/utils/extentions.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/core/utils/app_constant.dart';
-import 'package:willizo/core/widgets/app_text_field.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
 import 'package:willizo/features/complete_account_data/step_9/logic/step_9_cubit.dart';
 import 'package:willizo/features/complete_account_data/step_9/logic/step_9_state.dart';
@@ -31,7 +30,7 @@ class Step9Screen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      context.pop();
+                      context.clearAuthAndOpenSignIn();
                     },
                     child: Container(
                       height: 30.r,

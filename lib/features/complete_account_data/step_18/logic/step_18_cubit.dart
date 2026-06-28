@@ -6,14 +6,15 @@ import 'package:willizo/features/complete_account_data/step_18/data/repo/step18_
 import 'package:willizo/features/complete_account_data/step_18/logic/step_18_state.dart';
 
 class Step18Cubit extends Cubit<Step18State> {
-  Step18Cubit(this.step18repo, this._completeAccountRepo) : super(InitialState());
+  Step18Cubit(this.step18repo, this._completeAccountRepo)
+    : super(InitialState());
 
   Step18Repo step18repo;
   final CompleteAccountRepo _completeAccountRepo;
 
   List<Equipment> gymEquipments = [];
   List<Equipment> selectedEquipments = [];
-  
+
   static Step18Cubit get(context) => BlocProvider.of(context);
 
   Future<void> getGymEquipments() async {
@@ -29,8 +30,12 @@ class Step18Cubit extends Cubit<Step18State> {
   }
 
   void toggleEquipment(Equipment equipment) {
-    if (selectedEquipments.any((item) => item.id == equipment.id)) {
-      selectedEquipments.removeWhere((item) => item.id == equipment.id);
+    if (selectedEquipments.any(
+      (item) => item.selectionKey == equipment.selectionKey,
+    )) {
+      selectedEquipments.removeWhere(
+        (item) => item.selectionKey == equipment.selectionKey,
+      );
     } else {
       selectedEquipments.add(equipment);
     }
@@ -49,12 +54,14 @@ class Step18Cubit extends Cubit<Step18State> {
   }
 
   bool isEquipmentSelected(Equipment equipment) {
-    return selectedEquipments.any((item) => item.id == equipment.id);
+    return selectedEquipments.any(
+      (item) => item.selectionKey == equipment.selectionKey,
+    );
   }
 
   bool get isAllSelected {
-    return gymEquipments.isNotEmpty && 
-           selectedEquipments.length == gymEquipments.length;
+    return gymEquipments.isNotEmpty &&
+        selectedEquipments.length == gymEquipments.length;
   }
 
   bool get isValid {

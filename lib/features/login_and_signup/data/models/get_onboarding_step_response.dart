@@ -21,7 +21,7 @@ class GetOnboardingStepResponseModel {
 class OnboardingData {
   final int currentStep;
   final int totalSteps;
-  final Map<String, Answer> answers;
+  final dynamic answers;
   final bool isCompleted;
   final double progressPercentage;
   final String createdAt;
@@ -38,22 +38,27 @@ class OnboardingData {
   });
 
   factory OnboardingData.fromJson(Map<String, dynamic> json) {
-    Map<String, Answer> answersMap = {};
-    if (json['answers'] != null) {
-      (json['answers'] as Map<String, dynamic>).forEach((key, value) {
-        answersMap[key] = Answer.fromJson(value);
-      });
-    }
-
     return OnboardingData(
       currentStep: json['current_step'] ?? 1,
       totalSteps: json['total_steps'] ?? 21,
-      answers: answersMap,
+      answers: json['answers'] ?? const [],
       isCompleted: json['is_completed'] ?? false,
       progressPercentage: (json['progress_percentage'] ?? 0.0).toDouble(),
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
     );
+  }
+
+  bool get hasAnswers {
+    final value = answers;
+    if (value is List) return value.isNotEmpty;
+    if (value is Map) return value.isNotEmpty;
+    return value != null;
+  }
+
+  int get nextStep {
+    if (!hasAnswers) return currentStep;
+    return currentStep + 1;
   }
 }
 

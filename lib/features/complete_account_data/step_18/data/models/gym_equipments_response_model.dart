@@ -28,13 +28,21 @@ class GymData {
   factory GymData.fromJson(Map<String, dynamic> json) {
     return GymData(
       category: json['category'] ?? '',
-      total: json['total'] ?? 0,
+      total: _toInt(json['total']),
       equipments:
           (json['equipments'] as List<dynamic>?)
-              ?.map((e) => Equipment.fromJson(e))
+              ?.whereType<Map<String, dynamic>>()
+              .map((e) => Equipment.fromJson(e))
               .toList() ??
           [],
     );
+  }
+
+  static int _toInt(dynamic value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value) ?? 0;
+    return 0;
   }
 }
 
@@ -53,12 +61,29 @@ class Equipment {
 
   factory Equipment.fromJson(Map<String, dynamic> json) {
     return Equipment(
-      id: json['id'] ?? 0,
+      id: _toInt(
+        json['id'] ??
+            json['equipment_id'] ??
+            json['gym_equipment_id'] ??
+            json['machine_id'],
+      ),
       name: json['name'] ?? '',
       description: json['description'] ?? '',
-      imageUrl: json['image'] != null 
+      imageUrl: json['image'] != null
           ? EndPoints.getImageFromApi(json['image'])
           : '',
     );
+  }
+
+  String get selectionKey {
+    if (id > 0) return 'id:$id';
+    return 'fallback:$name|$imageUrl|$description';
+  }
+
+  static int _toInt(dynamic value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value) ?? 0;
+    return 0;
   }
 }

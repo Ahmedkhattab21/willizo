@@ -6,14 +6,15 @@ import 'package:willizo/features/complete_account_data/step_19/data/repo/step19_
 import 'package:willizo/features/complete_account_data/step_19/logic/step_19_state.dart';
 
 class Step19Cubit extends Cubit<Step19State> {
-  Step19Cubit(this.step19Repo, this._completeAccountRepo) : super(InitialState());
+  Step19Cubit(this.step19Repo, this._completeAccountRepo)
+    : super(InitialState());
 
   final Step19Repo step19Repo;
   final CompleteAccountRepo _completeAccountRepo;
   FreeWeightsData? freeWeightsData;
   List<Equipment> freeWeights = [];
   List<Equipment> selectedWeights = [];
-  
+
   static Step19Cubit get(context) => BlocProvider.of(context);
 
   Future<void> getFreeWeights() async {
@@ -30,8 +31,12 @@ class Step19Cubit extends Cubit<Step19State> {
   }
 
   void toggleWeight(Equipment weight) {
-    if (selectedWeights.any((item) => item.id == weight.id)) {
-      selectedWeights.removeWhere((item) => item.id == weight.id);
+    if (selectedWeights.any(
+      (item) => item.selectionKey == weight.selectionKey,
+    )) {
+      selectedWeights.removeWhere(
+        (item) => item.selectionKey == weight.selectionKey,
+      );
     } else {
       selectedWeights.add(weight);
     }
@@ -50,12 +55,14 @@ class Step19Cubit extends Cubit<Step19State> {
   }
 
   bool isWeightSelected(Equipment weight) {
-    return selectedWeights.any((item) => item.id == weight.id);
+    return selectedWeights.any(
+      (item) => item.selectionKey == weight.selectionKey,
+    );
   }
 
   bool get isAllSelected {
-    return freeWeights.isNotEmpty && 
-           selectedWeights.length == freeWeights.length;
+    return freeWeights.isNotEmpty &&
+        selectedWeights.length == freeWeights.length;
   }
 
   bool get isValid {
@@ -66,10 +73,7 @@ class Step19Cubit extends Cubit<Step19State> {
     emit(Step19LoadingState());
     final weightIds = selectedWeights.map((e) => e.id).toList();
     final result = await _completeAccountRepo.sendSteps(
-      parameter: StepsRequestModel(
-        stepNumber: 19,
-        freeWeightIds: weightIds,
-      ),
+      parameter: StepsRequestModel(stepNumber: 19, freeWeightIds: weightIds),
     );
     result.fold(
       (failure) => emit(Step19ErrorState(failure.message)),

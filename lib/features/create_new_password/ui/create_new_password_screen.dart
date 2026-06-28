@@ -136,7 +136,7 @@ class CreateNewPasswordScreen extends StatelessWidget {
                 ),
                 verticalSpace(16),
                 AppTextFormField(
-                  hintText: "Email",
+                  hintText: "Email or Phone Number",
                   hintStyle: TextStyles.font14greyColorColorW400,
                   contentPadding: EdgeInsets.symmetric(
                     vertical: 12.h,
@@ -170,10 +170,7 @@ class CreateNewPasswordScreen extends StatelessWidget {
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return "Enter Email";
-                    }
-                    if (!value.contains('@') || !value.contains('.')) {
-                      return "Enter Valid Email";
+                      return "Enter Email or Phone Number";
                     }
                     return null;
                   },

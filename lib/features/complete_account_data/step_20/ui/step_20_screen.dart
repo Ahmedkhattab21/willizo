@@ -46,7 +46,7 @@ class _Step20ScreenState extends State<Step20Screen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      context.pop();
+                      context.clearAuthAndOpenSignIn();
                     },
                     child: Container(
                       height: 30.r,
@@ -147,9 +147,8 @@ class _Step20ScreenState extends State<Step20Screen> {
                                 horizontalSpace(10),
                                 Text(
                                   "Select All",
-                                  style: TextStyles.font12WhiteColorW500.copyWith(
-                                    color: AppColors.whiteColor,
-                                  ),
+                                  style: TextStyles.font12WhiteColorW500
+                                      .copyWith(color: AppColors.whiteColor),
                                 ),
                               ],
                             ),
@@ -172,7 +171,7 @@ class _Step20ScreenState extends State<Step20Screen> {
                 },
                 builder: (context, state) {
                   final cubit = Step20Cubit.get(context);
-                  
+
                   if (state is GetSupportiveToolsLoading) {
                     return Center(
                       child: CircularProgressIndicator(
@@ -180,7 +179,7 @@ class _Step20ScreenState extends State<Step20Screen> {
                       ),
                     );
                   }
-                  
+
                   if (state is GetSupportiveToolsError) {
                     return Center(
                       child: Text(
@@ -191,7 +190,7 @@ class _Step20ScreenState extends State<Step20Screen> {
                       ),
                     );
                   }
-                  
+
                   if (cubit.supportiveTools.isEmpty) {
                     return Center(
                       child: Text(
@@ -202,7 +201,7 @@ class _Step20ScreenState extends State<Step20Screen> {
                       ),
                     );
                   }
-                  
+
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 14.w),
                     child: GridView.builder(
@@ -267,7 +266,10 @@ class _Step20ScreenState extends State<Step20Screen> {
                       if (cubit.isValid) {
                         cubit.sendStep();
                       } else {
-                        AppConstant.toast("Please select at least one supportive tool", AppColors.redColor);
+                        AppConstant.toast(
+                          "Please select at least one supportive tool",
+                          AppColors.redColor,
+                        );
                       }
                     },
                   ),

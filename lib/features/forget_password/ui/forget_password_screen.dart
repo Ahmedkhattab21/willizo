@@ -14,17 +14,26 @@ import 'package:willizo/core/widgets/button_widget.dart';
 import 'package:willizo/features/forget_password/logic/forget_password_cubit.dart';
 import 'package:willizo/features/forget_password/logic/forget_password_state.dart';
 
-class ForgetPasswordScreen extends StatelessWidget {
+class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
 
   @override
+  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
+}
+
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+  bool _usePhoneNumber = false;
+
+  @override
   Widget build(BuildContext context) {
+    final cubit = ForgetPasswordCubit.get(context);
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Form(
-            key: ForgetPasswordCubit.get(context).forgetKey,
+            key: cubit.forgetKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -86,7 +95,9 @@ class ForgetPasswordScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      'Please enter your email to reset the password',
+                      _usePhoneNumber
+                          ? 'Please enter your phone number to reset the password'
+                          : 'Please enter your email to reset the password',
                       style: TextStyles.font12whiteColorColorW400.copyWith(
                         color: AppColors.whiteColor.withValues(alpha: .7),
                       ),
@@ -95,20 +106,24 @@ class ForgetPasswordScreen extends StatelessWidget {
                 ),
                 verticalSpace(32),
                 AppTextFormField(
-                  hintText: "Email Address",
+                  hintText: _usePhoneNumber ? "Phone Number" : "Email Address",
                   hintStyle: TextStyles.font14greyColorColorW400,
                   contentPadding: EdgeInsets.symmetric(
                     vertical: 12.h,
                     horizontal: 20.w,
                   ),
                   textStyle: TextStyles.font14whiteColorColorW400,
-                  controller: ForgetPasswordCubit.get(context).emailController,
+                  controller: cubit.emailController,
                   prefixIcon: Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: 10.w,
                       vertical: 10.h,
                     ),
-                    child: SvgPicture.asset(ImageAsset.emailIcon),
+                    child: SvgPicture.asset(
+                      _usePhoneNumber
+                          ? ImageAsset.phoneIcon
+                          : ImageAsset.emailIcon,
+                    ),
                   ),
                   backgroundColor: AppColors.blackColor,
                   enabledBorder: OutlineInputBorder(
@@ -139,7 +154,9 @@ class ForgetPasswordScreen extends StatelessWidget {
                     }
                     return null;
                   },
-                  keyboardType: TextInputType.emailAddress,
+                  keyboardType: _usePhoneNumber
+                      ? TextInputType.phone
+                      : TextInputType.emailAddress,
                 ),
                 verticalSpace(32),
                 BlocConsumer<ForgetPasswordCubit, ForgetPasswordState>(
@@ -152,7 +169,9 @@ class ForgetPasswordScreen extends StatelessWidget {
                       context.pushNamed(
                         Routes.createNewPasswordScreen,
                         arguments: {
-                          'email': ForgetPasswordCubit.get(context).emailController.text,
+                          'email': ForgetPasswordCubit.get(
+                            context,
+                          ).emailController.text,
                         },
                       );
                     } else if (state is ForgetPasswordErrorState) {
@@ -169,19 +188,29 @@ class ForgetPasswordScreen extends StatelessWidget {
                       borderColor: AppColors.primaryColor,
                       textStyle: TextStyles.font18blackColorW600,
                       onPressed: () {
-                        if (ForgetPasswordCubit.get(context).forgetKey.currentState!.validate()) {
-                          ForgetPasswordCubit.get(context).forgetPassword();
+                        if (cubit.forgetKey.currentState!.validate()) {
+                          cubit.forgetPassword();
                         }
                       },
                     );
                   },
                 ),
                 verticalSpace(32),
-                Text(
-                  'Try with Phone Number',
-                  style: TextStyles.font12whiteColorColorW400.copyWith(
-                    decorationColor: AppColors.whiteColor,
-                    decoration: TextDecoration.underline,
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _usePhoneNumber = !_usePhoneNumber;
+                      cubit.emailController.clear();
+                    });
+                  },
+                  child: Text(
+                    _usePhoneNumber
+                        ? 'Try with Email Address'
+                        : 'Try with Phone Number',
+                    style: TextStyles.font12whiteColorColorW400.copyWith(
+                      decorationColor: AppColors.whiteColor,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
               ],

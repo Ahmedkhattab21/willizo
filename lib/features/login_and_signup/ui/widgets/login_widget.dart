@@ -122,7 +122,10 @@ class LoginWidget extends StatelessWidget {
           listener: (context, state) {
             if (state is LoginSuccessState) {
               AppConstant.toast("Login successfully", AppColors.primaryColor);
-              context.pushNamed(Routes.buttonNavBarWidget);
+              context.pushNamedAndRemoveUntil(
+                state.nextRoute,
+                predicate: (route) => false,
+              );
             } else if (state is LoginFailureState) {
               AppConstant.toast(state.error, AppColors.redColor);
             }
