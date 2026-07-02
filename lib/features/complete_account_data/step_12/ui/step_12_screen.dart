@@ -31,7 +31,7 @@ class Step12Screen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      context.clearAuthAndOpenSignIn();
+                      context.closeEditingStepOrOpenSignIn();
                     },
                     child: Container(
                       height: 30.r,
@@ -270,7 +270,7 @@ class Step12Screen extends StatelessWidget {
               // },
               listener: (context, state) {
                 if (state is Step12SuccessState) {
-                  context.pushNamed(Routes.step13Screen);
+                  context.completeOnboardingStepOrGo(Routes.step13Screen);
                 } else if (state is Step12ErrorState) {
                   AppConstant.toast(state.message, AppColors.redColor);
                 }

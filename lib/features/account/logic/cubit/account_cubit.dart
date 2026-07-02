@@ -72,6 +72,25 @@ class AccountCubit extends Cubit<AccountState> {
     );
   }
 
+  Future<void> updateProfilePhoto(String imagePath) async {
+    emit(UpdateProfilePhotoLoadingState(accountData: _accountData));
+    final result = await _accountRepo.updateProfilePhoto(imagePath);
+    result.fold(
+      (failure) {
+        emit(
+          UpdateProfilePhotoErrorState(
+            message: failure.message,
+            accountData: _accountData,
+          ),
+        );
+      },
+      (data) {
+        _accountData = data;
+        emit(UpdateProfilePhotoSuccessState(accountData: data));
+      },
+    );
+  }
+
   Future<void> _clearAuthData() async {
     await CacheHelper.removeSecureData(ConstantKeys.saveTokenToShared);
     await CacheHelper.removeSecureData(ConstantKeys.saveRefreshTokenToShared);

@@ -81,4 +81,25 @@ class AccountService {
       );
     }
   }
+
+  Future<AccountResponseModel> updateProfilePhoto(String imagePath) async {
+    final response = await apiConsumer.multiPost(
+      AccountApiEndpoint.profilePhoto,
+      {'profile_photo': imagePath},
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+print(response.statusCode);
+print(response.body);
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      return AccountResponseModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
 }

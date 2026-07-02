@@ -1,5 +1,5 @@
 class StepsRequestModel {
-  final int? stepNumber;
+  final int stepNumber;
   final String? name;
   final int? age;
   final String? gender;
@@ -29,7 +29,7 @@ class StepsRequestModel {
   final List<int>? supportiveToolIds;
 
   StepsRequestModel({
-    this.stepNumber,
+    required this.stepNumber,
     this.name,
     this.age,
     this.gender,
@@ -60,38 +60,47 @@ class StepsRequestModel {
   });
 
   Map<String, dynamic> toJson() {
-    return {
-      "step": stepNumber,
-      "answer": {
-        "name": name,
-        "age": age,
-        "gender": gender,
-        "height": height,
-        "weight": weight,
-        "has_target_weight": hasTargetWeight,
-        "target_weight": targetWeight,
-        "primary_goal": primaryGoal,
-        "days": days,
-        "level": level,
-        "workout": workout,
-        "active_level": activeLevel,
-        "has_health_issues": hasHealthIssues,
-        "health_issues": healthIssues,
-        "best_time_for_workout": betTimeForWorkout,
-        "has_dietry": hasDietry,
-        "choose_from_following_if_has_dietry_issues":
-            chooseFromFollowingIfHasDietryIssues,
-        "goal": goal,
-        "is_allergic": isAllergic,
-        "health_issues_description": healthIssuesDescription,
-        "is_there_food_dislike": isThereFoodDislike,
-        "food_dislike_description": foodDislikeDescription,
-        "meals_per_day": mealsPerDay,
-        "where_did_you_hear_about_us": whereDidYouHearAboutUs,
-        "gym_equipment_ids": gymEquipmentIds,
-        "free_weight_ids": freeWeightIds,
-        "supportive_tool_ids": supportiveToolIds,
-      },
-    };
+    final answer = <String, dynamic>{};
+
+    void addIfNotNull(String key, dynamic value) {
+      if (value != null ) {
+        answer[key] = value;
+      }
+    }
+
+    addIfNotNull("name", name);
+    addIfNotNull("age", age);
+    addIfNotNull("gender", gender);
+    addIfNotNull("height", height);
+    addIfNotNull("weight", weight);
+
+
+    addIfNotNull("has_target_weight", hasTargetWeight);
+    addIfNotNull("target_weight", targetWeight);
+    addIfNotNull("primary_goal", primaryGoal);
+    addIfNotNull("days", days);
+    addIfNotNull("level", level);
+    addIfNotNull("workout", workout);
+    addIfNotNull("active_level", activeLevel);
+    addIfNotNull("has_health_issues", hasHealthIssues);
+    addIfNotNull("health_issues", healthIssues);
+    addIfNotNull("best_time_for_workout", betTimeForWorkout);
+    addIfNotNull("has_dietry", hasDietry);
+    addIfNotNull(
+      "choose_from_following_if_has_dietry_issues",
+      chooseFromFollowingIfHasDietryIssues,
+    );
+    addIfNotNull("goal", goal);
+    addIfNotNull("is_allergic", isAllergic);
+    addIfNotNull("health_issues_description", healthIssuesDescription);
+    addIfNotNull("is_there_food_dislike", isThereFoodDislike);
+    addIfNotNull("food_dislike_description", foodDislikeDescription);
+    addIfNotNull("meals_per_day", mealsPerDay);
+    addIfNotNull("where_did_you_hear_about_us", whereDidYouHearAboutUs);
+    addIfNotNull("gym_equipment_ids", gymEquipmentIds);
+    addIfNotNull("free_weight_ids", freeWeightIds);
+    addIfNotNull("supportive_tool_ids", supportiveToolIds);
+
+    return {"step": stepNumber, "answer": answer};
   }
 }

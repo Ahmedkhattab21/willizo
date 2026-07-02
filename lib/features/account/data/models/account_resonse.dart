@@ -1,3 +1,5 @@
+import 'package:willizo/core/api/end_points.dart';
+
 class AccountResponseModel {
   final String message;
   final AccountData data;
@@ -21,6 +23,7 @@ class AccountData {
   final String name;
   final String phoneNumber;
   final String dateOfBirth;
+  final String profilePhoto;
   final Onboarding onboarding;
 
   AccountData({
@@ -29,6 +32,7 @@ class AccountData {
     required this.name,
     required this.phoneNumber,
     required this.dateOfBirth,
+    required this.profilePhoto,
     required this.onboarding,
   });
 
@@ -45,8 +49,21 @@ class AccountData {
       name: _toString(json['name']),
       phoneNumber: _toString(json['phone_number']),
       dateOfBirth: _toString(json['date_of_birth']),
+      profilePhoto: _imageUrl(
+        json['profile_photo'] ??
+            json['profile_photo_url'] ??
+            json['photo'] ??
+            json['avatar'],
+      ),
       onboarding: Onboarding.fromJson(json['onboarding'] ?? {}),
     );
+  }
+
+  static String _imageUrl(dynamic value) {
+    final rawValue = _toString(value);
+    if (rawValue.isEmpty) return '';
+    if (rawValue.startsWith('http')) return rawValue;
+    return EndPoints.getImageFromApi(rawValue);
   }
 
   String get formattedDateOfBirth {

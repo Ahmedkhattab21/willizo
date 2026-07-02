@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:willizo/config/routes/routes.dart';
 import 'package:willizo/core/services/services_locator.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
+import 'package:willizo/core/utils/app_constant.dart';
 import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
@@ -12,11 +15,16 @@ import 'package:willizo/features/account/data/repo/account_repo.dart';
 import 'package:willizo/features/account/logic/cubit/account_cubit.dart';
 import 'package:willizo/features/account/ui/widgets/account_shimmer_widget.dart';
 import 'package:willizo/features/account/ui/widgets/infro_tile_widget.dart';
+import 'package:willizo/features/account/ui/onboarding_details_screen.dart';
 import 'package:willizo/features/account/ui/widgets/profile_header_widget.dart';
 import 'package:willizo/features/account/ui/widgets/subscription_card_widget.dart';
+import 'package:willizo/features/login_and_signup/data/models/get_onboarding_step_response.dart';
+import 'package:willizo/features/login_and_signup/data/repo/login_and_signup_repo.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
+
+  static bool _isPickingProfilePhoto = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +40,13 @@ class AccountScreen extends StatelessWidget {
                   Routes.signInScreen,
                   (route) => false,
                 );
+              } else if (state is UpdateProfilePhotoSuccessState) {
+                AppConstant.toast(
+                  'Profile photo updated successfully',
+                  AppColors.primaryColor,
+                );
+              } else if (state is UpdateProfilePhotoErrorState) {
+                AppConstant.toast(state.message, AppColors.redColor);
               }
             },
             builder: (context, state) {
@@ -47,6 +62,12 @@ class AccountScreen extends StatelessWidget {
                 FetchAccountLoadedState() => state.accountData,
                 AccountActionLoadingState() => state.accountData,
                 AccountActionErrorState() => state.accountData,
+                UpdateProfileLoadingState() => state.accountData,
+                UpdateProfileErrorState() => state.accountData,
+                UpdateProfileSuccessState() => state.accountData,
+                UpdateProfilePhotoLoadingState() => state.accountData,
+                UpdateProfilePhotoErrorState() => state.accountData,
+                UpdateProfilePhotoSuccessState() => state.accountData,
                 _ => null,
               };
               final accountData = accountResponse?.data;
@@ -61,6 +82,8 @@ class AccountScreen extends StatelessWidget {
                     ProfileHeader(
                       name: accountData?.name ?? 'Loading...',
                       email: accountData?.email ?? 'Loading...',
+                      imageUrl: accountData?.profilePhoto ?? '',
+                      onCameraTap: () => _pickAndUploadProfilePhoto(context),
                     ),
                     verticalSpace(38),
                     _SectionHeader(
@@ -104,6 +127,22 @@ class AccountScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+                    verticalSpace(28),
+                    _SectionHeader(
+                      title: 'Details',
+                      showEdit: true,
+                      onEdit: () async {
+                        await Navigator.pushNamed(
+                          context,
+                          Routes.onboardingDetailsScreen,
+                        );
+                        if (context.mounted) {
+                          context.read<AccountCubit>().getAccountData();
+                        }
+                      },
+                    ),
+                    verticalSpace(16),
+                    const _OnboardingSummaryCard(),
                     verticalSpace(28),
                     const _SectionHeader(title: 'Subscription', showEdit: true),
                     verticalSpace(16),
@@ -191,6 +230,46 @@ class AccountScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _pickAndUploadProfilePhoto(BuildContext context) async {
+    if (_isPickingProfilePhoto) return;
+    _isPickingProfilePhoto = true;
+
+    try {
+      final pickedImage = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+      );
+      if (pickedImage == null || !context.mounted) return;
+
+      final extension = pickedImage.path.split('.').last.toLowerCase();
+      if (!['jpg', 'jpeg', 'png'].contains(extension)) {
+        AppConstant.toast(
+          'Only jpg, jpeg, and png images are allowed',
+          AppColors.redColor,
+        );
+        return;
+      }
+
+      final imageSize = await pickedImage.length();
+      if (!context.mounted) return;
+      if (imageSize > 5 * 1024 * 1024) {
+        AppConstant.toast(
+          'Image size must be 5 MB or less',
+          AppColors.redColor,
+        );
+        return;
+      }
+
+      context.read<AccountCubit>().updateProfilePhoto(pickedImage.path);
+    } on PlatformException catch (error) {
+      if (error.code != 'already_active' && context.mounted) {
+        AppConstant.toast('Failed to pick image', AppColors.redColor);
+      }
+    } finally {
+      _isPickingProfilePhoto = false;
+    }
   }
 }
 
@@ -300,6 +379,74 @@ class _DarkCard extends StatelessWidget {
       ),
       child: child,
     );
+  }
+}
+
+class _OnboardingSummaryCard extends StatelessWidget {
+  const _OnboardingSummaryCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<GetOnboardingStepResponseModel?>(
+      future: _loadStatus(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return _DarkCard(
+            child: Center(
+              child: CircularProgressIndicator(color: AppColors.primaryColor),
+            ),
+          );
+        }
+
+        final data = snapshot.data?.data;
+        if (data == null) {
+          return _DarkCard(
+            child: Text(
+              'Failed to load details',
+              style: TextStyles.font14whiteColorColorW400,
+            ),
+          );
+        }
+
+        return _DarkCard(
+          child: Column(
+            children: List.generate(4, (index) {
+              final stepNumber = index + 1;
+              return Padding(
+                padding: EdgeInsets.only(bottom: index == 3 ? 0 : 14.h),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        OnboardingStepPresenter.title(stepNumber),
+                        style: TextStyles.font14greyColorColor80W400,
+                      ),
+                    ),
+                    horizontalSpace(12),
+                    Flexible(
+                      child: Text(
+                        OnboardingStepPresenter.summary(
+                          data.answerForStep(stepNumber),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: TextStyles.font14WhiteColorW500,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<GetOnboardingStepResponseModel?> _loadStatus() async {
+    final result = await getIt<LoginAndSignupRepo>().getOnboardingStatus();
+    return result.fold((_) => null, (response) => response);
   }
 }
 

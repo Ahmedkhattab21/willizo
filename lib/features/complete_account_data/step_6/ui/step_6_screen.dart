@@ -31,7 +31,7 @@ class Step6Screen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      context.clearAuthAndOpenSignIn();
+                      context.closeEditingStepOrOpenSignIn();
                     },
                     child: Container(
                       height: 30.r,
@@ -263,7 +263,7 @@ class Step6Screen extends StatelessWidget {
             BlocConsumer<Step6Cubit, Step6State>(
               listener: (context, state) {
                 if (state is Step6SuccessState) {
-                  context.pushNamed(Routes.step7Screen);
+                  context.completeOnboardingStepOrGo(Routes.step7Screen);
                 } else if (state is Step6ErrorState) {
                   AppConstant.toast(state.message, AppColors.redColor);
                 }

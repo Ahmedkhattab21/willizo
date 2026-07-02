@@ -37,19 +37,18 @@ class HttpConsumer implements ApiConsumer {
   /// Handles logout when refresh token fails
   Future<void> _handleLogout() async {
     debugPrint('🔐 [Token Refresh] ⚠️ Logging out user due to refresh failure');
-    
+
     // Clear all stored tokens
     await CacheHelper.removeSecureData(ConstantKeys.saveTokenToShared);
     await CacheHelper.removeSecureData(ConstantKeys.saveRefreshTokenToShared);
     await CacheHelper.removeSecureData(ConstantKeys.saveNameToShared);
-    
+
     // Navigate to sign in screen
     final context = MyApp.navigatorKey.currentContext;
-    if (context != null) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        Routes.signInScreen,
-        (route) => false,
-      );
+    if (context != null && context.mounted) {
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil(Routes.signInScreen, (route) => false);
     }
   }
 
@@ -159,7 +158,7 @@ class HttpConsumer implements ApiConsumer {
         '🔐 [Token Refresh] ⏳ Already refreshing token, waiting for completion...',
       );
       final refreshSuccess = await _refreshCompleter!.future;
-      
+
       if (refreshSuccess) {
         debugPrint(
           '🔐 [Token Refresh] ✅ Refresh completed by another request, retrying...',
@@ -204,7 +203,9 @@ class HttpConsumer implements ApiConsumer {
   }
 
   /// Creates updated headers with fresh token for retry
-  Future<Map<String, String>> _getUpdatedHeaders(Map<String, String>? headers) async {
+  Future<Map<String, String>> _getUpdatedHeaders(
+    Map<String, String>? headers,
+  ) async {
     final token = await CacheHelper.getSecuredString(
       ConstantKeys.saveTokenToShared,
     );
@@ -295,7 +296,7 @@ class HttpConsumer implements ApiConsumer {
     Map<String, String>? headers,
   ) async {
     final response = await _executeMultiPost(path, body, headers);
-    
+
     return await _handle401Response(path, response, () async {
       final updatedHeaders = await _getUpdatedHeaders(headers);
       return await _executeMultiPost(path, body, updatedHeaders);
@@ -317,7 +318,7 @@ class HttpConsumer implements ApiConsumer {
     for (var entry in body.entries) {
       final key = entry.key;
       final value = entry.value;
-      
+
       if (value == null) continue;
 
       if (key == "images") {
@@ -359,6 +360,10 @@ class HttpConsumer implements ApiConsumer {
           await http.MultipartFile.fromPath(key, value.toString()),
         );
       } else if (key == "media") {
+        request.files.add(
+          await http.MultipartFile.fromPath(key, value.toString()),
+        );
+      } else if (key == "profile_photo") {
         request.files.add(
           await http.MultipartFile.fromPath(key, value.toString()),
         );

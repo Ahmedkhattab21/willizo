@@ -18,6 +18,10 @@ class CompleteAccountService {
   Future<StepResponseModel> sendSteps({
     required StepsRequestModel parameter,
   }) async {
+    print("parameter.stepNumber");
+    print(parameter.stepNumber);
+    print(parameter.name);
+    print(parameter.age);
     final response = await apiConsumer.post(
       CompleteAccountApiEndpoints.completeAccountUrl,
       parameter.toJson(),
@@ -26,6 +30,7 @@ class CompleteAccountService {
             "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
       },
     );
+
     if (response.statusCode == StatusCode.ok ||
         response.statusCode == StatusCode.created) {
       return StepResponseModel.fromJson(jsonDecode(response.body));

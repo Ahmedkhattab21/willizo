@@ -42,4 +42,18 @@ class AccountRepo {
       return const Left(ServerFailure(message: 'Failed to update profile'));
     }
   }
+
+  Future<Either<Failure, AccountResponseModel>> updateProfilePhoto(
+    String imagePath,
+  ) async {
+    try {
+      return Right(await _accountServices.updateProfilePhoto(imagePath));
+    } on ServerException catch (failure) {
+      return Left(ServerFailure(message: failure.serverFailure.message));
+    } catch (_) {
+      return const Left(
+        ServerFailure(message: 'Failed to update profile photo'),
+      );
+    }
+  }
 }

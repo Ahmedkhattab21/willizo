@@ -46,7 +46,7 @@ class _Step19ScreenState extends State<Step19Screen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      context.clearAuthAndOpenSignIn();
+                      context.closeEditingStepOrOpenSignIn();
                     },
                     child: Container(
                       height: 30.r,
@@ -239,7 +239,7 @@ class _Step19ScreenState extends State<Step19Screen> {
               // },
               listener: (context, state) {
                 if (state is Step19SuccessState) {
-                  context.pushNamed(Routes.step20Screen);
+                  context.completeOnboardingStepOrGo(Routes.step20Screen);
                 } else if (state is Step19ErrorState) {
                   AppConstant.toast(state.message, AppColors.redColor);
                 }

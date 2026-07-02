@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/app_constant.dart';
@@ -23,6 +25,7 @@ class PersonalInfoScreen extends StatefulWidget {
 
 class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   final _formKey = GlobalKey<FormState>();
+  bool _isPickingProfilePhoto = false;
   late final TextEditingController _nameController;
   late final TextEditingController _phoneController;
   late final TextEditingController _emailController;
@@ -62,11 +65,28 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                 AppColors.primaryColor,
               );
               Navigator.pop(context, true);
+            } else if (state is UpdateProfilePhotoSuccessState) {
+              AppConstant.toast(
+                'Profile photo updated successfully',
+                AppColors.primaryColor,
+              );
             } else if (state is UpdateProfileErrorState) {
+              AppConstant.toast(state.message, AppColors.redColor);
+            } else if (state is UpdateProfilePhotoErrorState) {
               AppConstant.toast(state.message, AppColors.redColor);
             }
           },
           builder: (context, state) {
+            final currentAccountData = switch (state) {
+              UpdateProfileSuccessState() => state.accountData.data,
+              UpdateProfilePhotoSuccessState() => state.accountData.data,
+              UpdateProfileLoadingState() => state.accountData?.data,
+              UpdateProfilePhotoLoadingState() => state.accountData?.data,
+              UpdateProfileErrorState() => state.accountData?.data,
+              UpdateProfilePhotoErrorState() => state.accountData?.data,
+              _ => widget.accountData,
+            };
+
             return SingleChildScrollView(
               padding: EdgeInsets.fromLTRB(16.w, 18.h, 16.w, 32.h),
               child: Form(
@@ -76,8 +96,10 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                     _Header(),
                     verticalSpace(34),
                     ProfileHeader(
-                      name: widget.accountData?.name ?? '',
-                      email: widget.accountData?.email ?? '',
+                      name: currentAccountData?.name ?? '',
+                      email: currentAccountData?.email ?? '',
+                      imageUrl: currentAccountData?.profilePhoto ?? '',
+                      onCameraTap: _pickAndUploadProfilePhoto,
                     ),
                     verticalSpace(34),
                     _InfoField(
@@ -166,6 +188,46 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _pickAndUploadProfilePhoto() async {
+    if (_isPickingProfilePhoto) return;
+    _isPickingProfilePhoto = true;
+
+    try {
+      final pickedImage = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+      );
+      if (pickedImage == null || !mounted) return;
+
+      final extension = pickedImage.path.split('.').last.toLowerCase();
+      if (!['jpg', 'jpeg', 'png'].contains(extension)) {
+        AppConstant.toast(
+          'Only jpg, jpeg, and png images are allowed',
+          AppColors.redColor,
+        );
+        return;
+      }
+
+      final imageSize = await pickedImage.length();
+      if (!mounted) return;
+      if (imageSize > 5 * 1024 * 1024) {
+        AppConstant.toast(
+          'Image size must be 5 MB or less',
+          AppColors.redColor,
+        );
+        return;
+      }
+
+      context.read<AccountCubit>().updateProfilePhoto(pickedImage.path);
+    } on PlatformException catch (error) {
+      if (error.code != 'already_active' && mounted) {
+        AppConstant.toast('Failed to pick image', AppColors.redColor);
+      }
+    } finally {
+      _isPickingProfilePhoto = false;
+    }
   }
 
   Future<void> _pickBirthDate() async {

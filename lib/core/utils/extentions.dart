@@ -38,6 +38,37 @@ extension NavigationScreens on BuildContext {
     );
   }
 
+  bool get isEditingOnboardingStep {
+    final args = ModalRoute.of(this)?.settings.arguments;
+    return args is Map && args['isEditing'] == true;
+  }
+
+  Future<void> closeEditingStepOrOpenSignIn() async {
+    if (isEditingOnboardingStep) {
+      pop();
+      return;
+    }
+
+    await clearAuthAndOpenSignIn();
+  }
+
+  Future<void> completeOnboardingStepOrGo(
+    String routeName, {
+    bool removeUntil = false,
+  }) async {
+    if (isEditingOnboardingStep) {
+      pop();
+      return;
+    }
+
+    if (removeUntil) {
+      await pushNamedAndRemoveUntil(routeName, predicate: (route) => false);
+      return;
+    }
+
+    await pushNamed(routeName);
+  }
+
   void pop() => Navigator.of(this).pop();
 }
 

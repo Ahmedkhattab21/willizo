@@ -5,6 +5,7 @@ import 'package:willizo/core/services/services_locator.dart';
 import 'package:willizo/features/account/data/models/account_resonse.dart';
 import 'package:willizo/features/account/data/repo/account_repo.dart';
 import 'package:willizo/features/account/logic/cubit/account_cubit.dart';
+import 'package:willizo/features/account/ui/onboarding_details_screen.dart';
 import 'package:willizo/features/account/ui/personal_info_screen.dart';
 import 'package:willizo/features/billing/ui/billing_screen.dart';
 import 'package:willizo/features/cart/ui/cart_screen.dart';
@@ -91,10 +92,14 @@ class RouteGenerator {
     final dynamic args = settings.arguments;
     switch (settings.name) {
       case Routes.splashVideoScreen:
-        return MaterialPageRoute(builder: (_) => SplashVideoScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => SplashVideoScreen(),
+        );
 
       case Routes.onBoardingScreen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => OnboardingCubit(),
             child: OnBoardingScreen(),
@@ -103,6 +108,7 @@ class RouteGenerator {
 
       case Routes.signInScreen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => LoginAndSignup(getIt()),
             child: SignInScreen(),
@@ -110,6 +116,7 @@ class RouteGenerator {
         );
       case Routes.forgetPasswordScreen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => ForgetPasswordCubit(getIt()),
             child: ForgetPasswordScreen(),
@@ -117,6 +124,7 @@ class RouteGenerator {
         );
       case Routes.forgetPasswordCodeScreen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => ForgetPasswordCodeCubit(),
             child: ForgetPasswordCodeScreen(),
@@ -124,6 +132,7 @@ class RouteGenerator {
         );
       case Routes.forgetPasswordDoneScreen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => ForgetPasswordDoneCubit(),
             child: ForgetPasswordDoneScreen(),
@@ -131,6 +140,7 @@ class RouteGenerator {
         );
       case Routes.createNewPasswordScreen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) =>
                 CreateNewPasswordCubit(getIt<ResetPasswordRepo>()),
@@ -140,11 +150,15 @@ class RouteGenerator {
           ),
         );
       case Routes.createNewPasswordDoneScreen:
-        return MaterialPageRoute(builder: (_) => CreateNewPasswordDoneScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => CreateNewPasswordDoneScreen(),
+        );
 
       ///steps
       case Routes.step1Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step1Cubit(getIt<CompleteAccountRepo>()),
             child: Step1Screen(),
@@ -152,6 +166,7 @@ class RouteGenerator {
         );
       case Routes.step2Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step2Cubit(getIt<CompleteAccountRepo>()),
             child: Step2Screen(),
@@ -159,6 +174,7 @@ class RouteGenerator {
         );
       case Routes.step3Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step3Cubit(getIt<CompleteAccountRepo>()),
             child: Step3Screen(),
@@ -166,6 +182,7 @@ class RouteGenerator {
         );
       case Routes.step4Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step4Cubit(getIt<CompleteAccountRepo>()),
             child: Step4Screen(),
@@ -173,6 +190,7 @@ class RouteGenerator {
         );
       case Routes.step5Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step5Cubit(getIt<CompleteAccountRepo>()),
             child: Step5Screen(),
@@ -180,6 +198,7 @@ class RouteGenerator {
         );
       case Routes.step6Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step6Cubit(getIt<CompleteAccountRepo>()),
             child: Step6Screen(),
@@ -188,6 +207,7 @@ class RouteGenerator {
 
       case Routes.step7Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step7Cubit(getIt<CompleteAccountRepo>()),
             child: Step7Screen(),
@@ -196,6 +216,7 @@ class RouteGenerator {
 
       case Routes.step8Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step8Cubit(getIt<CompleteAccountRepo>()),
             child: Step8Screen(),
@@ -203,6 +224,7 @@ class RouteGenerator {
         );
       case Routes.step9Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step9Cubit(getIt<CompleteAccountRepo>()),
             child: Step9Screen(),
@@ -210,6 +232,7 @@ class RouteGenerator {
         );
       case Routes.step10Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step10Cubit(getIt<CompleteAccountRepo>()),
             child: Step10Screen(),
@@ -217,6 +240,7 @@ class RouteGenerator {
         );
       case Routes.step11Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step11Cubit(getIt<CompleteAccountRepo>()),
             child: Step11Screen(),
@@ -224,6 +248,7 @@ class RouteGenerator {
         );
       case Routes.step12Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step12Cubit(getIt<CompleteAccountRepo>()),
             child: Step12Screen(),
@@ -231,6 +256,7 @@ class RouteGenerator {
         );
       case Routes.step13Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step13Cubit(getIt<CompleteAccountRepo>()),
             child: Step13Screen(),
@@ -238,6 +264,7 @@ class RouteGenerator {
         );
       case Routes.step14Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step14Cubit(getIt<CompleteAccountRepo>()),
             child: Step14Screen(),
@@ -245,6 +272,7 @@ class RouteGenerator {
         );
       case Routes.step15Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step15Cubit(getIt<CompleteAccountRepo>()),
             child: Step15Screen(),
@@ -252,6 +280,7 @@ class RouteGenerator {
         );
       case Routes.step16Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step16Cubit(getIt<CompleteAccountRepo>()),
             child: Step16Screen(),
@@ -259,6 +288,7 @@ class RouteGenerator {
         );
       case Routes.step17Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step17Cubit(getIt<CompleteAccountRepo>()),
             child: Step17Screen(),
@@ -266,6 +296,7 @@ class RouteGenerator {
         );
       case Routes.step18Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) =>
                 Step18Cubit(getIt<Step18Repo>(), getIt<CompleteAccountRepo>()),
@@ -274,6 +305,7 @@ class RouteGenerator {
         );
       case Routes.step19Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) =>
                 Step19Cubit(getIt<Step19Repo>(), getIt<CompleteAccountRepo>()),
@@ -282,6 +314,7 @@ class RouteGenerator {
         );
       case Routes.step20Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) =>
                 Step20Cubit(getIt<Step20Repo>(), getIt<CompleteAccountRepo>()),
@@ -291,6 +324,7 @@ class RouteGenerator {
 
       case Routes.step21Screen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => Step21Cubit(getIt<CompleteAccountRepo>()),
             child: Step21Screen(),
@@ -299,6 +333,7 @@ class RouteGenerator {
 
       case Routes.buttonNavBarWidget:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => ButtonNavBarCubit(),
             child: const ButtonNavBarWidget(),
@@ -306,9 +341,15 @@ class RouteGenerator {
         );
 
       case Routes.notificationScreen:
-        return MaterialPageRoute(builder: (_) => const NotificationsScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const NotificationsScreen(),
+        );
       case Routes.topFriendsScreen:
-        return MaterialPageRoute(builder: (_) => const FriendsTabBodyWidget());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const FriendsTabBodyWidget(),
+        );
       // ///user routes
       // case Routes.loginScreen:
       //   return MaterialPageRoute(
@@ -319,6 +360,7 @@ class RouteGenerator {
       //   );
       case Routes.productDetailsScreen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) =>
                 ProductDetailsCubit(getIt())
@@ -331,27 +373,49 @@ class RouteGenerator {
 
       case Routes.cartScreen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => CartCubit(getIt())..getCart(),
             child: const CartScreen(),
           ),
         );
       case Routes.myFavouriteScreen:
-        return MaterialPageRoute(builder: (_) => const MyFavouriteScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const MyFavouriteScreen(),
+        );
       // case Routes.chatScreen:
-      //   return MaterialPageRoute(builder: (_) => AllChatsScreen());
+      //   return MaterialPageRoute(
+      //     builder: (_) => AllChatsScreen(),
+      //   );
       case Routes.myOrderScreen:
-        return MaterialPageRoute(builder: (_) => const MyOrderScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const MyOrderScreen(),
+        );
       case Routes.myOrderDetailsScreen:
-        return MaterialPageRoute(builder: (_) => const MyOrderDetailsScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const MyOrderDetailsScreen(),
+        );
       case Routes.subscribeScreen:
-        return MaterialPageRoute(builder: (_) => const SubscribeScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const SubscribeScreen(),
+        );
       case Routes.billingScreen:
-        return MaterialPageRoute(builder: (_) => const BillingScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const BillingScreen(),
+        );
       case Routes.planDetailsScreen:
-        return MaterialPageRoute(builder: (_) => const PlanDetailsScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const PlanDetailsScreen(),
+        );
       case Routes.wishlistScreen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => WishlistCubit(getIt())..getWishlist(),
             child: const WishlistScreen(),
@@ -359,6 +423,7 @@ class RouteGenerator {
         );
       case Routes.checkoutScreen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => CheckoutScreen(
             cartItems: args is Map && args['cartItems'] != null
                 ? (args['cartItems'] as List).cast<CartItem>()
@@ -367,12 +432,18 @@ class RouteGenerator {
         );
       case Routes.personalInfoScreen:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => AccountCubit(getIt<AccountRepo>()),
             child: PersonalInfoScreen(
               accountData: args is AccountData ? args : null,
             ),
           ),
+        );
+      case Routes.onboardingDetailsScreen:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const OnboardingDetailsScreen(),
         );
       default:
         return null;

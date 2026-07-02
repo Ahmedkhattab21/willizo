@@ -59,3 +59,22 @@ final class UpdateProfileErrorState extends AccountState {
 
   UpdateProfileErrorState({required this.message, this.accountData});
 }
+
+final class UpdateProfilePhotoLoadingState extends AccountState {
+  final AccountResponseModel? accountData;
+
+  UpdateProfilePhotoLoadingState({this.accountData});
+}
+
+final class UpdateProfilePhotoSuccessState extends AccountState {
+  final AccountResponseModel accountData;
+
+  UpdateProfilePhotoSuccessState({required this.accountData});
+}
+
+final class UpdateProfilePhotoErrorState extends AccountState {
+  final String message;
+  final AccountResponseModel? accountData;
+
+  UpdateProfilePhotoErrorState({required this.message, this.accountData});
+}

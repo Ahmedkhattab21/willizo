@@ -60,6 +60,17 @@ class OnboardingData {
     if (!hasAnswers) return currentStep;
     return currentStep + 1;
   }
+
+  Map<String, dynamic>? answerForStep(int stepNumber) {
+    final value = answers;
+    if (value is! Map) return null;
+    final answer = value['step_$stepNumber'];
+    if (answer is Map<String, dynamic>) return answer;
+    if (answer is Map) {
+      return answer.map((key, value) => MapEntry(key.toString(), value));
+    }
+    return null;
+  }
 }
 
 class Answer {

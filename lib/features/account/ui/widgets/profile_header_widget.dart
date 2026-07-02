@@ -7,8 +7,16 @@ import 'package:willizo/core/utils/styles.dart';
 class ProfileHeader extends StatelessWidget {
   final String name;
   final String email;
+  final String imageUrl;
+  final VoidCallback? onCameraTap;
 
-  const ProfileHeader({super.key, required this.name, required this.email});
+  const ProfileHeader({
+    super.key,
+    required this.name,
+    required this.email,
+    this.imageUrl = '',
+    this.onCameraTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,29 +44,36 @@ class ProfileHeader extends StatelessWidget {
                 ),
                 child: CircleAvatar(
                   backgroundColor: AppColors.greyColor20,
-                  backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
+                  backgroundImage: NetworkImage(
+                    imageUrl.isNotEmpty
+                        ? imageUrl
+                        : 'https://i.pravatar.cc/300',
+                  ),
                 ),
               ),
               Positioned(
                 right: -2.r,
                 bottom: 4.r,
-                child: Container(
-                  width: 36.r,
-                  height: 36.r,
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryColor,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primaryColor.withValues(alpha: 0.45),
-                        blurRadius: 16.r,
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.camera_alt,
-                    size: 18.r,
-                    color: AppColors.blackColor,
+                child: GestureDetector(
+                  onTap: onCameraTap,
+                  child: Container(
+                    width: 36.r,
+                    height: 36.r,
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primaryColor.withValues(alpha: 0.45),
+                          blurRadius: 16.r,
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.camera_alt,
+                      size: 18.r,
+                      color: AppColors.blackColor,
+                    ),
                   ),
                 ),
               ),
