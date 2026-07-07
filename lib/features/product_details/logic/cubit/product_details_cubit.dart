@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:willizo/features/product_details/data/models/add_product_to_cart_request_response.dart';
 import 'package:willizo/features/product_details/data/models/add_product_to_wishlist_response.dart';
+import 'package:willizo/features/product_details/data/models/create_review_request_model.dart';
 import 'package:willizo/features/product_details/data/models/product_added_to_cart_response.dart';
 import 'package:willizo/features/product_details/data/models/product_details_response_model.dart';
 import 'package:willizo/features/product_details/data/models/product_reviews_response_model.dart';
@@ -82,6 +83,24 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
             ),
           );
         }
+      },
+    );
+  }
+
+  Future<String?> createReview(CreateReviewRequestModel request) async {
+    emit(CreateReviewLoadingState());
+
+    final result = await _productDetailsRepo.createReview(request);
+
+    return result.fold(
+      (failure) {
+        emit(CreateReviewErrorState(message: failure.message));
+        return failure.message;
+      },
+      (_) async {
+        emit(CreateReviewSuccessState());
+        await getProductReviews(request.productId);
+        return null;
       },
     );
   }

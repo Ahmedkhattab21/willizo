@@ -24,9 +24,9 @@ class StepsRequestModel {
   final String? foodDislikeDescription;
   final int? mealsPerDay;
   final String? whereDidYouHearAboutUs;
-  final List<int>? gymEquipmentIds;
-  final List<int>? freeWeightIds;
-  final List<int>? supportiveToolIds;
+  final List<String>? gymEquipmentIds;
+  final List<String>? freeWeightIds;
+  final List<String>? supportiveToolIds;
 
   StepsRequestModel({
     required this.stepNumber,
@@ -63,7 +63,7 @@ class StepsRequestModel {
     final answer = <String, dynamic>{};
 
     void addIfNotNull(String key, dynamic value) {
-      if (value != null ) {
+      if (value != null) {
         answer[key] = value;
       }
     }
@@ -73,7 +73,6 @@ class StepsRequestModel {
     addIfNotNull("gender", gender);
     addIfNotNull("height", height);
     addIfNotNull("weight", weight);
-
 
     addIfNotNull("has_target_weight", hasTargetWeight);
     addIfNotNull("target_weight", targetWeight);

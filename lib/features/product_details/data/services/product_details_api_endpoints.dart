@@ -7,12 +7,11 @@ class ProductDetailsApiEndpoints {
       '${EndPoints.baseUrl}/products/$productId/details';
   static String getProductReviews(String productId) =>
       '${EndPoints.baseUrl}/products/$productId/reviews';
+  static String createReview = '${EndPoints.baseUrl}/reviews';
   static String addProductToCart = '${EndPoints.baseUrl}/cart/items';
   static String addProductToWishlist = '${EndPoints.baseUrl}/wishlist';
   static String removeFromWishlist(String productId) =>
       '${EndPoints.baseUrl}/wishlist/$productId';
-  static String writeProductReview(String productId) =>
-      '${EndPoints.baseUrl}/products/$productId/reviews';
 }
 
 // wishlist/{{product_id}}

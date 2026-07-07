@@ -12,6 +12,7 @@ import 'package:willizo/features/shop/logic/cubit/badge_cubit.dart';
 import 'package:willizo/features/product_details/data/models/product_details_response_model.dart';
 import 'package:willizo/features/product_details/logic/cubit/product_details_cubit.dart';
 import 'package:willizo/features/product_details/ui/widgets/back_button_widget.dart';
+import 'package:willizo/features/product_details/ui/widgets/check_list_widget.dart';
 import 'package:willizo/features/product_details/ui/widgets/color_selector_widget.dart';
 import 'package:willizo/features/product_details/ui/widgets/custom_reviews.dart';
 import 'package:willizo/features/product_details/ui/widgets/product_action_widget.dart';
@@ -39,6 +40,59 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int quantity = 1;
   bool isItemAdded = false;
   bool isItemInWishlist = false;
+
+  List<OptionValue> _optionValues(ProductData product, String optionName) {
+    final normalizedName = optionName.toLowerCase();
+    for (final option in product.options) {
+      if (option.name.toLowerCase() == normalizedName) {
+        return option.values;
+      }
+    }
+    return [];
+  }
+
+  ProductVariant? _selectedVariant(ProductData product) {
+    final selectedValues = <String>{};
+    final colors = _optionValues(product, 'Color');
+    final sizes = _optionValues(product, 'Size');
+
+    if (colors.isNotEmpty && selectedColor < colors.length) {
+      selectedValues.add(colors[selectedColor].id);
+    }
+    if (sizes.isNotEmpty && selectedSize < sizes.length) {
+      selectedValues.add(sizes[selectedSize].id);
+    }
+    if (selectedValues.isEmpty) {
+      return product.variants.isNotEmpty ? product.variants.first : null;
+    }
+
+    for (final variant in product.variants) {
+      final variantValues = variant.optionValues.toSet();
+      if (selectedValues.every(variantValues.contains)) {
+        return variant;
+      }
+    }
+    return product.variants.isNotEmpty ? product.variants.first : null;
+  }
+
+  int _availableStock(ProductData product) {
+    return _selectedVariant(product)?.stockQuantity ?? product.stockQuantity;
+  }
+
+  void _clampQuantity(ProductData product) {
+    final stock = _availableStock(product);
+    if (stock > 0 && quantity > stock) {
+      quantity = stock;
+    }
+  }
+
+  Color _optionColor(OptionValue value) {
+    final hex = value.hexColor;
+    if (hex == null || hex.isEmpty) return Colors.grey;
+    final normalizedHex = hex.startsWith('#') ? hex.substring(1) : hex;
+    final colorValue = int.tryParse('ff$normalizedHex', radix: 16);
+    return colorValue == null ? Colors.grey : Color(colorValue);
+  }
 
   List<String> getProductImages(ProductData? product) {
     if (product == null) {
@@ -135,10 +189,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   backgroundColor: Colors.red,
                 ),
               );
+            } else if (state is CreateReviewSuccessState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Review submitted successfully'),
+                  backgroundColor: Colors.green,
+                ),
+              );
             } else if (state is ProductDetailsLoadedState) {
               setState(() {
                 isItemInWishlist =
                     state.productDetails.data?.isInWishlist ?? false;
+                isItemAdded = state.productDetails.data?.isInCart ?? false;
               });
             }
           },
@@ -182,6 +244,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         );
                       }
                       final images = getProductImages(product);
+                      final colorValues = _optionValues(product, 'Color');
+                      final sizeValues = _optionValues(product, 'Size');
+                      final selectedVariant = _selectedVariant(product);
 
                       return SingleChildScrollView(
                         padding: EdgeInsets.symmetric(
@@ -237,53 +302,27 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               children: [
                                 Expanded(
                                   child: ColorSelector(
-                                    colors:
-                                        product.options.any(
-                                          (opt) => opt.name == "Color",
-                                        )
-                                        ? product.options
-                                              .firstWhere(
-                                                (opt) => opt.name == "Color",
-                                              )
-                                              .values
-                                              .map(
-                                                (v) => v.hexColor != null
-                                                    ? Color(
-                                                        int.parse(
-                                                          v.hexColor!
-                                                              .replaceFirst(
-                                                                '#',
-                                                                '0xff',
-                                                              ),
-                                                        ),
-                                                      )
-                                                    : Colors.grey,
-                                              )
-                                              .toList()
-                                        : [],
+                                    colors: colorValues
+                                        .map(_optionColor)
+                                        .toList(),
                                     selectedIndex: selectedColor,
-                                    onColorSelected: (index) =>
-                                        setState(() => selectedColor = index),
+                                    onColorSelected: (index) => setState(() {
+                                      selectedColor = index;
+                                      _clampQuantity(product);
+                                    }),
                                   ),
                                 ),
                                 SizedBox(width: 16.w),
                                 Expanded(
                                   child: SizeSelector(
-                                    sizes:
-                                        product.options.any(
-                                          (opt) => opt.name == "Size",
-                                        )
-                                        ? product.options
-                                              .firstWhere(
-                                                (opt) => opt.name == "Size",
-                                              )
-                                              .values
-                                              .map((v) => v.value)
-                                              .toList()
-                                        : [],
+                                    sizes: sizeValues
+                                        .map((value) => value.value)
+                                        .toList(),
                                     selectedIndex: selectedSize,
-                                    onSizeSelected: (index) =>
-                                        setState(() => selectedSize = index),
+                                    onSizeSelected: (index) => setState(() {
+                                      selectedSize = index;
+                                      _clampQuantity(product);
+                                    }),
                                   ),
                                 ),
                               ],
@@ -298,7 +337,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             verticalSpace(10),
                             QuantityWidget(
                               quantity: quantity,
-                              onAdd: () => setState(() => quantity++),
+                              canAdd: quantity < _availableStock(product),
+                              canRemove: quantity > 1,
+                              onAdd: () => setState(() {
+                                final stock = _availableStock(product);
+                                if (quantity < stock) {
+                                  quantity++;
+                                }
+                              }),
                               onRemove: () => setState(
                                 () => quantity > 1 ? quantity-- : null,
                               ),
@@ -325,10 +371,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                           AddProductToCartRequest(
                                             productId: product.id,
                                             quantity: quantity,
-                                            variantId:
-                                                product.variants.isNotEmpty
-                                                ? product.variants[0].id
-                                                : null,
+                                            variantId: selectedVariant?.id,
                                           ),
                                         );
                                   },
@@ -351,176 +394,62 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             verticalSpace(20),
                             Divider(color: AppColors.greyColorFB),
                             verticalSpace(20),
-                            Row(
-                              children: [
-                                SvgPicture.asset(ImageAsset.shippingCar),
-                                horizontalSpace(10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Free Delivery",
-                                      style: TextStyles.font16WhiteColorW500
-                                          .copyWith(fontSize: 14.sp),
-                                    ),
-                                    Text(
-                                      "3-5 business days",
-                                      style: TextStyles.font16WhiteColorW500
-                                          .copyWith(
-                                            color: AppColors.greyColorFB,
-                                            fontSize: 12.sp,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                                Spacer(),
-                                SvgPicture.asset(ImageAsset.returnIcon),
-                                horizontalSpace(10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Returns",
-                                      style: TextStyles.font16WhiteColorW500
-                                          .copyWith(fontSize: 14.sp),
-                                    ),
-                                    Text(
-                                      "3-5 business days",
-                                      style: TextStyles.font16WhiteColorW500
-                                          .copyWith(
-                                            color: AppColors.greyColorFB,
-                                            fontSize: 12.sp,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                            _FulfillmentInfo(product: product),
                             verticalSpace(20),
-                            Text(
-                              "Dimensions",
-                              style: TextStyles.font14InterW400.copyWith(
-                                color: AppColors.whiteColor,
+                            _ProductSection(
+                              title: 'Product Description',
+                              child: Text(
+                                product.description,
+                                style: TextStyles.font12InterW400.copyWith(
+                                  color: AppColors.greyColorColor79,
+                                  height: 1.4,
+                                ),
                               ),
                             ),
-                            verticalSpace(20),
-                            Row(
-                              children: [
-                                Text(
-                                  "Lenght:",
-                                  style: TextStyles.font12InterW400,
+                            if (product.keyFeatures.isNotEmpty) ...[
+                              verticalSpace(18),
+                              _ProductSection(
+                                title: 'Key Features',
+                                child: CheckListWidget(
+                                  items: product.keyFeatures,
                                 ),
-                                Spacer(),
-                                Text(
-                                  "50 inches",
-                                  style: TextStyles.font12InterW400,
-                                ),
-                              ],
-                            ),
-                            verticalSpace(10),
-                            Row(
-                              children: [
-                                Text(
-                                  "Width:",
-                                  style: TextStyles.font12InterW400,
-                                ),
-                                Spacer(),
-                                Text(
-                                  "30 inches",
-                                  style: TextStyles.font12InterW400,
-                                ),
-                              ],
-                            ),
-                            verticalSpace(10),
-                            Row(
-                              children: [
-                                Text(
-                                  "Height:",
-                                  style: TextStyles.font12InterW400,
-                                ),
-                                Spacer(),
-                                Text(
-                                  "18-45 inches",
-                                  style: TextStyles.font12InterW400,
-                                ),
-                              ],
-                            ),
-                            verticalSpace(10),
-                            Row(
-                              children: [
-                                Text(
-                                  "Weight:",
-                                  style: TextStyles.font12InterW400,
-                                ),
-                                Spacer(),
-                                Text(
-                                  "${product.weight} kg",
-                                  style: TextStyles.font12InterW400,
-                                ),
-                              ],
-                            ),
-                            verticalSpace(20),
-                            Text(
-                              "Secifications",
-                              style: TextStyles.font14InterW400.copyWith(
-                                color: AppColors.whiteColor,
                               ),
-                            ),
-                            verticalSpace(10),
-                            Text(
-                              "Diminsions",
-                              style: TextStyles.font12InterW400,
-                            ),
-                            verticalSpace(10),
-                            Text(
-                              "16.5 x 16.5 x 48.5 inche (per dumbbell)",
-                              style: TextStyles.font12InterW400.copyWith(
-                                color: AppColors.greyColorColor79,
+                            ],
+                            if (product.dimensions != null &&
+                                product.dimensions!
+                                    .toDisplayMap()
+                                    .isNotEmpty) ...[
+                              verticalSpace(18),
+                              _ProductSection(
+                                title: 'Dimensions',
+                                child: _KeyValueRows(
+                                  items: product.dimensions!.toDisplayMap(),
+                                ),
                               ),
-                            ),
-                            verticalSpace(10),
-                            Text(
-                              "increments",
-                              style: TextStyles.font12InterW400,
-                            ),
-                            verticalSpace(10),
-                            Text(
-                              "16.5 x 16.5 x 48.5 inche (per dumbbell)",
-                              style: TextStyles.font12InterW400.copyWith(
-                                color: AppColors.greyColorColor79,
-                              ),
-                            ),
-                            verticalSpace(10),
-                            Text("Matrial", style: TextStyles.font12InterW400),
-                            verticalSpace(10),
-                            Text(
-                              "16.5 x 16.5 x 48.5 inche (per dumbbell)",
-                              style: TextStyles.font12InterW400.copyWith(
-                                color: AppColors.greyColorColor79,
-                              ),
-                            ),
-                            verticalSpace(10),
-                            Text("Warranty", style: TextStyles.font12InterW400),
-                            verticalSpace(10),
-                            Text(
-                              "16.5 x 16.5 x 48.5 inche (per dumbbell)",
-                              style: TextStyles.font12InterW400.copyWith(
-                                color: AppColors.greyColorColor79,
-                              ),
-                            ),
-                            verticalSpace(10),
-                            Text("Includes", style: TextStyles.font12InterW400),
-                            verticalSpace(10),
-                            Text(
-                              "16.5 x 16.5 x 48.5 inche (per dumbbell)",
-                              style: TextStyles.font12InterW400.copyWith(
-                                color: AppColors.greyColorColor79,
+                            ],
+                            verticalSpace(18),
+                            _ProductSection(
+                              title: 'Specifications',
+                              child: _KeyValueRows(
+                                items: {
+                                  if (product.specifications.isNotEmpty)
+                                    ...product.specifications,
+                                  if (product.material.isNotEmpty)
+                                    'Material': product.material,
+                                  if (product.warranty != null &&
+                                      product.warranty!.isNotEmpty)
+                                    'Warranty': product.warranty!,
+                                  if (product.sku.isNotEmpty)
+                                    'SKU': product.sku,
+                                  if (product.category.name.isNotEmpty)
+                                    'Category': product.category.name,
+                                  'Stock': product.stockQuantity.toString(),
+                                },
                               ),
                             ),
                             verticalSpace(50),
                             CustomReviews(
+                              productId: product.id,
                               rating: product.averageRating.toDouble(),
                               reviewCount: product.reviewCount,
                             ),
@@ -582,6 +511,178 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ),
       ),
     );
+  }
+}
+
+class _FulfillmentInfo extends StatelessWidget {
+  const _FulfillmentInfo({required this.product});
+
+  final ProductData product;
+
+  @override
+  Widget build(BuildContext context) {
+    final deliveryTitle = product.deliveryInfo?.freeDelivery == true
+        ? 'Free Delivery'
+        : 'Delivery';
+    final deliveryTime = product.deliveryInfo?.deliveryTime.isNotEmpty == true
+        ? product.deliveryInfo!.deliveryTime
+        : 'Not specified';
+    final returnTitle = product.returnInfo?.returnable == true
+        ? 'Returns'
+        : 'No Returns';
+    final returnTime = product.returnInfo?.returnTime.isNotEmpty == true
+        ? product.returnInfo!.returnTime
+        : 'Not specified';
+
+    return Row(
+      children: [
+        Expanded(
+          child: _FulfillmentItem(
+            icon: ImageAsset.shippingCar,
+            title: deliveryTitle,
+            subtitle: deliveryTime,
+          ),
+        ),
+        horizontalSpace(14),
+        Expanded(
+          child: _FulfillmentItem(
+            icon: ImageAsset.returnIcon,
+            title: returnTitle,
+            subtitle: returnTime,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _FulfillmentItem extends StatelessWidget {
+  const _FulfillmentItem({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
+
+  final String icon;
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SvgPicture.asset(icon, width: 22.r, height: 22.r),
+        horizontalSpace(10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyles.font16WhiteColorW500.copyWith(
+                  fontSize: 14.sp,
+                ),
+              ),
+              verticalSpace(3),
+              Text(
+                subtitle,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyles.font16WhiteColorW500.copyWith(
+                  color: AppColors.greyColorFB,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ProductSection extends StatelessWidget {
+  const _ProductSection({required this.title, required this.child});
+
+  final String title;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(16.r),
+      decoration: BoxDecoration(
+        color: const Color(0xFF151515),
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyles.font14InterW400.copyWith(
+              color: AppColors.whiteColor,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          verticalSpace(12),
+          child,
+        ],
+      ),
+    );
+  }
+}
+
+class _KeyValueRows extends StatelessWidget {
+  const _KeyValueRows({required this.items});
+
+  final Map<String, String> items;
+
+  @override
+  Widget build(BuildContext context) {
+    final entries = items.entries.where((entry) => entry.value.isNotEmpty);
+    return Column(
+      children: entries.map((entry) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: 10.h),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  _formatLabel(entry.key),
+                  style: TextStyles.font12InterW400.copyWith(
+                    color: AppColors.greyColorColor79,
+                  ),
+                ),
+              ),
+              horizontalSpace(12),
+              Expanded(
+                child: Text(
+                  entry.value,
+                  textAlign: TextAlign.end,
+                  style: TextStyles.font12InterW400.copyWith(
+                    color: AppColors.whiteColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  String _formatLabel(String value) {
+    return value
+        .split('_')
+        .where((word) => word.isNotEmpty)
+        .map((word) => '${word[0].toUpperCase()}${word.substring(1)}')
+        .join(' ');
   }
 }
 

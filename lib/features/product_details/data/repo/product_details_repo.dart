@@ -3,6 +3,7 @@ import 'package:willizo/core/exceptions/exceptions.dart';
 import 'package:willizo/core/exceptions/failure.dart';
 import 'package:willizo/features/product_details/data/models/add_product_to_cart_request_response.dart';
 import 'package:willizo/features/product_details/data/models/add_product_to_wishlist_response.dart';
+import 'package:willizo/features/product_details/data/models/create_review_request_model.dart';
 import 'package:willizo/features/product_details/data/models/product_added_to_cart_response.dart';
 import 'package:willizo/features/product_details/data/models/product_details_response_model.dart';
 import 'package:willizo/features/product_details/data/models/product_reviews_response_model.dart';
@@ -18,7 +19,9 @@ class ProductDetailsRepo {
     String productId,
   ) async {
     try {
-      return Right(await _productDetailsService.addProductToWishlist(productId));
+      return Right(
+        await _productDetailsService.addProductToWishlist(productId),
+      );
     } on ServerException catch (failure) {
       return Left(ServerFailure(message: failure.serverFailure.message));
     }
@@ -33,7 +36,8 @@ class ProductDetailsRepo {
   }
 
   Future<Either<Failure, ProductAddedToCartResponse>> addProductToCart(
-      AddProductToCartRequest request) async {
+    AddProductToCartRequest request,
+  ) async {
     try {
       return Right(await _productDetailsService.addProductToCart(request));
     } on ServerException catch (failure) {
@@ -56,6 +60,16 @@ class ProductDetailsRepo {
   ) async {
     try {
       return Right(await _productDetailsService.getProductReviews(productId));
+    } on ServerException catch (failure) {
+      return Left(ServerFailure(message: failure.serverFailure.message));
+    }
+  }
+
+  Future<Either<Failure, void>> createReview(
+    CreateReviewRequestModel request,
+  ) async {
+    try {
+      return Right(await _productDetailsService.createReview(request));
     } on ServerException catch (failure) {
       return Left(ServerFailure(message: failure.serverFailure.message));
     }

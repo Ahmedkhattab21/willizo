@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/core/widgets/button_widget.dart';
+import 'package:willizo/features/product_details/data/models/create_review_request_model.dart';
+import 'package:willizo/features/product_details/logic/cubit/product_details_cubit.dart';
 import 'package:willizo/features/product_details/ui/widgets/write_review_dialog.dart';
 
 class CustomReviews extends StatelessWidget {
+  final String productId;
   final double rating;
   final int reviewCount;
 
   const CustomReviews({
     super.key,
+    required this.productId,
     required this.rating,
     required this.reviewCount,
   });
@@ -99,7 +104,19 @@ class CustomReviews extends StatelessWidget {
             onPressed: () {
               showDialog(
                 context: context,
-                builder: (context) => const WriteReviewDialog(),
+                builder: (dialogContext) => WriteReviewDialog(
+                  onSubmit:
+                      ({required rating, required title, required comment}) {
+                        return context.read<ProductDetailsCubit>().createReview(
+                          CreateReviewRequestModel(
+                            productId: productId,
+                            rating: rating,
+                            title: title,
+                            comment: comment,
+                          ),
+                        );
+                      },
+                ),
               );
             },
           ),
@@ -131,7 +148,7 @@ class ReviewBar extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
               fontSize: 13.sp,
               fontWeight: FontWeight.w400,
             ),
@@ -173,7 +190,7 @@ class ReviewBar extends StatelessWidget {
           child: Text(
             percentText,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
               fontSize: 13.sp,
               fontWeight: FontWeight.w400,
             ),

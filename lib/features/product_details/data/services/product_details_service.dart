@@ -9,6 +9,7 @@ import 'package:willizo/core/utils/constant_keys.dart';
 import 'package:willizo/features/product_details/data/services/product_details_api_endpoints.dart';
 import 'package:willizo/features/product_details/data/models/add_product_to_cart_request_response.dart';
 import 'package:willizo/features/product_details/data/models/add_product_to_wishlist_response.dart';
+import 'package:willizo/features/product_details/data/models/create_review_request_model.dart';
 import 'package:willizo/features/product_details/data/models/product_added_to_cart_response.dart';
 import 'package:willizo/features/product_details/data/models/product_details_response_model.dart';
 import 'package:willizo/features/product_details/data/models/product_reviews_response_model.dart';
@@ -118,6 +119,24 @@ class ProductDetailsService {
         response.statusCode == StatusCode.created) {
       return ProductReviewsResponseModel.fromJson(jsonDecode(response.body));
     } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  Future<void> createReview(CreateReviewRequestModel request) async {
+    final response = await apiConsumer.post(
+      ProductDetailsApiEndpoints.createReview,
+      request.toJson(),
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode != StatusCode.ok &&
+        response.statusCode != StatusCode.created) {
       throw ServerException(
         serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
       );

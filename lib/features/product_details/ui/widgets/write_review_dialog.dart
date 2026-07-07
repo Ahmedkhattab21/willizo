@@ -4,7 +4,14 @@ import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 
 class WriteReviewDialog extends StatefulWidget {
-  const WriteReviewDialog({super.key});
+  final Future<String?> Function({
+    required int rating,
+    required String title,
+    required String comment,
+  })
+  onSubmit;
+
+  const WriteReviewDialog({super.key, required this.onSubmit});
 
   @override
   State<WriteReviewDialog> createState() => _WriteReviewDialogState();
@@ -12,8 +19,48 @@ class WriteReviewDialog extends StatefulWidget {
 
 class _WriteReviewDialogState extends State<WriteReviewDialog> {
   int rating = 4;
+  bool isLoading = false;
   final TextEditingController titleController = TextEditingController();
   final TextEditingController reviewController = TextEditingController();
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    reviewController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submitReview() async {
+    final title = titleController.text.trim();
+    final comment = reviewController.text.trim();
+    if (title.isEmpty || comment.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter review title and comment'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    setState(() => isLoading = true);
+    final errorMessage = await widget.onSubmit(
+      rating: rating,
+      title: title,
+      comment: comment,
+    );
+    if (!mounted) return;
+    setState(() => isLoading = false);
+
+    if (errorMessage == null) {
+      Navigator.pop(context, true);
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +132,7 @@ class _WriteReviewDialogState extends State<WriteReviewDialog> {
                 decoration: InputDecoration(
                   hintText: "e.g., Best experience ever!",
                   hintStyle: TextStyle(
-                    color: Colors.white.withOpacity(0.4),
+                    color: Colors.white.withValues(alpha: 0.4),
                     fontSize: 14.sp,
                   ),
                   filled: true,
@@ -123,7 +170,7 @@ class _WriteReviewDialogState extends State<WriteReviewDialog> {
                 decoration: InputDecoration(
                   hintText: "Tell us more about your experience...",
                   hintStyle: TextStyle(
-                    color: Colors.white.withOpacity(0.4),
+                    color: Colors.white.withValues(alpha: 0.4),
                     fontSize: 14.sp,
                   ),
                   filled: true,
@@ -173,10 +220,7 @@ class _WriteReviewDialogState extends State<WriteReviewDialog> {
                   ),
                   horizontalSpace(12),
                   TextButton(
-                    onPressed: () {
-                      // Handle review submission
-                      Navigator.pop(context);
-                    },
+                    onPressed: isLoading ? null : _submitReview,
                     style: TextButton.styleFrom(
                       backgroundColor: const Color(0xFFCDDC39),
                       padding: EdgeInsets.symmetric(
@@ -188,14 +232,23 @@ class _WriteReviewDialogState extends State<WriteReviewDialog> {
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                     ),
-                    child: Text(
-                      "Submit Review",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    child: isLoading
+                        ? SizedBox(
+                            width: 18.r,
+                            height: 18.r,
+                            child: const CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.black,
+                            ),
+                          )
+                        : Text(
+                            "Submit Review",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ],
               ),

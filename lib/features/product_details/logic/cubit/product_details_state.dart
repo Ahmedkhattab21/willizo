@@ -55,3 +55,13 @@ class RemoveFromWishlistErrorState extends ProductDetailsState {
 
   RemoveFromWishlistErrorState({required this.message});
 }
+
+class CreateReviewLoadingState extends ProductDetailsState {}
+
+class CreateReviewSuccessState extends ProductDetailsState {}
+
+class CreateReviewErrorState extends ProductDetailsState {
+  final String message;
+
+  CreateReviewErrorState({required this.message});
+}

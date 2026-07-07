@@ -43,13 +43,18 @@ class FreeWeightsData {
   static int _toInt(dynamic value) {
     if (value is int) return value;
     if (value is num) return value.toInt();
-    if (value is String) return int.tryParse(value) ?? 0;
+    if (value is String) {
+      final trimmedValue = value.trim();
+      return int.tryParse(trimmedValue) ??
+          num.tryParse(trimmedValue)?.toInt() ??
+          0;
+    }
     return 0;
   }
 }
 
 class Equipment {
-  final int id;
+  final String id;
   final String name;
   final String description;
   final String imageUrl;
@@ -63,7 +68,7 @@ class Equipment {
 
   factory Equipment.fromJson(Map<String, dynamic> json) {
     return Equipment(
-      id: _toInt(
+      id: _toId(
         json['id'] ??
             json['equipment_id'] ??
             json['free_weight_id'] ??
@@ -78,14 +83,12 @@ class Equipment {
   }
 
   String get selectionKey {
-    if (id > 0) return 'id:$id';
+    if (id.isNotEmpty) return 'id:$id';
     return 'fallback:$name|$imageUrl|$description';
   }
 
-  static int _toInt(dynamic value) {
-    if (value is int) return value;
-    if (value is num) return value.toInt();
-    if (value is String) return int.tryParse(value) ?? 0;
-    return 0;
+  static String _toId(dynamic value) {
+    if (value == null) return '';
+    return value.toString().trim();
   }
 }

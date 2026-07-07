@@ -1,3 +1,5 @@
+import 'package:willizo/core/api/end_points.dart';
+
 class ProductDetailsResponseModel {
   final ProductData? data;
 
@@ -16,10 +18,12 @@ class ProductData {
   final String name;
   final String slug;
   final String description;
+  final List<String> keyFeatures;
+  final Map<String, String> specifications;
   final String price;
   final String? comparePrice;
   final String sku;
-  final String weight;
+  final ProductDimensions? dimensions;
   final int stockQuantity;
   final String stockStatus;
   final String status;
@@ -29,6 +33,11 @@ class ProductData {
   final List<ProductOption> options;
   final List<ProductVariant> variants;
   final bool isInWishlist;
+  final bool isInCart;
+  final DeliveryInfo? deliveryInfo;
+  final ReturnInfo? returnInfo;
+  final String? warranty;
+  final String material;
   final num averageRating;
   final int reviewCount;
   final String createdAt;
@@ -40,10 +49,12 @@ class ProductData {
     required this.name,
     required this.slug,
     required this.description,
+    required this.keyFeatures,
+    required this.specifications,
     required this.price,
     this.comparePrice,
     required this.sku,
-    required this.weight,
+    this.dimensions,
     required this.stockQuantity,
     required this.stockStatus,
     required this.status,
@@ -53,6 +64,11 @@ class ProductData {
     required this.options,
     required this.variants,
     required this.isInWishlist,
+    required this.isInCart,
+    this.deliveryInfo,
+    this.returnInfo,
+    this.warranty,
+    required this.material,
     required this.averageRating,
     required this.reviewCount,
     required this.createdAt,
@@ -66,15 +82,21 @@ class ProductData {
       name: json['name'] ?? '',
       slug: json['slug'] ?? '',
       description: json['description'] ?? '',
-      price: json['price'] ?? '',
-      comparePrice: json['compare_price'],
+      keyFeatures:
+          (json['key_features'] as List?)?.map((e) => e.toString()).toList() ??
+          [],
+      specifications: _toStringMap(json['specifications']),
+      price: json['price']?.toString() ?? '',
+      comparePrice: json['compare_price']?.toString(),
       sku: json['sku'] ?? '',
-      weight: json['weight'] ?? '',
-      stockQuantity: json['stock_quantity'] ?? 0,
+      dimensions: json['dimensions'] is Map<String, dynamic>
+          ? ProductDimensions.fromJson(json['dimensions'])
+          : null,
+      stockQuantity: _toInt(json['stock_quantity']),
       stockStatus: json['stock_status'] ?? '',
       status: json['status'] ?? '',
-      images: json['images'] ?? [],
-      primaryImage: json['primary_image'],
+      images: _parseImages(json['images']),
+      primaryImage: _imageUrl(json['primary_image']),
       isAvailable: json['is_available'] ?? false,
       options:
           (json['options'] as List?)
@@ -87,10 +109,125 @@ class ProductData {
               .toList() ??
           [],
       isInWishlist: json['is_in_wishlist'] ?? false,
-      averageRating: json['average_rating'] ?? 0,
-      reviewCount: json['review_count'] ?? 0,
+      isInCart: json['is_in_cart'] ?? false,
+      deliveryInfo: json['delivery_info'] is Map<String, dynamic>
+          ? DeliveryInfo.fromJson(json['delivery_info'])
+          : null,
+      returnInfo: json['return_info'] is Map<String, dynamic>
+          ? ReturnInfo.fromJson(json['return_info'])
+          : null,
+      warranty: json['warranty']?.toString(),
+      material: json['material']?.toString() ?? '',
+      averageRating: _toNum(json['average_rating']),
+      reviewCount: _toInt(json['review_count']),
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
+    );
+  }
+
+  static List<String> _parseImages(dynamic value) {
+    if (value is! List) return [];
+    return value
+        .map((image) {
+          if (image is Map<String, dynamic>) {
+            return _imageUrl(
+              image['url'] ?? image['image'] ?? image['path'] ?? image['src'],
+            );
+          }
+          return _imageUrl(image);
+        })
+        .whereType<String>()
+        .where((image) => image.isNotEmpty)
+        .toList();
+  }
+
+  static String? _imageUrl(dynamic value) {
+    if (value == null) return null;
+    final image = value.toString();
+    if (image.isEmpty) return null;
+    if (image.startsWith('http://') ||
+        image.startsWith('https://') ||
+        image.startsWith('assets/')) {
+      return image;
+    }
+    return EndPoints.getImageFromApi(image);
+  }
+
+  static Map<String, String> _toStringMap(dynamic value) {
+    if (value is! Map) return {};
+    return value.map(
+      (key, mapValue) => MapEntry(key.toString(), mapValue?.toString() ?? ''),
+    );
+  }
+
+  static int _toInt(dynamic value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    return int.tryParse(value?.toString() ?? '') ?? 0;
+  }
+
+  static num _toNum(dynamic value) {
+    if (value is num) return value;
+    return num.tryParse(value?.toString() ?? '') ?? 0;
+  }
+}
+
+class ProductDimensions {
+  final String length;
+  final String width;
+  final String height;
+  final String weight;
+
+  ProductDimensions({
+    required this.length,
+    required this.width,
+    required this.height,
+    required this.weight,
+  });
+
+  factory ProductDimensions.fromJson(Map<String, dynamic> json) {
+    return ProductDimensions(
+      length: json['length']?.toString() ?? '',
+      width: json['width']?.toString() ?? '',
+      height: json['height']?.toString() ?? '',
+      weight: json['weight']?.toString() ?? '',
+    );
+  }
+
+  Map<String, String> toDisplayMap() {
+    return {
+      if (length.isNotEmpty) 'Length': length,
+      if (width.isNotEmpty) 'Width': width,
+      if (height.isNotEmpty) 'Height': height,
+      if (weight.isNotEmpty) 'Weight': weight,
+    };
+  }
+}
+
+class DeliveryInfo {
+  final bool freeDelivery;
+  final String deliveryTime;
+
+  DeliveryInfo({required this.freeDelivery, required this.deliveryTime});
+
+  factory DeliveryInfo.fromJson(Map<String, dynamic> json) {
+    return DeliveryInfo(
+      freeDelivery: json['free_delivery'] ?? false,
+      deliveryTime: json['delivery_time']?.toString() ?? '',
+    );
+  }
+}
+
+class ReturnInfo {
+  final bool returnable;
+  final String returnTime;
+
+  ReturnInfo({required this.returnable, required this.returnTime});
+
+  factory ReturnInfo.fromJson(Map<String, dynamic> json) {
+    return ReturnInfo(
+      returnable: json['returnable'] ?? false,
+      returnTime: json['return_time']?.toString() ?? '',
     );
   }
 }
@@ -147,7 +284,7 @@ class ProductOption {
     return ProductOption(
       id: json['id'] ?? '',
       name: json['name'] ?? '',
-      displayOrder: json['display_order'] ?? 0,
+      displayOrder: ProductData._toInt(json['display_order']),
       values:
           (json['values'] as List?)
               ?.map((e) => OptionValue.fromJson(e))
@@ -175,7 +312,7 @@ class OptionValue {
       id: json['id'] ?? '',
       value: json['value'] ?? '',
       hexColor: json['hex_color'],
-      displayOrder: json['display_order'] ?? 0,
+      displayOrder: ProductData._toInt(json['display_order']),
     );
   }
 }
@@ -203,7 +340,7 @@ class ProductVariant {
     return ProductVariant(
       id: json['id'] ?? '',
       sku: json['sku'] ?? '',
-      stockQuantity: json['stock_quantity'] ?? 0,
+      stockQuantity: ProductData._toInt(json['stock_quantity']),
       additionalPrice: json['additional_price']?.toString() ?? '0',
       isAvailable: json['is_available'] ?? false,
       optionValues:
