@@ -18,10 +18,6 @@ class ProductImageGallery extends StatelessWidget {
     return image.startsWith('http://') || image.startsWith('https://');
   }
 
-  bool _isAssetImage(String image) {
-    return image.startsWith('assets/');
-  }
-
   @override
   Widget build(BuildContext context) {
     if (images.isEmpty) {

@@ -27,7 +27,7 @@ class ProductData {
   final int stockQuantity;
   final String stockStatus;
   final String status;
-  final List<dynamic> images;
+  final List<String> images;
   final String? primaryImage;
   final bool isAvailable;
   final List<ProductOption> options;
@@ -96,7 +96,9 @@ class ProductData {
       stockStatus: json['stock_status'] ?? '',
       status: json['status'] ?? '',
       images: _parseImages(json['images']),
-      primaryImage: _imageUrl(json['primary_image']),
+      primaryImage: json['primary_image'] is Map<String, dynamic>
+          ? _imageFromMap(json['primary_image'])
+          : _imageUrl(json['primary_image']),
       isAvailable: json['is_available'] ?? false,
       options:
           (json['options'] as List?)
@@ -108,8 +110,8 @@ class ProductData {
               ?.map((e) => ProductVariant.fromJson(e))
               .toList() ??
           [],
-      isInWishlist: json['is_in_wishlist'] ?? false,
-      isInCart: json['is_in_cart'] ?? false,
+      isInWishlist: _toBool(json['is_in_wishlist']),
+      isInCart: _toBool(json['is_in_cart']),
       deliveryInfo: json['delivery_info'] is Map<String, dynamic>
           ? DeliveryInfo.fromJson(json['delivery_info'])
           : null,
@@ -130,9 +132,7 @@ class ProductData {
     return value
         .map((image) {
           if (image is Map<String, dynamic>) {
-            return _imageUrl(
-              image['url'] ?? image['image'] ?? image['path'] ?? image['src'],
-            );
+            return _imageFromMap(image);
           }
           return _imageUrl(image);
         })
@@ -153,6 +153,19 @@ class ProductData {
     return EndPoints.getImageFromApi(image);
   }
 
+  static String? _imageFromMap(Map<String, dynamic> image) {
+    final fullUrl =
+        image['full_url'] ?? image['url'] ?? image['image_url'] ?? image['src'];
+    if (fullUrl != null) return _imageUrl(fullUrl);
+
+    final imagePath = image['image_path'] ?? image['path'];
+    if (imagePath != null && imagePath.toString().isNotEmpty) {
+      return 'https://willizo.com/storage/${imagePath.toString()}';
+    }
+
+    return _imageUrl(image['image']);
+  }
+
   static Map<String, String> _toStringMap(dynamic value) {
     if (value is! Map) return {};
     return value.map(
@@ -169,6 +182,16 @@ class ProductData {
   static num _toNum(dynamic value) {
     if (value is num) return value;
     return num.tryParse(value?.toString() ?? '') ?? 0;
+  }
+
+  static bool _toBool(dynamic value) {
+    if (value is bool) return value;
+    if (value is num) return value != 0;
+    if (value is String) {
+      final normalizedValue = value.toLowerCase().trim();
+      return normalizedValue == 'true' || normalizedValue == '1';
+    }
+    return false;
   }
 }
 

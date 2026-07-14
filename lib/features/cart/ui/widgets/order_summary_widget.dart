@@ -85,7 +85,7 @@ class OrderSummaryWidget extends StatelessWidget {
           ],
         ),
         verticalSpace(20),
-      
+
         // Buttons
         ButtonWidget(
           isLoading: false,
@@ -106,7 +106,13 @@ class OrderSummaryWidget extends StatelessWidget {
           width: double.infinity,
           height: 50.h,
           child: OutlinedButton(
-            onPressed: () {},
+            onPressed: () {
+              context.pushNamedAndRemoveUntil(
+                Routes.buttonNavBarWidget,
+                arguments: {'initialIndex': 1},
+                predicate: (route) => false,
+              );
+            },
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: AppColors.primaryColor),
               shape: RoundedRectangleBorder(

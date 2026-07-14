@@ -118,17 +118,12 @@ class AllProductsScreen extends StatelessWidget {
                                 ? product.createdAt.substring(0, 4)
                                 : "2024";
 
-                            // Get first image if available, otherwise use placeholder
-                            final imageUrl = product.images.isNotEmpty
-                                ? product.images[0].toString()
-                                : "assets/images/banner_image.png";
-
                             return ShopProductCard(
-                              image: imageUrl,
+                              image: product.displayImage,
                               title: product.name,
                               year: year,
                               price: product.price,
-                              rating: "4.8", // Default rating since not in API
+                              rating: product.averageRating.toStringAsFixed(1),
                               product: product,
                             );
                           },

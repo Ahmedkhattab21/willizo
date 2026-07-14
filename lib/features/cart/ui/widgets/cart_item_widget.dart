@@ -19,6 +19,7 @@ class CartItemWidget extends StatelessWidget {
   final VoidCallback? onAdd;
   final VoidCallback? onRemove;
   final VoidCallback? onDelete;
+  final VoidCallback? onTap;
   final bool showControls;
 
   const CartItemWidget({
@@ -36,6 +37,7 @@ class CartItemWidget extends StatelessWidget {
     this.onAdd,
     this.onRemove,
     this.onDelete,
+    this.onTap,
   });
 
   bool get _hasValidNetworkImage =>
@@ -48,203 +50,212 @@ class CartItemWidget extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       child: Padding(
         padding: EdgeInsets.only(bottom: 24.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Image
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12.r),
-              child: _hasValidNetworkImage
-                  ? Image.network(
-                      imageUrl!,
-                      height: 180.h,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Image.asset(
-                          ImageAsset.backgroundCardImage,
-                          height: 180.h,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        );
-                      },
-                    )
-                  : Image.asset(
-                      ImageAsset.backgroundCardImage,
-                      height: 180.h,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-            ),
-            verticalSpace(12),
-            // Title & Subtitle
-            Text(
-              title,
-              style: TextStyles.font16WhiteColorW600.copyWith(fontSize: 16.sp),
-            ),
-            verticalSpace(4),
-            Text(
-              subtitle,
-              style: TextStyles.font14GreyColorW400.copyWith(
-                fontSize: 12.sp,
-                color: AppColors.greyColorColor79,
-              ),
-            ),
-            verticalSpace(12),
-            // Price Row
-            Row(
-              children: [
-                Text(
-                  "\$${price.toStringAsFixed(2)}",
-                  style: TextStyles.font16primaryColorW600.copyWith(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                horizontalSpace(8),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Text(
-                      "\$${originalPrice.toStringAsFixed(2)}",
-                      style: TextStyles.font14GreyColorW400.copyWith(
-                        color: AppColors.greyColorColor79,
-                        fontSize: 12.sp,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onTap,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Image
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12.r),
+                child: _hasValidNetworkImage
+                    ? Image.network(
+                        imageUrl!,
+                        height: 180.h,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            ImageAsset.backgroundCardImage,
+                            height: 180.h,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          );
+                        },
+                      )
+                    : Image.asset(
+                        ImageAsset.backgroundCardImage,
+                        height: 180.h,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
                       ),
-                    ),
-                    Container(
-                      height: 1.h,
-                      width: 40.w, // Approximate width of the text
-                      color: AppColors.greyColorColor79,
-                    ),
-                  ],
+              ),
+              verticalSpace(12),
+              // Title & Subtitle
+              Text(
+                title,
+                style: TextStyles.font16WhiteColorW600.copyWith(
+                  fontSize: 16.sp,
                 ),
-                horizontalSpace(8),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
-                  decoration: BoxDecoration(
-                    color: AppColors.redColor39,
-                    borderRadius: BorderRadius.circular(4.r),
-                  ),
-                  child: Text(
-                    "$discount% OFF",
-                    style: TextStyles.font10WhiteColorW600.copyWith(
-                      color: Colors.white,
-                      fontSize: 10.sp,
-                    ),
-                  ),
+              ),
+              verticalSpace(4),
+              Text(
+                subtitle,
+                style: TextStyles.font14GreyColorW400.copyWith(
+                  fontSize: 12.sp,
+                  color: AppColors.greyColorColor79,
                 ),
-              ],
-            ),
-            verticalSpace(12),
-            // Actions Row
-            if (showControls)
+              ),
+              verticalSpace(12),
+              // Price Row
               Row(
                 children: [
-                  // Quantity Selector
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.greyColorColor79),
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                    child: Row(
-                      children: [
-                        _QuantityButton(
-                          icon: Icons.remove,
-                          onTap: (onRemove != null && quantity > 1)
-                              ? onRemove
-                              : null,
-                          isActive: false,
-                          isEnabled: quantity > 1,
-                        ),
-                        Container(
-                          width: 1.w,
-                          height: 32.h,
-                          color: AppColors.greyColorColor79,
-                        ),
-                        Container(
-                          width: 40.w,
-                          alignment: Alignment.center,
-                          child: isUpdating
-                              ? SizedBox(
-                                  width: 16.w,
-                                  height: 16.h,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: AppColors.primaryColor,
-                                  ),
-                                )
-                              : Text(
-                                  "$quantity",
-                                  style: TextStyles.font14whiteColorColorW400
-                                      .copyWith(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16.sp,
-                                      ),
-                                ),
-                        ),
-                        Container(
-                          width: 1.w,
-                          height: 32.h,
-                          color: AppColors.greyColorColor79,
-                        ),
-                        _QuantityButton(
-                          icon: Icons.add,
-                          onTap: onAdd,
-                          isActive: true,
-                          isEnabled: true,
-                        ),
-                      ],
+                  Text(
+                    "\$${price.toStringAsFixed(2)}",
+                    style: TextStyles.font16primaryColorW600.copyWith(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  Spacer(),
-                  // Remove Button
-                  InkWell(
-                    onTap: (isDeleting || onDelete == null) ? null : onDelete,
-                    child: Row(
-                      children: [
-                        if (isDeleting)
-                          SizedBox(
-                            width: 18.w,
-                            height: 18.h,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: AppColors.redColor,
-                            ),
-                          )
-                        else
-                          SvgPicture.asset(
-                            ImageAsset.deleteIcon,
-                            colorFilter: ColorFilter.mode(
-                              AppColors.redColor,
-                              BlendMode.srcIn,
-                            ),
-                            height: 18.h,
-                            width: 18.w,
-                          ),
-                        horizontalSpace(4),
-                        Text(
-                          isDeleting ? "Removing..." : "Remove",
-                          style: TextStyles.font14W600.copyWith(
-                            color: AppColors.redColor,
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
+                  horizontalSpace(8),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Text(
+                        "\$${originalPrice.toStringAsFixed(2)}",
+                        style: TextStyles.font14GreyColorW400.copyWith(
+                          color: AppColors.greyColorColor79,
+                          fontSize: 12.sp,
                         ),
-                      ],
+                      ),
+                      Container(
+                        height: 1.h,
+                        width: 40.w, // Approximate width of the text
+                        color: AppColors.greyColorColor79,
+                      ),
+                    ],
+                  ),
+                  horizontalSpace(8),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 6.w,
+                      vertical: 2.h,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.redColor39,
+                      borderRadius: BorderRadius.circular(4.r),
+                    ),
+                    child: Text(
+                      "$discount% OFF",
+                      style: TextStyles.font10WhiteColorW600.copyWith(
+                        color: Colors.white,
+                        fontSize: 10.sp,
+                      ),
                     ),
                   ),
                 ],
-              )
-            else
-              Text(
-                "Qty: $quantity",
-                style: TextStyles.font14GreyColorW400.copyWith(
-                  fontSize: 14.sp,
-                  color: AppColors.whiteColor,
-                ),
               ),
-          ],
+              verticalSpace(12),
+              // Actions Row
+              if (showControls)
+                Row(
+                  children: [
+                    // Quantity Selector
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.greyColorColor79),
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      child: Row(
+                        children: [
+                          _QuantityButton(
+                            icon: Icons.remove,
+                            onTap: (onRemove != null && quantity > 1)
+                                ? onRemove
+                                : null,
+                            isActive: false,
+                            isEnabled: quantity > 1,
+                          ),
+                          Container(
+                            width: 1.w,
+                            height: 32.h,
+                            color: AppColors.greyColorColor79,
+                          ),
+                          Container(
+                            width: 40.w,
+                            alignment: Alignment.center,
+                            child: isUpdating
+                                ? SizedBox(
+                                    width: 16.w,
+                                    height: 16.h,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: AppColors.primaryColor,
+                                    ),
+                                  )
+                                : Text(
+                                    "$quantity",
+                                    style: TextStyles.font14whiteColorColorW400
+                                        .copyWith(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 16.sp,
+                                        ),
+                                  ),
+                          ),
+                          Container(
+                            width: 1.w,
+                            height: 32.h,
+                            color: AppColors.greyColorColor79,
+                          ),
+                          _QuantityButton(
+                            icon: Icons.add,
+                            onTap: onAdd,
+                            isActive: true,
+                            isEnabled: true,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Spacer(),
+                    // Remove Button
+                    InkWell(
+                      onTap: (isDeleting || onDelete == null) ? null : onDelete,
+                      child: Row(
+                        children: [
+                          if (isDeleting)
+                            SizedBox(
+                              width: 18.w,
+                              height: 18.h,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppColors.redColor,
+                              ),
+                            )
+                          else
+                            SvgPicture.asset(
+                              ImageAsset.deleteIcon,
+                              colorFilter: ColorFilter.mode(
+                                AppColors.redColor,
+                                BlendMode.srcIn,
+                              ),
+                              height: 18.h,
+                              width: 18.w,
+                            ),
+                          horizontalSpace(4),
+                          Text(
+                            isDeleting ? "Removing..." : "Remove",
+                            style: TextStyles.font14W600.copyWith(
+                              color: AppColors.redColor,
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              else
+                Text(
+                  "Qty: $quantity",
+                  style: TextStyles.font14GreyColorW400.copyWith(
+                    fontSize: 14.sp,
+                    color: AppColors.whiteColor,
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -290,7 +301,7 @@ class _QuantityButton extends StatelessWidget {
               ? Colors.black
               : isEnabled
               ? AppColors.greyColorColor79
-              : AppColors.greyColorColor79.withOpacity(0.4),
+              : AppColors.greyColorColor79.withValues(alpha: 0.4),
         ),
       ),
     );

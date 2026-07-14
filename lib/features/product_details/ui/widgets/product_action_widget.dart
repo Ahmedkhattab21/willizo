@@ -12,6 +12,7 @@ class ProductActionButtons extends StatelessWidget {
   final VoidCallback onShare;
   final VoidCallback onBuyNow;
   final bool isAddToCartLoading;
+  final bool isBuyNowLoading;
   final bool isWishlistLoading;
   final bool isAdded;
   final bool isInWishlist;
@@ -23,6 +24,7 @@ class ProductActionButtons extends StatelessWidget {
     required this.onShare,
     required this.onBuyNow,
     this.isAddToCartLoading = false,
+    this.isBuyNowLoading = false,
     this.isWishlistLoading = false,
     this.isAdded = false,
     this.isInWishlist = false,
@@ -65,7 +67,7 @@ class ProductActionButtons extends StatelessWidget {
         SizedBox(height: 14.h),
         ButtonWidget(
           backGroundColor: AppColors.primaryColor,
-          isLoading: false,
+          isLoading: isBuyNowLoading,
           buttonText: "Buy Now",
           borderRadius: 4.r,
           textStyle: TextStyles.font16InterW600.copyWith(

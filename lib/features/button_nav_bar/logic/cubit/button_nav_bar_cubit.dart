@@ -5,40 +5,40 @@ import 'package:willizo/features/button_nav_bar/data/nav_itme.dart';
 import 'package:willizo/features/button_nav_bar/logic/cubit/button_nav_bar_state.dart';
 
 class ButtonNavBarCubit extends Cubit<NavigationState> {
-  ButtonNavBarCubit()
-      : super(
-          NavigationState(
-            items: [
-              NavItem(
-                activeAssetPath: ImageAsset.activeHomeIcon,
-                inactiveAssetPath: ImageAsset.inactiveHomeIcon,
-                label: 'Home',
-              ),
-              NavItem(
-                activeAssetPath: ImageAsset.activeShopIcon,
-                inactiveAssetPath: ImageAsset.activeInactiveShopIcon,
-                label: 'Shop',
-              ),
-              NavItem(
-                activeAssetPath: ImageAsset.activeGymIcon,
-                inactiveAssetPath: ImageAsset.inactiveGymIcon,
-                label: 'Workout',
-              ),
-              NavItem(
-                activeAssetPath: ImageAsset.activeRankingIcon,
-                inactiveAssetPath: ImageAsset.inactiveRankingIcon,
-                label: 'Ranking',
-              ),
-              NavItem(
-                activeAssetPath: ImageAsset.activeProfileIcon,
-                inactiveAssetPath: ImageAsset.inactiveProfileIcon,
-                label: 'Account',
-              ),
-            ],
-            selectedIndex: 0,
-            middleIndex: 2,
-          ),
-        );
+  ButtonNavBarCubit({int initialIndex = 0})
+    : super(
+        NavigationState(
+          items: [
+            NavItem(
+              activeAssetPath: ImageAsset.activeHomeIcon,
+              inactiveAssetPath: ImageAsset.inactiveHomeIcon,
+              label: 'Home',
+            ),
+            NavItem(
+              activeAssetPath: ImageAsset.activeShopIcon,
+              inactiveAssetPath: ImageAsset.activeInactiveShopIcon,
+              label: 'Shop',
+            ),
+            NavItem(
+              activeAssetPath: ImageAsset.activeGymIcon,
+              inactiveAssetPath: ImageAsset.inactiveGymIcon,
+              label: 'Workout',
+            ),
+            NavItem(
+              activeAssetPath: ImageAsset.activeRankingIcon,
+              inactiveAssetPath: ImageAsset.inactiveRankingIcon,
+              label: 'Ranking',
+            ),
+            NavItem(
+              activeAssetPath: ImageAsset.activeProfileIcon,
+              inactiveAssetPath: ImageAsset.inactiveProfileIcon,
+              label: 'Account',
+            ),
+          ],
+          selectedIndex: initialIndex.clamp(0, 4),
+          middleIndex: 2,
+        ),
+      );
 
   void selectItem(int index) {
     // Safety: guard out-of-range

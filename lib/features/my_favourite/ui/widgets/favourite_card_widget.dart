@@ -11,6 +11,7 @@ class FavouriteCardWidget extends StatelessWidget {
   final String price;
   final String rating;
   final bool isOnSale;
+  final bool isDeleting;
   final VoidCallback? onDelete;
   final VoidCallback? onTap;
 
@@ -21,6 +22,7 @@ class FavouriteCardWidget extends StatelessWidget {
     required this.price,
     required this.rating,
     this.isOnSale = false,
+    this.isDeleting = false,
     this.onDelete,
     this.onTap,
   });
@@ -46,12 +48,20 @@ class FavouriteCardWidget extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12.r),
-                    child: Image.asset(
-                      image,
-                      width: double.infinity,
-                      height: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
+                    child: image.startsWith('http')
+                        ? Image.network(
+                            image,
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => _fallbackImage(),
+                          )
+                        : Image.asset(
+                            image,
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
                   ),
                   // Sale Badge
                   if (isOnSale)
@@ -139,12 +149,21 @@ class FavouriteCardWidget extends StatelessWidget {
                           ),
                         ),
                         GestureDetector(
-                          onTap: onDelete,
-                          child: SvgPicture.asset(
-                            ImageAsset.deleteIcon,
-                            width: 20.w,
-                            height: 20.h,
-                          ),
+                          onTap: isDeleting ? null : onDelete,
+                          child: isDeleting
+                              ? SizedBox(
+                                  width: 20.w,
+                                  height: 20.w,
+                                  child: const CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: AppColors.redColor,
+                                  ),
+                                )
+                              : SvgPicture.asset(
+                                  ImageAsset.deleteIcon,
+                                  width: 20.w,
+                                  height: 20.h,
+                                ),
                         ),
                       ],
                     ),
@@ -155,6 +174,15 @@ class FavouriteCardWidget extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _fallbackImage() {
+    return Image.asset(
+      ImageAsset.backgroundCardImage,
+      width: double.infinity,
+      height: double.infinity,
+      fit: BoxFit.cover,
     );
   }
 }

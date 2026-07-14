@@ -46,9 +46,8 @@ class CheckoutCubit extends Cubit<CheckoutState> {
     final result = await checkoutRepo.calculateCheckout(request);
     result.fold(
       (failure) => emit(CheckoutError(message: failure.message)),
-      (calculationResponse) => emit(
-        CheckoutCalculationLoaded(calculation: calculationResponse),
-      ),
+      (calculationResponse) =>
+          emit(CheckoutCalculationLoaded(calculation: calculationResponse)),
     );
   }
 
@@ -57,9 +56,8 @@ class CheckoutCubit extends Cubit<CheckoutState> {
     final result = await checkoutRepo.confirmCheckout();
     result.fold(
       (failure) => emit(CheckoutError(message: failure.message)),
-      (orderResponse) => emit(
-        CheckoutOrderConfirmed(order: orderResponse.order),
-      ),
+      (orderResponse) =>
+          emit(CheckoutOrderConfirmed(orderResponse: orderResponse)),
     );
   }
 }

@@ -30,6 +30,8 @@ import 'package:willizo/features/cart/data/repos/cart_repo.dart';
 import 'package:willizo/features/cart/data/services/cart_service.dart';
 import 'package:willizo/features/checkout/data/repos/checkout_repo.dart';
 import 'package:willizo/features/checkout/data/services/checkout_services.dart';
+import 'package:willizo/features/my_order/data/repos/orders_repo.dart';
+import 'package:willizo/features/my_order/data/services/orders_service.dart';
 import 'package:willizo/features/shop/logic/cubit/badge_cubit.dart';
 import 'package:willizo/features/community/data/services/community_services.dart';
 import 'package:willizo/features/community/data/repo/community_repo.dart';
@@ -115,6 +117,11 @@ class ServicesLocator {
       () => CheckoutService(apiConsumer: getIt()),
     );
 
+    getIt.registerLazySingleton<OrdersRepo>(() => OrdersRepo(getIt()));
+    getIt.registerLazySingleton<OrdersService>(
+      () => OrdersService(apiConsumer: getIt()),
+    );
+
     // Badge Cubit (singleton for cart & wishlist badge counts)
     getIt.registerLazySingleton<BadgeCubit>(
       () => BadgeCubit(cartRepo: getIt(), wishlistRepo: getIt()),
@@ -144,7 +151,9 @@ class ServicesLocator {
     getIt.registerLazySingleton<HomeRepo>(() => HomeRepo(getIt()));
 
     // Workout Recipes
-    getIt.registerLazySingleton<RecipesServices>(() => RecipesServices(getIt()));
+    getIt.registerLazySingleton<RecipesServices>(
+      () => RecipesServices(getIt()),
+    );
     getIt.registerLazySingleton<RecipesRepo>(() => RecipesRepo(getIt()));
 
     // Workout Body Parts

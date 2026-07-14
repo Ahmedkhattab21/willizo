@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:willizo/config/routes/routes.dart';
 import 'package:willizo/core/services/services_locator.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/assets_manager.dart';
+import 'package:willizo/core/utils/extentions.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/features/product_details/data/models/add_product_to_cart_request_response.dart';
@@ -40,6 +42,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int quantity = 1;
   bool isItemAdded = false;
   bool isItemInWishlist = false;
+  bool _isBuyNowFlow = false;
 
   List<OptionValue> _optionValues(ProductData product, String optionName) {
     final normalizedName = optionName.toLowerCase();
@@ -130,18 +133,24 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         child: BlocListener<ProductDetailsCubit, ProductDetailsState>(
           listener: (context, state) {
             if (state is AddToCartSuccessState) {
+              final shouldOpenCart = _isBuyNowFlow;
               setState(() {
                 isItemAdded = true;
+                _isBuyNowFlow = false;
               });
               // Update cart badge count
               getIt<BadgeCubit>().incrementCartCount();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.response.message),
-                  backgroundColor: Colors.green,
-                  duration: const Duration(seconds: 2),
-                ),
-              );
+              if (shouldOpenCart) {
+                context.pushNamed(Routes.cartScreen);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.response.message),
+                    backgroundColor: Colors.green,
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              }
             } else if (state is AddProductToWishlistSuccessState) {
               setState(() {
                 isItemInWishlist = true;
@@ -169,6 +178,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
               );
             } else if (state is AddToCartErrorState) {
+              setState(() {
+                _isBuyNowFlow = false;
+              });
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.message),
@@ -355,9 +367,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               ProductDetailsState
                             >(
                               builder: (context, state) {
+                                final isCartLoading =
+                                    state is AddToCartLoadingState;
                                 return ProductActionButtons(
                                   isAddToCartLoading:
-                                      state is AddToCartLoadingState,
+                                      isCartLoading && !_isBuyNowFlow,
+                                  isBuyNowLoading:
+                                      isCartLoading && _isBuyNowFlow,
                                   isWishlistLoading:
                                       state
                                           is AddProductToWishlistLoadingState ||
@@ -365,6 +381,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   isAdded: isItemAdded,
                                   isInWishlist: isItemInWishlist,
                                   onAddToCart: () {
+                                    if (isCartLoading) return;
+                                    setState(() {
+                                      _isBuyNowFlow = false;
+                                    });
                                     context
                                         .read<ProductDetailsCubit>()
                                         .addProductToCart(
@@ -387,7 +407,25 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     }
                                   },
                                   onShare: () {},
-                                  onBuyNow: () {},
+                                  onBuyNow: () {
+                                    if (isCartLoading) return;
+                                    if (isItemAdded) {
+                                      context.pushNamed(Routes.cartScreen);
+                                      return;
+                                    }
+                                    setState(() {
+                                      _isBuyNowFlow = true;
+                                    });
+                                    context
+                                        .read<ProductDetailsCubit>()
+                                        .addProductToCart(
+                                          AddProductToCartRequest(
+                                            productId: product.id,
+                                            quantity: quantity,
+                                            variantId: selectedVariant?.id,
+                                          ),
+                                        );
+                                  },
                                 );
                               },
                             ),

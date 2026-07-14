@@ -10,6 +10,7 @@ import 'package:willizo/features/account/ui/personal_info_screen.dart';
 import 'package:willizo/features/billing/ui/billing_screen.dart';
 import 'package:willizo/features/cart/ui/cart_screen.dart';
 import 'package:willizo/features/cart/logic/cubit/cart_cubit.dart';
+import 'package:willizo/features/checkout/ui/checkout_payment_web_view_screen.dart';
 import 'package:willizo/features/checkout/ui/checkout_screen.dart';
 import 'package:willizo/features/complete_account_data/data/repo/complete_account_repo.dart';
 import 'package:willizo/features/complete_account_data/step_18/data/repo/step18_repo.dart';
@@ -71,6 +72,8 @@ import 'package:willizo/features/forget_password_code/ui/forget_password_code_sc
 import 'package:willizo/features/forget_password_done/logic/forget_password_done_cubit.dart';
 import 'package:willizo/features/forget_password_done/ui/forget_password_done_screen.dart';
 import 'package:willizo/features/my_favourite/ui/my_favourtie_screen.dart';
+import 'package:willizo/features/my_order/data/repos/orders_repo.dart';
+import 'package:willizo/features/my_order/logic/orders_cubit.dart';
 import 'package:willizo/features/my_order/ui/my_order_screen.dart';
 import 'package:willizo/features/notificatoin/ui/notification_screen.dart';
 import 'package:willizo/features/onboarding/logic/onboarding_cubit.dart';
@@ -332,10 +335,13 @@ class RouteGenerator {
         );
 
       case Routes.buttonNavBarWidget:
+        final initialIndex = args is Map<String, dynamic>
+            ? args['initialIndex'] as int? ?? 0
+            : 0;
         return MaterialPageRoute(
           settings: settings,
           builder: (_) => BlocProvider(
-            create: (context) => ButtonNavBarCubit(),
+            create: (context) => ButtonNavBarCubit(initialIndex: initialIndex),
             child: const ButtonNavBarWidget(),
           ),
         );
@@ -382,7 +388,10 @@ class RouteGenerator {
       case Routes.myFavouriteScreen:
         return MaterialPageRoute(
           settings: settings,
-          builder: (_) => const MyFavouriteScreen(),
+          builder: (_) => BlocProvider(
+            create: (context) => WishlistCubit(getIt())..getWishlist(),
+            child: const MyFavouriteScreen(),
+          ),
         );
       // case Routes.chatScreen:
       //   return MaterialPageRoute(
@@ -391,12 +400,22 @@ class RouteGenerator {
       case Routes.myOrderScreen:
         return MaterialPageRoute(
           settings: settings,
-          builder: (_) => const MyOrderScreen(),
+          builder: (_) => BlocProvider(
+            create: (_) => OrdersCubit(getIt<OrdersRepo>())..getOrders(),
+            child: const MyOrderScreen(),
+          ),
         );
       case Routes.myOrderDetailsScreen:
+        final orderId = args is Map<String, dynamic>
+            ? args['id']?.toString() ?? ''
+            : '';
         return MaterialPageRoute(
           settings: settings,
-          builder: (_) => const MyOrderDetailsScreen(),
+          builder: (_) => BlocProvider(
+            create: (_) =>
+                OrdersCubit(getIt<OrdersRepo>())..getOrderDetails(orderId),
+            child: MyOrderDetailsScreen(orderId: orderId),
+          ),
         );
       case Routes.subscribeScreen:
         return MaterialPageRoute(
@@ -428,6 +447,15 @@ class RouteGenerator {
             cartItems: args is Map && args['cartItems'] != null
                 ? (args['cartItems'] as List).cast<CartItem>()
                 : [],
+          ),
+        );
+      case Routes.checkoutPaymentWebViewScreen:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => CheckoutPaymentWebViewScreen(
+            checkoutUrl: args is Map && args['checkoutUrl'] != null
+                ? args['checkoutUrl'].toString()
+                : '',
           ),
         );
       case Routes.personalInfoScreen:

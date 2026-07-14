@@ -48,10 +48,12 @@ final class CheckoutCalculationLoaded extends CheckoutState {
 }
 
 final class CheckoutOrderConfirmed extends CheckoutState {
-  final OrderModel order;
+  final OrderResponseModel orderResponse;
 
-  const CheckoutOrderConfirmed({required this.order});
+  const CheckoutOrderConfirmed({required this.orderResponse});
+
+  OrderModel get order => orderResponse.order;
 
   @override
-  List<Object> get props => [order];
+  List<Object> get props => [orderResponse];
 }

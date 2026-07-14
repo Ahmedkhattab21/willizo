@@ -3,16 +3,22 @@ import 'package:willizo/features/checkout/data/models/address_model.dart';
 class OrderResponseModel {
   final String message;
   final OrderModel order;
+  final String checkoutUrl;
+  final bool paymentRequired;
 
   OrderResponseModel({
     required this.message,
     required this.order,
+    required this.checkoutUrl,
+    required this.paymentRequired,
   });
 
   factory OrderResponseModel.fromJson(Map<String, dynamic> json) {
     return OrderResponseModel(
       message: json['message'] ?? '',
       order: OrderModel.fromJson(json['order'] ?? {}),
+      checkoutUrl: json['checkout_url']?.toString() ?? '',
+      paymentRequired: _toBool(json['payment_required']),
     );
   }
 
@@ -20,7 +26,19 @@ class OrderResponseModel {
     return {
       'message': message,
       'order': order.toJson(),
+      'checkout_url': checkoutUrl,
+      'payment_required': paymentRequired,
     };
+  }
+
+  static bool _toBool(dynamic value) {
+    if (value is bool) return value;
+    if (value is num) return value != 0;
+    if (value is String) {
+      final normalizedValue = value.toLowerCase().trim();
+      return normalizedValue == 'true' || normalizedValue == '1';
+    }
+    return false;
   }
 }
 
@@ -68,13 +86,14 @@ class OrderModel {
       id: json['id'] ?? '',
       orderNumber: json['order_number'] ?? '',
       status: json['status'] ?? '',
-      items: (json['items'] as List<dynamic>?)
-              ?.map((item) => OrderItemModel.fromJson(item as Map<String, dynamic>))
+      items:
+          (json['items'] as List<dynamic>?)
+              ?.map(
+                (item) => OrderItemModel.fromJson(item as Map<String, dynamic>),
+              )
               .toList() ??
           [],
-      shippingAddress: AddressModel.fromJson(
-        json['shipping_address'] ?? {},
-      ),
+      shippingAddress: AddressModel.fromJson(json['shipping_address'] ?? {}),
       subtotal: (json['subtotal'] as num?)?.toDouble() ?? 0.0,
       taxRate: (json['tax_rate'] as num?)?.toDouble() ?? 0.0,
       taxAmount: (json['tax_amount'] as num?)?.toDouble() ?? 0.0,

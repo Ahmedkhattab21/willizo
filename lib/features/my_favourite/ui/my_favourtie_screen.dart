@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:willizo/config/routes/routes.dart';
+import 'package:willizo/core/services/services_locator.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/assets_manager.dart';
+import 'package:willizo/core/utils/extentions.dart';
+import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/features/my_favourite/ui/widgets/favourite_card_widget.dart';
+import 'package:willizo/features/shop/logic/cubit/badge_cubit.dart';
+import 'package:willizo/features/wishlist/logic/cubit/wishlist_cubit.dart';
+import 'package:willizo/features/wishlist/logic/cubit/wishlist_state.dart';
 
 class MyFavouriteScreen extends StatelessWidget {
   const MyFavouriteScreen({super.key});
@@ -16,18 +24,20 @@ class MyFavouriteScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // Fixed Header
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
               child: Row(
                 children: [
-                  Container(
-                    padding: EdgeInsets.all(8.r),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.primaryColor),
-                      borderRadius: BorderRadius.circular(8.r),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      padding: EdgeInsets.all(8.r),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.primaryColor),
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      child: SvgPicture.asset(ImageAsset.arrowBackIcon),
                     ),
-                    child: SvgPicture.asset(ImageAsset.arrowBackIcon),
                   ),
                   Expanded(
                     child: Center(
@@ -39,91 +49,120 @@ class MyFavouriteScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Spacer to balance the back button
                   SizedBox(width: 40.w),
                 ],
               ),
             ),
-            // Scrollable GridView
             Expanded(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
-                child: GridView.builder(
-                  itemCount: 6,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 12.w,
-                    mainAxisSpacing: 12.h,
-                    childAspectRatio: 0.75,
-                  ),
-                  itemBuilder: (context, index) {
-                    // Sample data - you can replace with actual data
-                    final products = [
-                      {
-                        'image': 'assets/images/banner_image.png',
-                        'title': 'Power Whey Protein',
-                        'price': '59.99',
-                        'rating': '4.5',
-                        'isOnSale': true,
-                      },
-                      {
-                        'image': 'assets/images/banner_image.png',
-                        'title': 'Premium Gym Bag',
-                        'price': '45.00',
-                        'rating': '4.8',
-                        'isOnSale': false,
-                      },
-                      {
-                        'image': 'assets/images/banner_image.png',
-                        'title': 'Yoga Mat Pro',
-                        'price': '29.99',
-                        'rating': '4.7',
-                        'isOnSale': true,
-                      },
-                      {
-                        'image': 'assets/images/banner_image.png',
-                        'title': 'Resistance Bands',
-                        'price': '19.99',
-                        'rating': '4.6',
-                        'isOnSale': false,
-                      },
-                      {
-                        'image': 'assets/images/banner_image.png',
-                        'title': 'Dumbbells Set',
-                        'price': '89.99',
-                        'rating': '4.9',
-                        'isOnSale': true,
-                      },
-                      {
-                        'image': 'assets/images/banner_image.png',
-                        'title': 'Water Bottle',
-                        'price': '15.99',
-                        'rating': '4.4',
-                        'isOnSale': false,
-                      },
-                    ];
+                child: BlocConsumer<WishlistCubit, WishlistState>(
+                  listener: (context, state) {
+                    if (state is WishlistLoaded) {
+                      getIt<BadgeCubit>().updateWishlistCount(
+                        state.wishlistData.data.length,
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is WishlistLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primaryColor,
+                        ),
+                      );
+                    }
 
-                    final product = products[index % products.length];
+                    if (state is WishlistError) {
+                      return _FavouriteMessage(
+                        message: state.message,
+                        onRetry: () =>
+                            context.read<WishlistCubit>().getWishlist(),
+                      );
+                    }
 
-                    return FavouriteCardWidget(
-                      image: product['image'] as String,
-                      title: product['title'] as String,
-                      price: product['price'] as String,
-                      rating: product['rating'] as String,
-                      isOnSale: product['isOnSale'] as bool,
-                      onDelete: () {
-                        // Handle delete action
-                        print('Delete ${product['title']}');
-                      },
-                      onTap: () {
-                        // Handle card tap
-                        print('Tapped ${product['title']}');
-                      },
-                    );
+                    if (state is WishlistLoaded) {
+                      final items = state.wishlistData.data;
+                      if (items.isEmpty) {
+                        return const _FavouriteMessage(
+                          message: "Your favourite list is empty",
+                        );
+                      }
+
+                      return GridView.builder(
+                        itemCount: items.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 12.w,
+                          mainAxisSpacing: 12.h,
+                          childAspectRatio: 0.75,
+                        ),
+                        itemBuilder: (context, index) {
+                          final item = items[index];
+                          final product = item.product;
+                          final isDeleting = state.isDeleting(product.id);
+
+                          return FavouriteCardWidget(
+                            image: product.displayImage,
+                            title: product.name,
+                            price: product.price,
+                            rating: product.averageRating.toStringAsFixed(1),
+                            isOnSale: product.comparePrice != null,
+                            isDeleting: isDeleting,
+                            onDelete: () => context
+                                .read<WishlistCubit>()
+                                .removeFromWishlist(product.id),
+                            onTap: () => context.pushNamed(
+                              Routes.productDetailsScreen,
+                              arguments: {'productId': product.id},
+                            ),
+                          );
+                        },
+                      );
+                    }
+
+                    return const SizedBox.shrink();
                   },
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FavouriteMessage extends StatelessWidget {
+  final String message;
+  final VoidCallback? onRetry;
+
+  const _FavouriteMessage({required this.message, this.onRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(24.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: TextStyles.font16WhiteColorW400,
+            ),
+            if (onRetry != null) ...[
+              verticalSpace(16),
+              ElevatedButton(
+                onPressed: onRetry,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryColor,
+                  foregroundColor: AppColors.blackColor,
+                ),
+                child: const Text("Retry"),
+              ),
+            ],
           ],
         ),
       ),

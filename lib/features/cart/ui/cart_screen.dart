@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:willizo/config/routes/routes.dart';
 import 'package:willizo/core/services/services_locator.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/assets_manager.dart';
+import 'package:willizo/core/utils/extentions.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/features/cart/logic/cubit/cart_cubit.dart';
@@ -212,11 +214,6 @@ class CartScreen extends StatelessWidget {
                                               .round()
                                         : 0;
 
-                                    // Get first image if available
-                                    final imageUrl = product.images.isNotEmpty
-                                        ? product.images[0].toString()
-                                        : null;
-
                                     // Get effective quantity (local or server)
                                     final effectiveQuantity = state.getQuantity(
                                       item.id,
@@ -230,7 +227,7 @@ class CartScreen extends StatelessWidget {
                                     );
 
                                     return CartItemWidget(
-                                      imageUrl: imageUrl,
+                                      imageUrl: product.displayImage,
                                       title: product.name,
                                       subtitle: product.description,
                                       price: price,
@@ -252,12 +249,18 @@ class CartScreen extends StatelessWidget {
                                           ),
                                       onDelete: () =>
                                           cartCubit.deleteCartItem(item.id),
+                                      onTap: () => context.pushNamed(
+                                        Routes.productDetailsScreen,
+                                        arguments: {'productId': product.id},
+                                      ),
                                     );
                                   },
                                 ),
                                 verticalSpace(20),
                                 Divider(
-                                  color: AppColors.greyColorFB.withOpacity(0.3),
+                                  color: AppColors.greyColorFB.withValues(
+                                    alpha: 0.3,
+                                  ),
                                 ),
                                 verticalSpace(20),
                                 // Order Summary

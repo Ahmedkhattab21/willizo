@@ -1,3 +1,5 @@
+import 'package:willizo/core/api/end_points.dart';
+
 class CartResponseModel {
   final CartData data;
 
@@ -85,7 +87,7 @@ class CartProduct {
   final int stockQuantity;
   final String stockStatus;
   final String status;
-  final List<dynamic> images;
+  final List<String> images;
   final bool isAvailable;
   final bool isInWishlist;
   final double averageRating;
@@ -129,7 +131,7 @@ class CartProduct {
       stockQuantity: json['stock_quantity'] ?? 0,
       stockStatus: json['stock_status'] ?? "",
       status: json['status'] ?? "",
-      images: json['images'] ?? [],
+      images: _parseImages(json['images']),
       isAvailable: json['is_available'] ?? false,
       isInWishlist: json['is_in_wishlist'] ?? false,
       averageRating: (json['average_rating'] as num?)?.toDouble() ?? 0.0,
@@ -137,6 +139,50 @@ class CartProduct {
       createdAt: json['created_at'] ?? "",
       updatedAt: json['updated_at'] ?? "",
     );
+  }
+
+  String get displayImage {
+    if (images.isNotEmpty) return images.first;
+    return "assets/images/banner_image.png";
+  }
+
+  static List<String> _parseImages(dynamic value) {
+    if (value is! List) return [];
+    return value
+        .map((image) {
+          if (image is Map<String, dynamic>) {
+            return _imageFromMap(image);
+          }
+          return _imageUrl(image);
+        })
+        .whereType<String>()
+        .where((image) => image.isNotEmpty)
+        .toList();
+  }
+
+  static String? _imageUrl(dynamic value) {
+    if (value == null) return null;
+    final image = value.toString();
+    if (image.isEmpty) return null;
+    if (image.startsWith('http://') ||
+        image.startsWith('https://') ||
+        image.startsWith('assets/')) {
+      return image;
+    }
+    return EndPoints.getImageFromApi(image);
+  }
+
+  static String? _imageFromMap(Map<String, dynamic> image) {
+    final fullUrl =
+        image['full_url'] ?? image['url'] ?? image['image_url'] ?? image['src'];
+    if (fullUrl != null) return _imageUrl(fullUrl);
+
+    final imagePath = image['image_path'] ?? image['path'];
+    if (imagePath != null && imagePath.toString().isNotEmpty) {
+      return 'https://willizo.com/storage/${imagePath.toString()}';
+    }
+
+    return _imageUrl(image['image']);
   }
 }
 

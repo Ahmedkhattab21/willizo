@@ -42,6 +42,7 @@ class Routes {
   static const planDetailsScreen = "/PlanDetailsScreen";
   static const wishlistScreen = "/WishlistScreen";
   static const checkoutScreen = "/CheckoutScreen";
+  static const checkoutPaymentWebViewScreen = "/CheckoutPaymentWebViewScreen";
   static const personalInfoScreen = "/PersonalInfoScreen";
   static const onboardingDetailsScreen = "/OnboardingDetailsScreen";
 
