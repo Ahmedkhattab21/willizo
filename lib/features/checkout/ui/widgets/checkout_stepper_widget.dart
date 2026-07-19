@@ -25,6 +25,7 @@ class CheckoutStepperWidget extends StatefulWidget {
 class _CheckoutStepperWidgetState extends State<CheckoutStepperWidget> {
   int _currentStep = 0;
   String? _selectedAddressId;
+  String? _confirmedOrderId;
 
   void _onStepTapped(int step) {
     setState(() {
@@ -39,6 +40,14 @@ class _CheckoutStepperWidgetState extends State<CheckoutStepperWidget> {
       _currentStep = 1;
     });
     widget.onStepChanged?.call(1);
+  }
+
+  void _onOrderConfirmed(String orderId) {
+    setState(() {
+      _confirmedOrderId = orderId;
+      _currentStep = 3;
+    });
+    widget.onStepChanged?.call(3);
   }
 
   @override
@@ -144,8 +153,10 @@ class _CheckoutStepperWidgetState extends State<CheckoutStepperWidget> {
             currentStep: _currentStep,
             cartItems: widget.cartItems,
             onStepTapped: _onStepTapped,
+            onOrderConfirmed: _onOrderConfirmed,
             selectedAddressId: _selectedAddressId,
             onAddressSelected: _onAddressSelected,
+            confirmedOrderId: _confirmedOrderId,
           ),
         ],
       ),

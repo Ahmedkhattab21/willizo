@@ -6,30 +6,46 @@ import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/features/home/logic/cubit/home_cubit.dart';
 
-class DateSelector extends StatelessWidget {
+class DateSelector extends StatefulWidget {
   const DateSelector({super.key});
+
+  @override
+  State<DateSelector> createState() => _DateSelectorState();
+}
+
+class _DateSelectorState extends State<DateSelector> {
+  final ScrollController _scrollController = ScrollController();
+  bool _didPositionToday = false;
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        final weekDays = _currentWeekDays();
+        final days = _availableDays();
+        _positionToday(context);
 
         return SizedBox(
           height: 80,
           child: SingleChildScrollView(
+            controller: _scrollController,
             scrollDirection: Axis.horizontal,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                for (int i = 0; i < weekDays.length; i++) ...[
+                for (int i = 0; i < days.length; i++) ...[
                   DayItem(
-                    number: weekDays[i].day.toString(),
-                    short: _weekdayShort(weekDays[i].weekday),
-                    selected: _isSameDay(weekDays[i], state.selectedDate),
-                    onTap: () => context.read<HomeCubit>().selectDate(weekDays[i]),
+                    number: days[i].day.toString(),
+                    short: _weekdayShort(days[i].weekday),
+                    selected: _isSameDay(days[i], state.selectedDate),
+                    onTap: () => context.read<HomeCubit>().selectDate(days[i]),
                   ),
-                  if (i != weekDays.length - 1) horizontalSpace(2),
+                  if (i != days.length - 1) horizontalSpace(2),
                 ],
               ],
             ),
@@ -39,17 +55,28 @@ class DateSelector extends StatelessWidget {
     );
   }
 
-  List<DateTime> _currentWeekDays() {
+  void _positionToday(BuildContext context) {
+    if (_didPositionToday) return;
+    _didPositionToday = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_scrollController.hasClients) return;
+      final itemWidth = 58.w;
+      final todayIndex = 7;
+      final viewportWidth = MediaQuery.sizeOf(context).width - 32.w;
+      final offset = (todayIndex * itemWidth) - (viewportWidth / 2) + (28.w);
+      _scrollController.jumpTo(
+        offset.clamp(0.0, _scrollController.position.maxScrollExtent),
+      );
+    });
+  }
+
+  List<DateTime> _availableDays() {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final firstDayOfWeek = today.subtract(Duration(days: today.weekday - 1));
+    final firstDay = today.subtract(const Duration(days: 7));
     return List.generate(
-      7,
-      (i) => DateTime(
-        firstDayOfWeek.year,
-        firstDayOfWeek.month,
-        firstDayOfWeek.day + i,
-      ),
+      15,
+      (i) => DateTime(firstDay.year, firstDay.month, firstDay.day + i),
     );
   }
 

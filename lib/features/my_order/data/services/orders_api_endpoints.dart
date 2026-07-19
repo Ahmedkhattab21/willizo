@@ -5,4 +5,7 @@ class OrdersApiEndpoints {
 
   static String orderDetails(String orderId) =>
       '${EndPoints.baseUrl}/orders/$orderId';
+
+  static String cancelOrder(String orderId) =>
+      '${EndPoints.baseUrl}/orders/$orderId/cancel';
 }

@@ -10,7 +10,7 @@ import 'package:willizo/features/checkout/logic/cubit/checkout_cubit.dart';
 
 class CheckoutPaymentTabContent extends StatefulWidget {
   final CheckoutCalculationResponseModel? calculation;
-  final VoidCallback? onOrderConfirmed;
+  final ValueChanged<String>? onOrderConfirmed;
 
   const CheckoutPaymentTabContent({
     super.key,
@@ -26,6 +26,7 @@ class CheckoutPaymentTabContent extends StatefulWidget {
 class _CheckoutPaymentTabContentState extends State<CheckoutPaymentTabContent> {
   bool _isProcessing = false;
   bool _hasStartedCheckout = false;
+  String? _confirmedOrderId;
 
   @override
   void initState() {
@@ -59,7 +60,7 @@ class _CheckoutPaymentTabContentState extends State<CheckoutPaymentTabContent> {
     });
 
     if (paid == true) {
-      widget.onOrderConfirmed?.call();
+      widget.onOrderConfirmed?.call(_confirmedOrderId ?? '');
     }
   }
 
@@ -69,13 +70,14 @@ class _CheckoutPaymentTabContentState extends State<CheckoutPaymentTabContent> {
       listener: (context, state) {
         if (state is CheckoutOrderConfirmed) {
           final checkoutUrl = state.orderResponse.checkoutUrl;
+          _confirmedOrderId = state.orderResponse.order.id;
           if (state.orderResponse.paymentRequired && checkoutUrl.isNotEmpty) {
             _openPaymentWebView(checkoutUrl);
           } else {
             setState(() {
               _isProcessing = false;
             });
-            widget.onOrderConfirmed?.call();
+            widget.onOrderConfirmed?.call(_confirmedOrderId ?? '');
           }
         } else if (state is CheckoutError) {
           setState(() {

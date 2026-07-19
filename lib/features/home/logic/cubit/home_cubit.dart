@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:willizo/features/account/data/models/account_resonse.dart';
 import 'package:willizo/features/home/data/models/my_meal_plans_response_model.dart';
 import 'package:willizo/features/home/data/models/my_workout_plans_response_model.dart';
 import 'package:willizo/features/home/data/repo/home_repo.dart';
@@ -13,7 +14,36 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> fetchPlans() async {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    await _fetchPlansForDate(date: state.selectedDate, today: today);
+    await Future.wait([
+      _fetchProfile(),
+      _fetchPlansForDate(date: state.selectedDate, today: today),
+    ]);
+  }
+
+  Future<void> _fetchProfile() async {
+    emit(
+      state.copyWith(
+        profileStatus: HomeLoadStatus.loading,
+        clearProfileError: true,
+      ),
+    );
+
+    final result = await homeRepo.getProfile();
+    result.fold(
+      (failure) => emit(
+        state.copyWith(
+          profileStatus: HomeLoadStatus.failure,
+          profileError: failure.message,
+        ),
+      ),
+      (response) => emit(
+        state.copyWith(
+          profileStatus: HomeLoadStatus.success,
+          accountData: response.data,
+          clearProfileError: true,
+        ),
+      ),
+    );
   }
 
   Future<void> selectDate(DateTime date) async {
@@ -46,8 +76,9 @@ class HomeCubit extends Cubit<HomeState> {
     final workoutFuture = isToday
         ? homeRepo.getTodayWorkoutPlans()
         : homeRepo.getWorkoutPlansByDate(dateParam);
-    final mealFuture =
-        isToday ? homeRepo.getTodayMealPlans() : homeRepo.getMealPlansByDate(dateParam);
+    final mealFuture = isToday
+        ? homeRepo.getTodayMealPlans()
+        : homeRepo.getMealPlansByDate(dateParam);
 
     final workoutResult = await workoutFuture;
     final mealResult = await mealFuture;
@@ -90,16 +121,23 @@ class HomeCubit extends Cubit<HomeState> {
     emit(
       HomeState(
         selectedDate: state.selectedDate,
+        profileStatus: state.profileStatus,
+        accountData: state.accountData,
         workoutPlansStatus: workoutStatus,
         mealPlansStatus: mealStatus,
         workouts: workouts,
         meals: meals,
-        workoutPlansResponseDate:
-            workoutStatus == HomeLoadStatus.success ? workoutDate : null,
-        mealPlansResponseDate: mealStatus == HomeLoadStatus.success ? mealDate : null,
-        workoutPlansError:
-            workoutStatus == HomeLoadStatus.failure ? workoutErr : null,
+        workoutPlansResponseDate: workoutStatus == HomeLoadStatus.success
+            ? workoutDate
+            : null,
+        mealPlansResponseDate: mealStatus == HomeLoadStatus.success
+            ? mealDate
+            : null,
+        workoutPlansError: workoutStatus == HomeLoadStatus.failure
+            ? workoutErr
+            : null,
         mealPlansError: mealStatus == HomeLoadStatus.failure ? mealErr : null,
+        profileError: state.profileError,
       ),
     );
   }

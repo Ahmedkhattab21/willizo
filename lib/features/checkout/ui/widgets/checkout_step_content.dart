@@ -12,16 +12,20 @@ class CheckoutStepContent extends StatelessWidget {
   final int currentStep;
   final List<CartItem> cartItems;
   final ValueChanged<int> onStepTapped;
+  final ValueChanged<String>? onOrderConfirmed;
   final String? selectedAddressId;
   final Function(String)? onAddressSelected;
+  final String? confirmedOrderId;
 
   const CheckoutStepContent({
     super.key,
     required this.currentStep,
     required this.cartItems,
     required this.onStepTapped,
+    this.onOrderConfirmed,
     this.selectedAddressId,
     this.onAddressSelected,
+    this.confirmedOrderId,
   });
 
   @override
@@ -49,12 +53,12 @@ class CheckoutStepContent extends StatelessWidget {
             }
             return CheckoutPaymentTabContent(
               calculation: calculation,
-              onOrderConfirmed: () => onStepTapped(3),
+              onOrderConfirmed: onOrderConfirmed,
             );
           },
         );
       case 3:
-        return const CheckoutConfirmationTabContent();
+        return CheckoutConfirmationTabContent(orderId: confirmedOrderId);
       default:
         return const SizedBox.shrink();
     }

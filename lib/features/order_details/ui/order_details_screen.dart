@@ -48,7 +48,17 @@ class _MyOrderDetailsScreenState extends State<MyOrderDetailsScreen> {
     return Scaffold(
       backgroundColor: AppColors.darkColor,
       appBar: const CustomAppBar(title: "Order Details"),
-      body: BlocBuilder<OrdersCubit, OrdersState>(
+      body: BlocConsumer<OrdersCubit, OrdersState>(
+        listener: (context, state) {
+          if (state is OrderDetailsCancelError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
         builder: (context, state) {
           if (state is OrderDetailsLoading) {
             return const Center(
@@ -69,6 +79,26 @@ class _MyOrderDetailsScreenState extends State<MyOrderDetailsScreen> {
               order: state.order,
               reviewedItems: reviewedItems,
               onWriteReview: _openReviewDialog,
+              onCancelOrder: _cancelOrder,
+            );
+          }
+
+          if (state is OrderDetailsCancelling) {
+            return _OrderDetailsBody(
+              order: state.order,
+              reviewedItems: reviewedItems,
+              onWriteReview: _openReviewDialog,
+              onCancelOrder: _cancelOrder,
+              isCancelling: true,
+            );
+          }
+
+          if (state is OrderDetailsCancelError) {
+            return _OrderDetailsBody(
+              order: state.order,
+              reviewedItems: reviewedItems,
+              onWriteReview: _openReviewDialog,
+              onCancelOrder: _cancelOrder,
             );
           }
 
@@ -77,6 +107,17 @@ class _MyOrderDetailsScreenState extends State<MyOrderDetailsScreen> {
       ),
     );
   }
+
+  Future<void> _cancelOrder(OrderData order) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierColor: Colors.black.withValues(alpha: 0.72),
+      builder: (_) => _CancelOrderDialog(orderNumber: order.displayNumber),
+    );
+
+    if (confirmed != true || !mounted) return;
+    await context.read<OrdersCubit>().cancelOrder(order);
+  }
 }
 
 class _OrderDetailsBody extends StatelessWidget {
@@ -84,11 +125,15 @@ class _OrderDetailsBody extends StatelessWidget {
   final Set<String> reviewedItems;
   final Future<void> Function(OrderData order, OrderItemData item)
   onWriteReview;
+  final Future<void> Function(OrderData order)? onCancelOrder;
+  final bool isCancelling;
 
   const _OrderDetailsBody({
     required this.order,
     required this.reviewedItems,
     required this.onWriteReview,
+    this.onCancelOrder,
+    this.isCancelling = false,
   });
 
   @override
@@ -208,12 +253,54 @@ class _OrderDetailsBody extends StatelessWidget {
                   title: "Shipping Information",
                   lines: order.shippingAddress?.displayLines ?? const [],
                 ),
+                if (_canCancel(order)) ...[
+                  verticalSpace(28),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48.h,
+                    child: ElevatedButton(
+                      onPressed: isCancelling || onCancelOrder == null
+                          ? null
+                          : () => onCancelOrder?.call(order),
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: Colors.red,
+                        disabledBackgroundColor: Colors.red.withValues(
+                          alpha: 0.55,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                      ),
+                      child: isCancelling
+                          ? SizedBox(
+                              width: 20.w,
+                              height: 20.w,
+                              child: const CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppColors.whiteColor,
+                              ),
+                            )
+                          : Text(
+                              "Cancel Order",
+                              style: TextStyles.font16WhiteColorW600.copyWith(
+                                color: AppColors.whiteColor,
+                              ),
+                            ),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  bool _canCancel(OrderData order) {
+    final status = order.status.toLowerCase();
+    return status == 'pending' || status == 'processing';
   }
 }
 
@@ -760,6 +847,66 @@ class _ReviewSubmittedDialog extends StatelessWidget {
                         predicate: (route) => false,
                       );
                     },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CancelOrderDialog extends StatelessWidget {
+  final String orderNumber;
+
+  const _CancelOrderDialog({required this.orderNumber});
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: const Color(0xFF121212),
+      insetPadding: EdgeInsets.symmetric(horizontal: 28.w),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 24.h),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.warning_amber_rounded, color: Colors.red, size: 44.sp),
+            verticalSpace(18),
+            Text(
+              "Cancel Order?",
+              style: TextStyles.font18WhiteColor700.copyWith(fontSize: 20.sp),
+            ),
+            verticalSpace(12),
+            Text(
+              "Are you sure you want to cancel order #$orderNumber?",
+              textAlign: TextAlign.center,
+              style: TextStyles.font14GreyColorW400.copyWith(
+                color: AppColors.greyColorColor79,
+                height: 1.45,
+              ),
+            ),
+            verticalSpace(24),
+            Row(
+              children: [
+                Expanded(
+                  child: _DialogButton(
+                    text: "No",
+                    backgroundColor: AppColors.whiteColor,
+                    textColor: AppColors.greyColorColor79,
+                    onPressed: () => Navigator.of(context).pop(false),
+                  ),
+                ),
+                horizontalSpace(12),
+                Expanded(
+                  child: _DialogButton(
+                    text: "Cancel Order",
+                    backgroundColor: Colors.red,
+                    textColor: AppColors.whiteColor,
+                    onPressed: () => Navigator.of(context).pop(true),
                   ),
                 ),
               ],

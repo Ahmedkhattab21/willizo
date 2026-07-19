@@ -26,4 +26,12 @@ class OrdersRepo {
       return Left(ServerFailure(message: failure.serverFailure.message));
     }
   }
+
+  Future<Either<Failure, String>> cancelOrder(String orderId) async {
+    try {
+      return Right(await ordersService.cancelOrder(orderId));
+    } on ServerException catch (failure) {
+      return Left(ServerFailure(message: failure.serverFailure.message));
+    }
+  }
 }

@@ -44,6 +44,21 @@ class OrdersService {
     );
   }
 
+  Future<String> cancelOrder(String orderId) async {
+    final response = await apiConsumer.post(
+      OrdersApiEndpoints.cancelOrder(orderId),
+      {},
+      await _authHeaders(),
+    );
+
+    final body = jsonDecode(response.body);
+    if (_isSuccess(response.statusCode)) {
+      return body['message']?.toString() ?? 'Order cancelled successfully';
+    }
+
+    throw ServerException(serverFailure: ServerFailure.fromJson(body));
+  }
+
   Future<Map<String, String>> _authHeaders() async {
     final token = await CacheHelper.getSecuredString(
       ConstantKeys.saveTokenToShared,

@@ -48,3 +48,22 @@ final class OrderDetailsError extends OrdersState {
   @override
   List<Object?> get props => [message];
 }
+
+final class OrderDetailsCancelling extends OrdersState {
+  final OrderData order;
+
+  const OrderDetailsCancelling(this.order);
+
+  @override
+  List<Object?> get props => [order];
+}
+
+final class OrderDetailsCancelError extends OrdersState {
+  final String message;
+  final OrderData order;
+
+  const OrderDetailsCancelError({required this.message, required this.order});
+
+  @override
+  List<Object?> get props => [message, order];
+}

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:willizo/core/exceptions/exceptions.dart';
 import 'package:willizo/core/exceptions/failure.dart';
+import 'package:willizo/features/account/data/models/account_resonse.dart';
 import 'package:willizo/features/home/data/models/home_model.dart';
 import 'package:willizo/features/home/data/models/my_meal_plans_response_model.dart';
 import 'package:willizo/features/home/data/models/my_workout_plans_response_model.dart';
@@ -19,7 +20,16 @@ class HomeRepo {
     }
   }
 
-  Future<Either<Failure, MyWorkoutPlansResponseModel>> getTodayWorkoutPlans() async {
+  Future<Either<Failure, AccountResponseModel>> getProfile() async {
+    try {
+      return Right(await homeServices.getProfile());
+    } on ServerException catch (failure) {
+      return Left(ServerFailure(message: failure.serverFailure.message));
+    }
+  }
+
+  Future<Either<Failure, MyWorkoutPlansResponseModel>>
+  getTodayWorkoutPlans() async {
     try {
       return Right(await homeServices.getTodayWorkoutPlans());
     } on ServerException catch (failure) {
@@ -35,7 +45,9 @@ class HomeRepo {
     }
   }
 
-  Future<Either<Failure, MyWorkoutPlansResponseModel>> getWorkoutPlansByDate(String date) async {
+  Future<Either<Failure, MyWorkoutPlansResponseModel>> getWorkoutPlansByDate(
+    String date,
+  ) async {
     try {
       return Right(await homeServices.getWorkoutPlansByDate(date));
     } on ServerException catch (failure) {
@@ -43,7 +55,9 @@ class HomeRepo {
     }
   }
 
-  Future<Either<Failure, MyMealPlansResponseModel>> getMealPlansByDate(String date) async {
+  Future<Either<Failure, MyMealPlansResponseModel>> getMealPlansByDate(
+    String date,
+  ) async {
     try {
       return Right(await homeServices.getMealPlansByDate(date));
     } on ServerException catch (failure) {
