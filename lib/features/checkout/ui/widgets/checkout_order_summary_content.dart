@@ -31,6 +31,7 @@ class _CheckoutOrderSummaryContentState
     extends State<CheckoutOrderSummaryContent> {
   final TextEditingController _promoCodeController = TextEditingController();
   bool _isApplying = false;
+  bool _isRemovingPromoCode = false;
 
   @override
   void dispose() {
@@ -60,16 +61,38 @@ class _CheckoutOrderSummaryContentState
     );
   }
 
+  void _removePromoCode() {
+    setState(() {
+      _isApplying = true;
+      _isRemovingPromoCode = true;
+      _promoCodeController.clear();
+    });
+
+    context.read<CheckoutCubit>().calculateCheckout(widget.addressId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<CheckoutCubit, CheckoutState>(
       listener: (context, state) {
         if (state is CheckoutCalculationLoaded) {
+          final wasRemoving = _isRemovingPromoCode;
           setState(() {
             _isApplying = false;
+            _isRemovingPromoCode = false;
           });
-          // Show success/error message based on coupon validity
-          if (state.calculation.coupon.valid) {
+          if (wasRemoving) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Promo code removed'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          } else if (state.calculation.coupon.valid) {
+            final code = state.calculation.coupon.code;
+            if (code != null && code.isNotEmpty) {
+              _promoCodeController.text = code;
+            }
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
@@ -92,6 +115,7 @@ class _CheckoutOrderSummaryContentState
         } else if (state is CheckoutError) {
           setState(() {
             _isApplying = false;
+            _isRemovingPromoCode = false;
           });
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message), backgroundColor: Colors.red),
@@ -108,6 +132,13 @@ class _CheckoutOrderSummaryContentState
           final calculation = state is CheckoutCalculationLoaded
               ? state.calculation
               : widget.calculation;
+          final hasPromoCode =
+              calculation.coupon.valid &&
+              (calculation.coupon.code?.isNotEmpty ?? false);
+          if (hasPromoCode &&
+              _promoCodeController.text != calculation.coupon.code) {
+            _promoCodeController.text = calculation.coupon.code ?? '';
+          }
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,7 +223,7 @@ class _CheckoutOrderSummaryContentState
                 value: "\$${calculation.pricing.taxAmount.toStringAsFixed(2)}",
               ),
               verticalSpace(16),
-              Divider(color: AppColors.greyColorColor79.withOpacity(0.3)),
+              Divider(color: AppColors.greyColorColor79.withValues(alpha: 0.3)),
               CheckoutSummaryRow(
                 label: "Total",
                 value: "\$${calculation.pricing.total.toStringAsFixed(2)}",
@@ -232,6 +263,7 @@ class _CheckoutOrderSummaryContentState
                       ),
                       child: TextField(
                         controller: _promoCodeController,
+                        readOnly: hasPromoCode,
                         style: TextStyles.font14whiteColorColorW400,
                         decoration: InputDecoration(
                           hintText: "Enter code",
@@ -246,12 +278,20 @@ class _CheckoutOrderSummaryContentState
                   ),
                   horizontalSpace(10),
                   GestureDetector(
-                    onTap: _isApplying ? null : _applyPromoCode,
+                    onTap: _isApplying
+                        ? null
+                        : hasPromoCode
+                        ? _removePromoCode
+                        : _applyPromoCode,
                     child: Container(
                       height: 45.h,
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      padding: EdgeInsets.symmetric(horizontal: 18.w),
                       decoration: BoxDecoration(
-                        color: _isApplying ? Colors.grey : Colors.white,
+                        color: _isApplying
+                            ? Colors.grey
+                            : hasPromoCode
+                            ? AppColors.primaryColor
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                       alignment: Alignment.center,
@@ -267,7 +307,7 @@ class _CheckoutOrderSummaryContentState
                               ),
                             )
                           : Text(
-                              "Apply",
+                              hasPromoCode ? "Remove Code" : "Apply",
                               style: TextStyles.font14BlackColorW700.copyWith(
                                 fontWeight: FontWeight.w600,
                               ),

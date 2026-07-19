@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:willizo/core/exceptions/exceptions.dart';
 import 'package:willizo/core/exceptions/failure.dart';
 import 'package:willizo/features/all_products/data/models/all_products_model_response.dart';
+import 'package:willizo/features/shop/data/models/banners_response_model.dart';
 import 'package:willizo/features/shop/data/models/categories_model_response.dart';
 import 'package:willizo/features/shop/data/models/shop_model_response.dart';
 import 'package:willizo/features/shop/data/services/shop_service.dart';
@@ -22,6 +23,14 @@ class ShopRepo {
   Future<Either<Failure, CategoriesResponseModel>> getCategories() async {
     try {
       return Right(await _shopService.getCategories());
+    } on ServerException catch (failure) {
+      return Left(ServerFailure(message: failure.serverFailure.message));
+    }
+  }
+
+  Future<Either<Failure, List<BannerModel>>> getBanners() async {
+    try {
+      return Right(await _shopService.getBanners());
     } on ServerException catch (failure) {
       return Left(ServerFailure(message: failure.serverFailure.message));
     }
