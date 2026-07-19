@@ -790,10 +790,10 @@ class _ReviewSubmittedDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: const Color(0xFF121212),
-      insetPadding: EdgeInsets.symmetric(horizontal: 28.w),
+      insetPadding: EdgeInsets.symmetric(horizontal: 20.w),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 42.h),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 36.h),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -835,7 +835,7 @@ class _ReviewSubmittedDialog extends StatelessWidget {
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ),
-                horizontalSpace(12),
+                horizontalSpace(10),
                 Expanded(
                   child: _OutlinedDialogButton(
                     text: "Back to Account",
@@ -936,7 +936,7 @@ class _DialogButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 44.h,
+      height: 46.h,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
@@ -944,9 +944,9 @@ class _DialogButton extends StatelessWidget {
           backgroundColor: backgroundColor,
           disabledBackgroundColor: backgroundColor.withValues(alpha: 0.6),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6.r),
+            borderRadius: BorderRadius.circular(8.r),
           ),
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          padding: EdgeInsets.symmetric(horizontal: 10.w),
         ),
         child: isLoading
             ? SizedBox(
@@ -957,9 +957,13 @@ class _DialogButton extends StatelessWidget {
                   color: textColor,
                 ),
               )
-            : Text(
-                text,
-                style: TextStyles.font14W600.copyWith(color: textColor),
+            : FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  text,
+                  maxLines: 1,
+                  style: TextStyles.font14W600.copyWith(color: textColor),
+                ),
               ),
       ),
     );
@@ -975,19 +979,25 @@ class _OutlinedDialogButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 44.h,
+      height: 46.h,
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
           side: BorderSide(color: AppColors.primaryColor),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6.r),
+            borderRadius: BorderRadius.circular(8.r),
           ),
-          padding: EdgeInsets.symmetric(horizontal: 12.w),
+          padding: EdgeInsets.symmetric(horizontal: 10.w),
         ),
-        child: Text(
-          text,
-          style: TextStyles.font14W600.copyWith(color: AppColors.primaryColor),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            style: TextStyles.font14W600.copyWith(
+              color: AppColors.primaryColor,
+            ),
+          ),
         ),
       ),
     );
