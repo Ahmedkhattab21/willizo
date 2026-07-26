@@ -64,6 +64,35 @@ class FriendListItem {
   }
 }
 
+class FriendsStats {
+  final int friendsCount;
+  final int workoutPartnersCount;
+  final int activeTodayCount;
+
+  const FriendsStats({
+    required this.friendsCount,
+    required this.workoutPartnersCount,
+    required this.activeTodayCount,
+  });
+
+  factory FriendsStats.fromJson(Map<String, dynamic> json) {
+    final data = json['data'] is Map<String, dynamic>
+        ? json['data'] as Map<String, dynamic>
+        : json;
+    return FriendsStats(
+      friendsCount: _toInt(data['friends_count']),
+      workoutPartnersCount: _toInt(data['workout_partners_count']),
+      activeTodayCount: _toInt(data['active_today_count']),
+    );
+  }
+
+  static int _toInt(dynamic value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    return int.tryParse(value?.toString() ?? '') ?? 0;
+  }
+}
+
 /// Response from POST /friends/add (add friend by friend_id).
 class AddFriendResponse {
   final String message;

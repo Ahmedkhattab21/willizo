@@ -93,7 +93,37 @@ class LoginAndSignup extends Cubit<LoginAndSignupState> {
   TextEditingController registerBirthDateController = TextEditingController();
   TextEditingController registerPasswordController = TextEditingController();
 
+  final List<String> countryDialCodes = const [
+    '+20',
+    '+966',
+    '+971',
+    '+965',
+    '+974',
+    '+973',
+    '+968',
+    '+962',
+    '+1',
+  ];
+  String selectedCountryDialCode = '+20';
   bool isAgreeForTerms = false;
+
+  void changeCountryDialCode(String code) {
+    selectedCountryDialCode = code;
+    emit(OnChangeCountryDialCodeState());
+  }
+
+  String get registerFullPhoneNumber {
+    final rawPhone = registerPhoneController.text.trim().replaceAll(
+      RegExp(r'[\s-]'),
+      '',
+    );
+    if (rawPhone.startsWith('+')) return rawPhone;
+    if (rawPhone.startsWith('00')) return '+${rawPhone.substring(2)}';
+    if (rawPhone.startsWith('0')) {
+      return '$selectedCountryDialCode${rawPhone.substring(1)}';
+    }
+    return '$selectedCountryDialCode$rawPhone';
+  }
 
   Future<void> signup() async {
     emit((SignupLoadingState()));
@@ -102,7 +132,7 @@ class LoginAndSignup extends Cubit<LoginAndSignupState> {
           SignupRequestModel(
             fullName: registerNameController.text,
             email: registerEmailController.text,
-            phoneNumber: registerPhoneController.text,
+            phoneNumber: registerFullPhoneNumber,
             dateOfBirth: registerBirthDateController.text,
             password: registerPasswordController.text,
             passwordConfirmation: registerPasswordController.text,

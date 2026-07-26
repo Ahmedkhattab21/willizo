@@ -147,9 +147,22 @@ class CommunityRepo {
 
   Future<Either<Failure, FriendsListResponse>> getFriends({
     int page = 1,
+    String? search,
   }) async {
     try {
-      final response = await communityServices.getFriends(page: page);
+      final response = await communityServices.getFriends(
+        page: page,
+        search: search,
+      );
+      return Right(response);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, FriendsStats>> getFriendsStats() async {
+    try {
+      final response = await communityServices.getFriendsStats();
       return Right(response);
     } on ServerException catch (failure) {
       return Left(failure.serverFailure);

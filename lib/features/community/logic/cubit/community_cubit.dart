@@ -30,6 +30,8 @@ class CommunityCubit extends Cubit<CommunityState> {
   List<FriendListItem> _friends = [];
   int _friendsCurrentPage = 1;
   int _friendsLastPage = 1;
+  String _friendsSearch = '';
+  FriendsStats? friendsStats;
   List<FriendListItem> get friends => List.unmodifiable(_friends);
   bool get hasMoreFriends => _friendsCurrentPage < _friendsLastPage;
 
@@ -167,13 +169,16 @@ class CommunityCubit extends Cubit<CommunityState> {
 
   /// Fetches friends list for All Friends tab (page 1, or refresh).
   /// If we already have cached friends and [refresh] is false, re-emits cached state without loading.
-  Future<void> getFriends({bool refresh = false}) async {
-    if (refresh) {
+  Future<void> getFriends({bool refresh = false, String? search}) async {
+    final nextSearch = search ?? _friendsSearch;
+    final searchChanged = nextSearch != _friendsSearch;
+    _friendsSearch = nextSearch;
+    if (refresh || searchChanged) {
       _friends = [];
       _friendsCurrentPage = 1;
       _friendsLastPage = 1;
     }
-    if (!refresh && _friends.isNotEmpty) {
+    if (!refresh && !searchChanged && _friends.isNotEmpty) {
       emit(
         FriendsLoadedState(
           friends: _friends,
@@ -185,7 +190,10 @@ class CommunityCubit extends Cubit<CommunityState> {
       return;
     }
     emit(FriendsLoadingState());
-    final result = await _communityRepo.getFriends(page: 1);
+    final result = await _communityRepo.getFriends(
+      page: 1,
+      search: _friendsSearch,
+    );
     result.fold((failure) => emit(FriendsErrorState(failure)), (response) {
       _friends = List.from(response.data);
       _friendsCurrentPage = response.currentPage;
@@ -198,6 +206,15 @@ class CommunityCubit extends Cubit<CommunityState> {
           hasMore: response.hasMore,
         ),
       );
+    });
+  }
+
+  Future<void> getFriendsStats() async {
+    emit(FriendsStatsLoadingState());
+    final result = await _communityRepo.getFriendsStats();
+    result.fold((failure) => emit(FriendsStatsErrorState(failure)), (stats) {
+      friendsStats = stats;
+      emit(FriendsStatsLoadedState());
     });
   }
 
@@ -230,7 +247,10 @@ class CommunityCubit extends Cubit<CommunityState> {
         hasMore: hasMoreFriends,
       ),
     );
-    final result = await _communityRepo.getFriends(page: nextPage);
+    final result = await _communityRepo.getFriends(
+      page: nextPage,
+      search: _friendsSearch,
+    );
     result.fold((failure) => emit(FriendsErrorState(failure)), (response) {
       _friends = [..._friends, ...response.data];
       _friendsCurrentPage = response.currentPage;

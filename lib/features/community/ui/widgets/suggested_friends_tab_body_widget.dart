@@ -18,6 +18,7 @@ class SuggestedFriendsTabBodyWidget extends StatelessWidget {
         onRefresh: () async {
           final cubit = context.read<CommunityCubit>();
           await Future.wait([
+            cubit.getFriendsStats(),
             cubit.getSuggestionsNearYou(refresh: true),
             cubit.getSuggestionsFromContacts(),
             cubit.getTopFollowers(refresh: true),

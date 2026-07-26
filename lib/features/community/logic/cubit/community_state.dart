@@ -20,8 +20,10 @@ final class LeaderboardLoadedState extends CommunityState {
   final MyLeaderboardEntry? myEntry;
   final List<ExerciseCategoryEntry> exerciseCategories;
   final List<LeaderboardEntry> leaderboardFriends;
+
   /// Exercise details for the first card (from GET /leaderboards/exercise/:slug).
   final ExerciseInfo? firstCardExercise;
+
   /// Workout summary for weekly challenge (from GET /workouts/summary).
   final WorkoutSummaryModel? workoutSummary;
 
@@ -75,6 +77,15 @@ final class FriendsErrorState extends CommunityState {
   FriendsErrorState(this.failure);
 }
 
+final class FriendsStatsLoadingState extends CommunityState {}
+
+final class FriendsStatsLoadedState extends CommunityState {}
+
+final class FriendsStatsErrorState extends CommunityState {
+  final Failure failure;
+  FriendsStatsErrorState(this.failure);
+}
+
 // Top followers suggestions (Suggested tab)
 final class TopFollowersLoadingState extends CommunityState {}
 
@@ -94,6 +105,7 @@ final class NearYouSuggestionsErrorState extends CommunityState {
   final Failure failure;
   NearYouSuggestionsErrorState(this.failure);
 }
+
 final class ContactsSuggestionsLoadingState extends CommunityState {}
 
 final class ContactsSuggestionsLoadedState extends CommunityState {}

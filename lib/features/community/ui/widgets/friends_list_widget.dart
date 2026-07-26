@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
-import 'package:willizo/features/community/data/models/friend_model.dart';
 import 'package:willizo/features/community/logic/cubit/community_cubit.dart';
 import 'package:willizo/features/community/ui/widgets/friends_list_shimmer_widget.dart';
 import 'package:willizo/features/community/ui/widgets/frind_info_card_widget.dart';
@@ -37,10 +36,7 @@ class _FriendsListWidgetState extends State<FriendsListWidget> {
 
   void _onScroll() {
     final cubit = context.read<CommunityCubit>();
-    if (cubit.state is! FriendsLoadedState &&
-        cubit.state is! FriendsLoadingMoreState) {
-      return;
-    }
+    if (cubit.friends.isEmpty) return;
     if (!cubit.hasMoreFriends) return;
     final position = _scrollController.position;
     if (position.pixels >= position.maxScrollExtent - 200) {
@@ -51,7 +47,13 @@ class _FriendsListWidgetState extends State<FriendsListWidget> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CommunityCubit, CommunityState>(
+      buildWhen: (previous, current) =>
+          current is FriendsLoadingState ||
+          current is FriendsLoadedState ||
+          current is FriendsLoadingMoreState ||
+          current is FriendsErrorState,
       builder: (context, state) {
+        final cubit = context.read<CommunityCubit>();
         // Request friends once when All Friends tab is first shown.
         if (!_requestedFriends) {
           _requestedFriends = true;
@@ -68,10 +70,7 @@ class _FriendsListWidgetState extends State<FriendsListWidget> {
           });
         }
 
-        if (state is FriendsLoadingState ||
-            (state is! FriendsLoadedState &&
-                state is! FriendsLoadingMoreState &&
-                state is! FriendsErrorState)) {
+        if (state is FriendsLoadingState && cubit.friends.isEmpty) {
           return const Expanded(
             child: SingleChildScrollView(child: FriendsListShimmerWidget()),
           );
@@ -101,15 +100,20 @@ class _FriendsListWidgetState extends State<FriendsListWidget> {
             ? state.friends
             : state is FriendsLoadingMoreState
             ? state.friends
-            : <FriendListItem>[];
+            : cubit.friends;
 
         if (friends.isEmpty) {
           return Expanded(
             child: RefreshIndicator(
               color: AppColors.primaryColor,
               backgroundColor: AppColors.greyColor2727,
-              onRefresh: () =>
-                  context.read<CommunityCubit>().getFriends(refresh: true),
+              onRefresh: () async {
+                final cubit = context.read<CommunityCubit>();
+                await Future.wait([
+                  cubit.getFriends(refresh: true),
+                  cubit.getFriendsStats(),
+                ]);
+              },
               child: const SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 child: SizedBox(
@@ -127,8 +131,13 @@ class _FriendsListWidgetState extends State<FriendsListWidget> {
           child: RefreshIndicator(
             color: AppColors.primaryColor,
             backgroundColor: AppColors.greyColor2727,
-            onRefresh: () =>
-                context.read<CommunityCubit>().getFriends(refresh: true),
+            onRefresh: () async {
+              final cubit = context.read<CommunityCubit>();
+              await Future.wait([
+                cubit.getFriends(refresh: true),
+                cubit.getFriendsStats(),
+              ]);
+            },
             child: ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
               controller: _scrollController,

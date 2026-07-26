@@ -119,9 +119,9 @@ class CommunityServices {
   }
 
   /// Fetches friends list (All Friends tab) with pagination.
-  Future<FriendsListResponse> getFriends({int page = 1}) async {
+  Future<FriendsListResponse> getFriends({int page = 1, String? search}) async {
     final response = await apiConsumer.get(
-      CommunityApiEndpoint.friendsUrlWithPage(page),
+      CommunityApiEndpoint.friendsUrlWithPage(page, search: search),
       {
         ConstantKeys.appAuthorization:
             "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
@@ -131,6 +131,22 @@ class CommunityServices {
     if (response.statusCode == StatusCode.ok ||
         response.statusCode == StatusCode.created) {
       return FriendsListResponse.fromJson(jsonDecode(response.body));
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  Future<FriendsStats> getFriendsStats() async {
+    final response = await apiConsumer.get(CommunityApiEndpoint.friendsStatsUrl, {
+      ConstantKeys.appAuthorization:
+          "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+    });
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      return FriendsStats.fromJson(jsonDecode(response.body));
     } else {
       throw ServerException(
         serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),

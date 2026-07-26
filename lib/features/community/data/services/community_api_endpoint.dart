@@ -11,8 +11,14 @@ class CommunityApiEndpoint {
       '${EndPoints.baseUrl}/leaderboards/friends?period=monthly';
 
   static const String friendsUrl = '${EndPoints.baseUrl}/friends';
-  static String friendsUrlWithPage(int page) =>
-      '${EndPoints.baseUrl}/friends?page=$page';
+  static const String friendsStatsUrl = '${EndPoints.baseUrl}/friends/stats';
+  static String friendsUrlWithPage(int page, {String? search}) {
+    final params = <String, String>{'page': page.toString()};
+    if (search != null && search.trim().isNotEmpty) {
+      params['search'] = search.trim();
+    }
+    return Uri.parse(friendsUrl).replace(queryParameters: params).toString();
+  }
 
   static const String addFriendUrl = '${EndPoints.baseUrl}/friends/add';
 

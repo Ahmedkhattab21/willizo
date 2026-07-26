@@ -6,6 +6,8 @@ class OnChangeSignInState extends LoginAndSignupState {}
 
 class OnChangeAgreeForTermsState extends LoginAndSignupState {}
 
+class OnChangeCountryDialCodeState extends LoginAndSignupState {}
+
 class LoginLoadingState extends LoginAndSignupState {}
 
 class LoginSuccessState extends LoginAndSignupState {

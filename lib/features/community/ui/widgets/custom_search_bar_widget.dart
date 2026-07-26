@@ -6,7 +6,10 @@ import 'package:willizo/core/utils/assets_manager.dart';
 import 'package:willizo/core/utils/styles.dart';
 
 class CustomSearchBarWidget extends StatelessWidget {
-  const CustomSearchBarWidget({super.key});
+  final TextEditingController? controller;
+  final ValueChanged<String>? onChanged;
+
+  const CustomSearchBarWidget({super.key, this.controller, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +25,21 @@ class CustomSearchBarWidget extends StatelessWidget {
           spacing: 12.w,
           children: [
             SvgPicture.asset(ImageAsset.coloredSearchIcon),
-            Text(
-              "Search friends...",
-              style: TextStyles.font14greyColorColor79W400.copyWith(
-                color: AppColors.greyColorFD,
+            Expanded(
+              child: TextField(
+                controller: controller,
+                onChanged: onChanged,
+                style: TextStyles.font14greyColorColor79W400.copyWith(
+                  color: AppColors.blackColor,
+                ),
+                decoration: InputDecoration(
+                  hintText: "Search friends...",
+                  hintStyle: TextStyles.font14greyColorColor79W400.copyWith(
+                    color: AppColors.greyColorFD,
+                  ),
+                  border: InputBorder.none,
+                  isDense: true,
+                ),
               ),
             ),
           ],

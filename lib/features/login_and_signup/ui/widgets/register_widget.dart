@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
@@ -63,43 +64,105 @@ class RegisterWidget extends StatelessWidget {
           keyboardType: TextInputType.name,
         ),
         verticalSpace(20),
-        AppTextFormField(
-          hintText: "Phone Number",
-          hintStyle: TextStyles.font14greyColorColorW400,
-          contentPadding: EdgeInsets.symmetric(
-            vertical: 12.h,
-            horizontal: 20.w,
-          ),
-          textStyle: TextStyles.font14whiteColorColorW400,
-          controller: LoginAndSignup.get(context).registerPhoneController,
-          prefixIcon: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-            child: SvgPicture.asset(ImageAsset.phoneIcon),
-          ),
-          backgroundColor: AppColors.blackColor,
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
-            borderRadius: BorderRadius.circular(10.r),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
-            borderRadius: BorderRadius.circular(10.r),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.redColor, width: 2),
-            borderRadius: BorderRadius.circular(10.r),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.redColor, width: 2),
-            borderRadius: BorderRadius.circular(10.r),
-          ),
-          validator: (String? value) {
-            if (value == null || value.isEmpty) {
-              return "Enter Value";
-            }
-            return null;
+        BlocBuilder<LoginAndSignup, LoginAndSignupState>(
+          buildWhen: (_, current) => current is OnChangeCountryDialCodeState,
+          builder: (context, state) {
+            final cubit = LoginAndSignup.get(context);
+            return TextFormField(
+              controller: cubit.registerPhoneController,
+              keyboardType: TextInputType.phone,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9\s-]')),
+              ],
+              cursorColor: AppColors.primaryColor,
+              style: TextStyles.font14whiteColorColorW400,
+              decoration: InputDecoration(
+                isDense: true,
+                filled: true,
+                fillColor: AppColors.blackColor,
+                hintText: "Phone Number",
+                hintStyle: TextStyles.font14greyColorColorW400,
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.h,
+                  horizontal: 12.w,
+                ),
+                prefixIconConstraints: BoxConstraints(minWidth: 120.w),
+                prefixIcon: Padding(
+                  padding: EdgeInsets.only(left: 10.w, right: 4.w),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SvgPicture.asset(ImageAsset.phoneIcon),
+                      horizontalSpace(8),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: cubit.selectedCountryDialCode,
+                          dropdownColor: AppColors.blackColor,
+                          iconEnabledColor: AppColors.primaryColor,
+                          style: TextStyles.font14whiteColorColorW400,
+                          selectedItemBuilder: (_) => cubit.countryDialCodes
+                              .map(
+                                (code) => Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    code,
+                                    style: TextStyles.font14whiteColorColorW400,
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          items: cubit.countryDialCodes
+                              .map(
+                                (code) => DropdownMenuItem<String>(
+                                  value: code,
+                                  child: Text(
+                                    code,
+                                    style: TextStyles.font14whiteColorColorW400,
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (value) {
+                            if (value != null) {
+                              cubit.changeCountryDialCode(value);
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: AppColors.primaryColor,
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: AppColors.primaryColor,
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.redColor, width: 2),
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.redColor, width: 2),
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+              ),
+              validator: (String? value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "Enter Value";
+                }
+                return null;
+              },
+            );
           },
-          keyboardType: TextInputType.phone,
         ),
         verticalSpace(20),
         AppTextFormField(
