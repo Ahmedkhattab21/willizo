@@ -5,8 +5,8 @@ class SyncContactsRequest {
   SyncContactsRequest({required this.contacts});
 
   Map<String, dynamic> toJson() => {
-        'contacts': contacts.map((e) => e.toJson()).toList(),
-      };
+    'contacts': contacts.map((e) => e.toJson()).toList(),
+  };
 }
 
 class SyncContactItem {
@@ -15,10 +15,7 @@ class SyncContactItem {
 
   SyncContactItem({required this.phoneNumber, required this.name});
 
-  Map<String, dynamic> toJson() => {
-        'phone_number': phoneNumber,
-        'name': name,
-      };
+  Map<String, dynamic> toJson() => {'phone_number': phoneNumber, 'name': name};
 }
 
 class SyncContactsResponse {
@@ -37,6 +34,7 @@ class ContactSuggestionItem {
   final String? friendId;
   final String phoneNumber;
   final int followersCount;
+  final bool isFollowing;
 
   ContactSuggestionItem({
     required this.id,
@@ -44,6 +42,7 @@ class ContactSuggestionItem {
     this.friendId,
     required this.phoneNumber,
     required this.followersCount,
+    required this.isFollowing,
   });
 
   factory ContactSuggestionItem.fromJson(Map<String, dynamic> json) {
@@ -53,6 +52,18 @@ class ContactSuggestionItem {
       friendId: json['friend_id']?.toString(),
       phoneNumber: json['phone_number']?.toString() ?? '',
       followersCount: _toInt(json['followers_count']),
+      isFollowing: _toBool(json['is_following']),
+    );
+  }
+
+  ContactSuggestionItem copyWith({bool? isFollowing}) {
+    return ContactSuggestionItem(
+      id: id,
+      fullName: fullName,
+      friendId: friendId,
+      phoneNumber: phoneNumber,
+      followersCount: followersCount,
+      isFollowing: isFollowing ?? this.isFollowing,
     );
   }
 
@@ -61,6 +72,12 @@ class ContactSuggestionItem {
     if (value is int) return value;
     if (value is double) return value.toInt();
     return 0;
+  }
+
+  static bool _toBool(dynamic value) {
+    if (value is bool) return value;
+    if (value is num) return value != 0;
+    return value?.toString().toLowerCase().trim() == 'true';
   }
 }
 
@@ -71,6 +88,7 @@ class NearYouSuggestionItem {
   final String? friendId;
   final int followersCount;
   final double distance;
+  final bool isFollowing;
 
   NearYouSuggestionItem({
     required this.id,
@@ -78,6 +96,7 @@ class NearYouSuggestionItem {
     this.friendId,
     required this.followersCount,
     required this.distance,
+    required this.isFollowing,
   });
 
   factory NearYouSuggestionItem.fromJson(Map<String, dynamic> json) {
@@ -96,6 +115,18 @@ class NearYouSuggestionItem {
       friendId: json['friend_id']?.toString(),
       followersCount: _toInt(json['followers_count']),
       distance: parsedDistance,
+      isFollowing: _toBool(json['is_following']),
+    );
+  }
+
+  NearYouSuggestionItem copyWith({bool? isFollowing}) {
+    return NearYouSuggestionItem(
+      id: id,
+      fullName: fullName,
+      friendId: friendId,
+      followersCount: followersCount,
+      distance: distance,
+      isFollowing: isFollowing ?? this.isFollowing,
     );
   }
 
@@ -104,6 +135,12 @@ class NearYouSuggestionItem {
     if (value is int) return value;
     if (value is double) return value.toInt();
     return 0;
+  }
+
+  static bool _toBool(dynamic value) {
+    if (value is bool) return value;
+    if (value is num) return value != 0;
+    return value?.toString().toLowerCase().trim() == 'true';
   }
 }
 
@@ -113,12 +150,14 @@ class TopFollowerSuggestionItem {
   final String fullName;
   final String? friendId;
   final int followersCount;
+  final bool isFollowing;
 
   TopFollowerSuggestionItem({
     required this.id,
     required this.fullName,
     this.friendId,
     required this.followersCount,
+    required this.isFollowing,
   });
 
   factory TopFollowerSuggestionItem.fromJson(Map<String, dynamic> json) {
@@ -127,6 +166,17 @@ class TopFollowerSuggestionItem {
       fullName: json['full_name']?.toString() ?? '',
       friendId: json['friend_id']?.toString(),
       followersCount: _toInt(json['followers_count']),
+      isFollowing: _toBool(json['is_following']),
+    );
+  }
+
+  TopFollowerSuggestionItem copyWith({bool? isFollowing}) {
+    return TopFollowerSuggestionItem(
+      id: id,
+      fullName: fullName,
+      friendId: friendId,
+      followersCount: followersCount,
+      isFollowing: isFollowing ?? this.isFollowing,
     );
   }
 
@@ -135,5 +185,11 @@ class TopFollowerSuggestionItem {
     if (value is int) return value;
     if (value is double) return value.toInt();
     return 0;
+  }
+
+  static bool _toBool(dynamic value) {
+    if (value is bool) return value;
+    if (value is num) return value != 0;
+    return value?.toString().toLowerCase().trim() == 'true';
   }
 }

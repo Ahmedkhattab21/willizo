@@ -33,45 +33,53 @@ class _FeedBodyWidgetState extends State<FeedBodyWidget> {
         final feeds = cubit.feeds;
         final isLoading = state is FeedsLoadingState;
 
-        return CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                child: const SharePhotoWidget(),
-              ),
-            ),
-            if (isLoading)
-              const SliverToBoxAdapter(
-                child: FeedPostShimmerWidget(),
-              )
-            else if (feeds.isEmpty)
+        return RefreshIndicator(
+          color: AppColors.primaryColor,
+          backgroundColor: AppColors.greyColor2727,
+          onRefresh: () => cubit.getFeeds(refresh: true),
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.only(top: 40.h),
-                  child: Center(
-                    child: Text(
-                      "No feeds yet",
-                      style: TextStyle(
-                        color: AppColors.greyColorColor80,
-                        fontSize: 14.sp,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 12.h,
+                  ),
+                  child: const SharePhotoWidget(),
+                ),
+              ),
+              if (isLoading)
+                const SliverToBoxAdapter(child: FeedPostShimmerWidget())
+              else if (feeds.isEmpty)
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 40.h),
+                    child: Center(
+                      child: Text(
+                        "No feeds yet",
+                        style: TextStyle(
+                          color: AppColors.greyColorColor80,
+                          fontSize: 14.sp,
+                        ),
                       ),
                     ),
                   ),
+                )
+              else
+                SliverList.separated(
+                  itemCount: feeds.length,
+                  separatorBuilder: (_, __) => Divider(
+                    color: AppColors.greyColorColor79.withValues(alpha: 0.3),
+                    height: 1,
+                  ),
+                  itemBuilder: (context, index) {
+                    return FeedPostWidget(feed: feeds[index]);
+                  },
                 ),
-              )
-            else
-              SliverList.separated(
-                itemCount: feeds.length,
-                separatorBuilder: (_, __) => Divider(
-                  color: AppColors.greyColorColor79.withValues(alpha: 0.3),
-                  height: 1,
-                ),
-                itemBuilder: (context, index) {
-                  return FeedPostWidget(feed: feeds[index]);
-                },
-              ),
-          ],
+            ],
+          ),
         );
       },
     );

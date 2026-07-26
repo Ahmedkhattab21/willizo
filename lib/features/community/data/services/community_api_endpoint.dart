@@ -16,6 +16,9 @@ class CommunityApiEndpoint {
 
   static const String addFriendUrl = '${EndPoints.baseUrl}/friends/add';
 
+  static String followUserUrl(String userId) =>
+      '${EndPoints.baseUrl}/follow/$userId';
+
   static String deleteFriendUrl(String id) =>
       '${EndPoints.baseUrl}/friends/$id';
 

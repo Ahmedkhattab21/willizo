@@ -17,8 +17,6 @@ class FriendsTopFollowersSection extends StatefulWidget {
 
 class _FriendsTopFollowersSectionState
     extends State<FriendsTopFollowersSection> {
- 
-
   static String _formatFollowers(int count) {
     if (count >= 1000) {
       final k = count / 1000;
@@ -110,10 +108,11 @@ class _FriendsTopFollowersSectionState
         ),
       );
     }
-    
+
     final cubit = CommunityCubit.get(context);
-    final hasLoaded = state is TopFollowersLoadedState || cubit.hasFetchedTopFollowers;
-    
+    final hasLoaded =
+        state is TopFollowersLoadedState || cubit.hasFetchedTopFollowers;
+
     if (hasLoaded) {
       final list = cubit.topFollowers;
       if (list.isEmpty) {
@@ -141,12 +140,18 @@ class _FriendsTopFollowersSectionState
               (item) => TopFollowerCardWidget(
                 name: item.fullName,
                 followersCount: _formatFollowers(item.followersCount),
+                isFollowing: item.isFollowing,
+                onFollow: () =>
+                    CommunityCubit.get(context).toggleFollowSuggestedUser(
+                      userId: item.id,
+                      isFollowing: item.isFollowing,
+                    ),
               ),
             )
             .toList(),
       );
     }
-    
+
     if (state is TopFollowersErrorState) {
       return Padding(
         padding: EdgeInsets.symmetric(vertical: 24.h),

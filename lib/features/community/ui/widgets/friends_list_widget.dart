@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/features/community/data/models/friend_model.dart';
 import 'package:willizo/features/community/logic/cubit/community_cubit.dart';
 import 'package:willizo/features/community/ui/widgets/friends_list_shimmer_widget.dart';
@@ -37,8 +38,9 @@ class _FriendsListWidgetState extends State<FriendsListWidget> {
   void _onScroll() {
     final cubit = context.read<CommunityCubit>();
     if (cubit.state is! FriendsLoadedState &&
-        cubit.state is! FriendsLoadingMoreState)
+        cubit.state is! FriendsLoadingMoreState) {
       return;
+    }
     if (!cubit.hasMoreFriends) return;
     final position = _scrollController.position;
     if (position.pixels >= position.maxScrollExtent - 200) {
@@ -102,73 +104,95 @@ class _FriendsListWidgetState extends State<FriendsListWidget> {
             : <FriendListItem>[];
 
         if (friends.isEmpty) {
-          return const Center(child: Text('No friends yet'));
+          return Expanded(
+            child: RefreshIndicator(
+              color: AppColors.primaryColor,
+              backgroundColor: AppColors.greyColor2727,
+              onRefresh: () =>
+                  context.read<CommunityCubit>().getFriends(refresh: true),
+              child: const SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: 280,
+                  child: Center(child: Text('No friends yet')),
+                ),
+              ),
+            ),
+          );
         }
 
         final isLoadingMore = state is FriendsLoadingMoreState;
 
         return Expanded(
-          child: ListView.builder(
-            controller: _scrollController,
-            itemCount: friends.length + (isLoadingMore ? 1 : 0),
-            itemBuilder: (context, index) {
-              if (index >= friends.length) {
-                return const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              }
-              final item = friends[index];
-              final f = item.friend;
-
-              String activeStatus = 'Inactive';
-              bool isOnline = false;
-
-              if (f.lastActiveAt != null && f.lastActiveAt!.isNotEmpty) {
-                try {
-                  String dateString = f.lastActiveAt!;
-                  if (!dateString.contains('Z')) {
-                    dateString = '${dateString.replaceFirst(' ', 'T')}Z';
-                  }
-                  final lastActive = DateTime.tryParse(dateString);
-                  if (lastActive != null) {
-                    final now = DateTime.now().toUtc();
-                    final difference = now.difference(lastActive);
-
-                    if (difference.isNegative || difference.inMinutes < 1) {
-                      activeStatus = 'Active now';
-                      isOnline = true;
-                    } else if (difference.inMinutes < 60) {
-                      activeStatus = 'Active ${difference.inMinutes} min ago';
-                      isOnline = true;
-                    } else if (difference.inHours < 24) {
-                      activeStatus = 'Last workout ${difference.inHours}h ago';
-                      isOnline = false;
-                    } else {
-                      activeStatus = 'Last workout ${difference.inDays}d ago';
-                      isOnline = false;
-                    }
-                  }
-                } catch (e) {
-                  activeStatus = 'Inactive';
-                  isOnline = false;
+          child: RefreshIndicator(
+            color: AppColors.primaryColor,
+            backgroundColor: AppColors.greyColor2727,
+            onRefresh: () =>
+                context.read<CommunityCubit>().getFriends(refresh: true),
+            child: ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              controller: _scrollController,
+              itemCount: friends.length + (isLoadingMore ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index >= friends.length) {
+                  return const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
                 }
-              }
+                final item = friends[index];
+                final f = item.friend;
 
-              return FriendInfoCardWidget(
-                name: f.fullName,
-                activeStatus: activeStatus,
-                isActiveNow: isOnline,
-                currentActivity: f.currentActivity,
-                imageUrl: _placeholderAvatarUrl,
-                onRemoveTap: () => showRemoveFriendDialog(
-                  context: context,
-                  cubit: context.read<CommunityCubit>(),
-                  friendId: item.id,
-                  friendName: f.fullName,
-                ),
-              );
-            },
+                String activeStatus = 'Inactive';
+                bool isOnline = false;
+
+                if (f.lastActiveAt != null && f.lastActiveAt!.isNotEmpty) {
+                  try {
+                    String dateString = f.lastActiveAt!;
+                    if (!dateString.contains('Z')) {
+                      dateString = '${dateString.replaceFirst(' ', 'T')}Z';
+                    }
+                    final lastActive = DateTime.tryParse(dateString);
+                    if (lastActive != null) {
+                      final now = DateTime.now().toUtc();
+                      final difference = now.difference(lastActive);
+
+                      if (difference.isNegative || difference.inMinutes < 1) {
+                        activeStatus = 'Active now';
+                        isOnline = true;
+                      } else if (difference.inMinutes < 60) {
+                        activeStatus = 'Active ${difference.inMinutes} min ago';
+                        isOnline = true;
+                      } else if (difference.inHours < 24) {
+                        activeStatus =
+                            'Last workout ${difference.inHours}h ago';
+                        isOnline = false;
+                      } else {
+                        activeStatus = 'Last workout ${difference.inDays}d ago';
+                        isOnline = false;
+                      }
+                    }
+                  } catch (e) {
+                    activeStatus = 'Inactive';
+                    isOnline = false;
+                  }
+                }
+
+                return FriendInfoCardWidget(
+                  name: f.fullName,
+                  activeStatus: activeStatus,
+                  isActiveNow: isOnline,
+                  currentActivity: f.currentActivity,
+                  imageUrl: _placeholderAvatarUrl,
+                  onRemoveTap: () => showRemoveFriendDialog(
+                    context: context,
+                    cubit: context.read<CommunityCubit>(),
+                    friendId: item.id,
+                    friendName: f.fullName,
+                  ),
+                );
+              },
+            ),
           ),
         );
       },

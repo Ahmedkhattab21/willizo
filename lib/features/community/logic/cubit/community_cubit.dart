@@ -42,8 +42,8 @@ class CommunityCubit extends Cubit<CommunityState> {
   bool hasFetchedNearYouSuggestions = false;
 
   /// Fetches suggestions near you (GET /suggestions/near-you).
-  Future<void> getSuggestionsNearYou() async {
-    if (hasFetchedNearYouSuggestions) {
+  Future<void> getSuggestionsNearYou({bool refresh = false}) async {
+    if (hasFetchedNearYouSuggestions && !refresh) {
       emit(NearYouSuggestionsLoadedState());
       return;
     }
@@ -248,8 +248,8 @@ class CommunityCubit extends Cubit<CommunityState> {
 
   /// Fetches top followers suggestions for Suggested tab.
   /// If already cached, re-emits [TopFollowersLoadedState] without calling API.
-  Future<void> getTopFollowers() async {
-    if (hasFetchedTopFollowers) {
+  Future<void> getTopFollowers({bool refresh = false}) async {
+    if (hasFetchedTopFollowers && !refresh) {
       emit(TopFollowersLoadedState());
       return;
     }
@@ -260,6 +260,41 @@ class CommunityCubit extends Cubit<CommunityState> {
       hasFetchedTopFollowers = true;
       emit(TopFollowersLoadedState());
     });
+  }
+
+  Future<bool> toggleFollowSuggestedUser({
+    required String userId,
+    required bool isFollowing,
+  }) async {
+    final result = isFollowing
+        ? await _communityRepo.unfollowUser(userId)
+        : await _communityRepo.followUser(userId);
+    return result.fold((_) => false, (_) {
+      _setFollowing(userId, !isFollowing);
+      emit(TopFollowersLoadedState());
+      return true;
+    });
+  }
+
+  void _setFollowing(String userId, bool value) {
+    topFollowers = topFollowers
+        .map(
+          (item) =>
+              item.id == userId ? item.copyWith(isFollowing: value) : item,
+        )
+        .toList();
+    nearYouSuggestions = nearYouSuggestions
+        .map(
+          (item) =>
+              item.id == userId ? item.copyWith(isFollowing: value) : item,
+        )
+        .toList();
+    suggestionsFromContacts = suggestionsFromContacts
+        .map(
+          (item) =>
+              item.id == userId ? item.copyWith(isFollowing: value) : item,
+        )
+        .toList();
   }
 
   /// Fetches suggestions from contacts (GET /suggestions/from-contacts).
@@ -318,8 +353,9 @@ class CommunityCubit extends Cubit<CommunityState> {
     });
   }
 
-  Future<void> getLeagues() async {
-    if (generalLeagues.isNotEmpty || invitationalLeagues.isNotEmpty) {
+  Future<void> getLeagues({bool refresh = false}) async {
+    if (!refresh &&
+        (generalLeagues.isNotEmpty || invitationalLeagues.isNotEmpty)) {
       emit(LeaguesLoadedState());
       return;
     }
@@ -334,8 +370,8 @@ class CommunityCubit extends Cubit<CommunityState> {
     });
   }
 
-  Future<void> getAvailableLeagues() async {
-    if (availableLeagues.isNotEmpty) {
+  Future<void> getAvailableLeagues({bool refresh = false}) async {
+    if (availableLeagues.isNotEmpty && !refresh) {
       emit(AvailableLeaguesLoadedState());
       return;
     }
@@ -518,12 +554,14 @@ class CommunityCubit extends Cubit<CommunityState> {
     });
   }
 
-  Future<void> getFeeds() async {
-    if (feeds.isNotEmpty) {
+  Future<void> getFeeds({bool refresh = false}) async {
+    if (feeds.isNotEmpty && !refresh) {
       emit(FeedsLoadedState());
       return;
     }
-    emit(FeedsLoadingState());
+    if (feeds.isEmpty) {
+      emit(FeedsLoadingState());
+    }
     final result = await _communityRepo.getFeeds();
     result.fold((failure) => emit(FeedsErrorState(failure)), (list) {
       feeds = list;

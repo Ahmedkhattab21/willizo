@@ -74,7 +74,8 @@ class CommunityRepo {
     }
   }
 
-  Future<Either<Failure, List<LeaderboardEntry>>> getLeaderboardFriends() async {
+  Future<Either<Failure, List<LeaderboardEntry>>>
+  getLeaderboardFriends() async {
     try {
       final response = await communityServices.getLeaderboardFriends();
       return Right(response);
@@ -84,7 +85,8 @@ class CommunityRepo {
   }
 
   Future<Either<Failure, LeaderboardExerciseResponse>> getLeaderboardExercise(
-      String slug) async {
+    String slug,
+  ) async {
     try {
       final response = await communityServices.getLeaderboardExercise(slug);
       return Right(response);
@@ -103,7 +105,8 @@ class CommunityRepo {
   }
 
   Future<Either<Failure, SyncContactsResponse>> syncContacts(
-      SyncContactsRequest request) async {
+    SyncContactsRequest request,
+  ) async {
     try {
       final response = await communityServices.syncContacts(request);
       return Right(response);
@@ -113,7 +116,7 @@ class CommunityRepo {
   }
 
   Future<Either<Failure, List<ContactSuggestionItem>>>
-      getSuggestionsFromContacts() async {
+  getSuggestionsFromContacts() async {
     try {
       final response = await communityServices.getSuggestionsFromContacts();
       return Right(response);
@@ -123,7 +126,7 @@ class CommunityRepo {
   }
 
   Future<Either<Failure, List<TopFollowerSuggestionItem>>>
-      getTopFollowers() async {
+  getTopFollowers() async {
     try {
       final response = await communityServices.getTopFollowers();
       return Right(response);
@@ -133,7 +136,7 @@ class CommunityRepo {
   }
 
   Future<Either<Failure, List<NearYouSuggestionItem>>>
-      getSuggestionsNearYou() async {
+  getSuggestionsNearYou() async {
     try {
       final response = await communityServices.getSuggestionsNearYou();
       return Right(response);
@@ -142,7 +145,9 @@ class CommunityRepo {
     }
   }
 
-  Future<Either<Failure, FriendsListResponse>> getFriends({int page = 1}) async {
+  Future<Either<Failure, FriendsListResponse>> getFriends({
+    int page = 1,
+  }) async {
     try {
       final response = await communityServices.getFriends(page: page);
       return Right(response);
@@ -155,6 +160,24 @@ class CommunityRepo {
     try {
       final response = await communityServices.addFriend(friendId);
       return Right(response);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, void>> followUser(String userId) async {
+    try {
+      await communityServices.followUser(userId);
+      return const Right(null);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, void>> unfollowUser(String userId) async {
+    try {
+      await communityServices.unfollowUser(userId);
+      return const Right(null);
     } on ServerException catch (failure) {
       return Left(failure.serverFailure);
     }
@@ -179,7 +202,8 @@ class CommunityRepo {
   }
 
   Future<Either<Failure, CreateLeagueResponseModel>> createLeague(
-      CreateLeagueRequestModel request) async {
+    CreateLeagueRequestModel request,
+  ) async {
     try {
       final response = await communityServices.createLeague(request);
       return Right(response);

@@ -159,6 +159,48 @@ class CommunityServices {
     }
   }
 
+  Future<void> followUser(String userId) async {
+    final response = await apiConsumer.post(
+      CommunityApiEndpoint.followUserUrl(userId),
+      {},
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created ||
+        response.statusCode == StatusCode.noContent) {
+      return;
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  Future<void> unfollowUser(String userId) async {
+    final response = await apiConsumer.delete(
+      CommunityApiEndpoint.followUserUrl(userId),
+      null,
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created ||
+        response.statusCode == StatusCode.noContent) {
+      return;
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
   /// Removes a friend (DELETE /friends/:id). [id] is the friendship record id.
   Future<void> deleteFriend(String id) async {
     final response = await apiConsumer.delete(
@@ -435,13 +477,10 @@ class CommunityServices {
 
   /// Fetches feeds. GET /feeds.
   Future<List<FeedModel>> getFeeds() async {
-    final response = await apiConsumer.get(
-      CommunityApiEndpoint.feedsUrl,
-      {
-        ConstantKeys.appAuthorization:
-            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
-      },
-    );
+    final response = await apiConsumer.get(CommunityApiEndpoint.feedsUrl, {
+      ConstantKeys.appAuthorization:
+          "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+    });
 
     if (response.statusCode == StatusCode.ok ||
         response.statusCode == StatusCode.created) {
@@ -551,10 +590,7 @@ class CommunityServices {
   }) async {
     final response = await apiConsumer.multiPost(
       CommunityApiEndpoint.createFeedUrl,
-      {
-        'media': mediaPath,
-        'visibility': visibility,
-      },
+      {'media': mediaPath, 'visibility': visibility},
       {
         ConstantKeys.appAuthorization:
             "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
