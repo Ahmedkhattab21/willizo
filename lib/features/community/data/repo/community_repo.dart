@@ -148,11 +148,13 @@ class CommunityRepo {
   Future<Either<Failure, FriendsListResponse>> getFriends({
     int page = 1,
     String? search,
+    String? status,
   }) async {
     try {
       final response = await communityServices.getFriends(
         page: page,
         search: search,
+        status: status,
       );
       return Right(response);
     } on ServerException catch (failure) {
@@ -163,6 +165,15 @@ class CommunityRepo {
   Future<Either<Failure, FriendsStats>> getFriendsStats() async {
     try {
       final response = await communityServices.getFriendsStats();
+      return Right(response);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, List<FriendListItem>>> getFriendRequests() async {
+    try {
+      final response = await communityServices.getFriendRequests();
       return Right(response);
     } on ServerException catch (failure) {
       return Left(failure.serverFailure);
@@ -190,6 +201,24 @@ class CommunityRepo {
   Future<Either<Failure, void>> unfollowUser(String userId) async {
     try {
       await communityServices.unfollowUser(userId);
+      return const Right(null);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, void>> acceptFriendRequest(String id) async {
+    try {
+      await communityServices.acceptFriendRequest(id);
+      return const Right(null);
+    } on ServerException catch (failure) {
+      return Left(failure.serverFailure);
+    }
+  }
+
+  Future<Either<Failure, void>> rejectFriendRequest(String id) async {
+    try {
+      await communityServices.rejectFriendRequest(id);
       return const Right(null);
     } on ServerException catch (failure) {
       return Left(failure.serverFailure);

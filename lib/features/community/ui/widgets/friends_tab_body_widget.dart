@@ -10,6 +10,7 @@ import 'package:willizo/features/community/ui/widgets/all_friends_tab_body_widge
 import 'package:willizo/features/community/ui/widgets/custom_search_bar_widget.dart';
 import 'package:willizo/features/community/ui/widgets/friends_tab_bar_widget.dart';
 import 'package:willizo/features/community/ui/widgets/profile_state_item_widget.dart';
+import 'package:willizo/features/community/ui/widgets/friend_requests_tab_body_widget.dart';
 import 'package:willizo/features/community/ui/widgets/suggested_friends_tab_body_widget.dart';
 import 'package:willizo/features/community/logic/cubit/community_cubit.dart';
 
@@ -55,7 +56,7 @@ class _FriendsTabBodyWidgetState extends State<FriendsTabBodyWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: _currentTabIndex == 0
+      floatingActionButton: _currentTabIndex == 0 || _currentTabIndex == 2
           ? FloatingActionButton(
               shape: CircleBorder(),
               onPressed: () => showAddFriendDialog(context),
@@ -115,7 +116,9 @@ class _FriendsTabBodyWidgetState extends State<FriendsTabBodyWidget> {
             verticalSpace(24),
             _currentTabIndex == 0
                 ? const AllFriendsTabBodyWidget()
-                : const SuggestedFriendsTabBodyWidget(),
+                : _currentTabIndex == 1
+                ? const SuggestedFriendsTabBodyWidget()
+                : const FriendRequestsTabBodyWidget(),
           ],
         ),
       ),

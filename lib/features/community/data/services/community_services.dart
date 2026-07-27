@@ -119,9 +119,17 @@ class CommunityServices {
   }
 
   /// Fetches friends list (All Friends tab) with pagination.
-  Future<FriendsListResponse> getFriends({int page = 1, String? search}) async {
+  Future<FriendsListResponse> getFriends({
+    int page = 1,
+    String? search,
+    String? status,
+  }) async {
     final response = await apiConsumer.get(
-      CommunityApiEndpoint.friendsUrlWithPage(page, search: search),
+      CommunityApiEndpoint.friendsUrlWithPage(
+        page,
+        search: search,
+        status: status,
+      ),
       {
         ConstantKeys.appAuthorization:
             "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
@@ -136,6 +144,44 @@ class CommunityServices {
         serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
       );
     }
+  }
+
+  Future<List<FriendListItem>> getFriendRequests() async {
+    final response = await apiConsumer.get(
+      CommunityApiEndpoint.friendRequestsUrl,
+      {
+        ConstantKeys.appAuthorization:
+            "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+      },
+    );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created) {
+      final decodedBody = jsonDecode(response.body);
+      final requestsJson = _extractListFromResponse(decodedBody);
+      return requestsJson
+          .whereType<Map<String, dynamic>>()
+          .map(FriendListItem.fromJson)
+          .toList();
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  List<dynamic> _extractListFromResponse(dynamic decodedBody) {
+    if (decodedBody is List) return decodedBody;
+    if (decodedBody is! Map<String, dynamic>) return const [];
+
+    final data = decodedBody['data'];
+    if (data is List) return data;
+    if (data is Map<String, dynamic> && data['data'] is List) {
+      return data['data'] as List;
+    }
+    if (decodedBody['requests'] is List) return decodedBody['requests'] as List;
+
+    return const [];
   }
 
   Future<FriendsStats> getFriendsStats() async {
@@ -205,6 +251,35 @@ class CommunityServices {
             "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
       },
     );
+
+    if (response.statusCode == StatusCode.ok ||
+        response.statusCode == StatusCode.created ||
+        response.statusCode == StatusCode.noContent) {
+      return;
+    } else {
+      throw ServerException(
+        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
+      );
+    }
+  }
+
+  Future<void> acceptFriendRequest(String id) async {
+    await _postFriendRequestAction(
+      CommunityApiEndpoint.acceptFriendRequestUrl(id),
+    );
+  }
+
+  Future<void> rejectFriendRequest(String id) async {
+    await _postFriendRequestAction(
+      CommunityApiEndpoint.rejectFriendRequestUrl(id),
+    );
+  }
+
+  Future<void> _postFriendRequestAction(String url) async {
+    final response = await apiConsumer.post(url, {}, {
+      ConstantKeys.appAuthorization:
+          "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
+    });
 
     if (response.statusCode == StatusCode.ok ||
         response.statusCode == StatusCode.created ||

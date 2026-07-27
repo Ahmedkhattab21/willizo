@@ -32,6 +32,7 @@ class CommunityCubit extends Cubit<CommunityState> {
   int _friendsLastPage = 1;
   String _friendsSearch = '';
   FriendsStats? friendsStats;
+  List<FriendListItem> friendRequests = [];
   List<FriendListItem> get friends => List.unmodifiable(_friends);
   bool get hasMoreFriends => _friendsCurrentPage < _friendsLastPage;
 
@@ -216,6 +217,55 @@ class CommunityCubit extends Cubit<CommunityState> {
       friendsStats = stats;
       emit(FriendsStatsLoadedState());
     });
+  }
+
+  Future<void> getFriendRequests({bool refresh = false}) async {
+    if (friendRequests.isNotEmpty && !refresh) {
+      emit(FriendRequestsLoadedState(friendRequests));
+      return;
+    }
+    emit(FriendRequestsLoadingState());
+    final result = await _communityRepo.getFriendRequests();
+    result.fold((failure) => emit(FriendRequestsErrorState(failure)), (
+      requests,
+    ) {
+      friendRequests = requests;
+      emit(FriendRequestsLoadedState(friendRequests));
+    });
+  }
+
+  Future<bool> acceptFriendRequest(String id) async {
+    emit(FriendRequestActionLoadingState(id));
+    final result = await _communityRepo.acceptFriendRequest(id);
+    return result.fold(
+      (failure) {
+        emit(FriendRequestActionErrorState(requestId: id, failure: failure));
+        return false;
+      },
+      (_) {
+        friendRequests.removeWhere((item) => item.id == id);
+        emit(FriendRequestsLoadedState(friendRequests));
+        getFriendsStats();
+        return true;
+      },
+    );
+  }
+
+  Future<bool> rejectFriendRequest(String id) async {
+    emit(FriendRequestActionLoadingState(id));
+    final result = await _communityRepo.rejectFriendRequest(id);
+    return result.fold(
+      (failure) {
+        emit(FriendRequestActionErrorState(requestId: id, failure: failure));
+        return false;
+      },
+      (_) {
+        friendRequests.removeWhere((item) => item.id == id);
+        emit(FriendRequestsLoadedState(friendRequests));
+        getFriendsStats();
+        return true;
+      },
+    );
   }
 
   Future<bool> removeFriend(String id) async {

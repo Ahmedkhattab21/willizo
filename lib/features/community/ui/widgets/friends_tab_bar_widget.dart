@@ -84,6 +84,35 @@ class _FriendsTabBarWidgetState extends State<FriendsTabBarWidget> {
               ),
             ),
           ),
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _selectedIndex = 2;
+                });
+                widget.onTabChanged(2);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: _selectedIndex == 2
+                      ? AppColors.primaryColor
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+                child: Center(
+                  child: Text(
+                    "Requests",
+                    style: TextStyles.font16WhiteColorW500.copyWith(
+                      color: _selectedIndex == 2
+                          ? AppColors.blackColor
+                          : AppColors.greyColor62,
+                      fontSize: 15.sp,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

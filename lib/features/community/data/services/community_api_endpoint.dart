@@ -11,11 +11,16 @@ class CommunityApiEndpoint {
       '${EndPoints.baseUrl}/leaderboards/friends?period=monthly';
 
   static const String friendsUrl = '${EndPoints.baseUrl}/friends';
+  static const String friendRequestsUrl =
+      '${EndPoints.baseUrl}/friends/requests';
   static const String friendsStatsUrl = '${EndPoints.baseUrl}/friends/stats';
-  static String friendsUrlWithPage(int page, {String? search}) {
+  static String friendsUrlWithPage(int page, {String? search, String? status}) {
     final params = <String, String>{'page': page.toString()};
     if (search != null && search.trim().isNotEmpty) {
       params['search'] = search.trim();
+    }
+    if (status != null && status.trim().isNotEmpty) {
+      params['status'] = status.trim();
     }
     return Uri.parse(friendsUrl).replace(queryParameters: params).toString();
   }
@@ -27,6 +32,12 @@ class CommunityApiEndpoint {
 
   static String deleteFriendUrl(String id) =>
       '${EndPoints.baseUrl}/friends/$id';
+
+  static String acceptFriendRequestUrl(String id) =>
+      '${EndPoints.baseUrl}/friends/accept/$id';
+
+  static String rejectFriendRequestUrl(String id) =>
+      '${EndPoints.baseUrl}/friends/reject/$id';
 
   static const String generateInviteLinkUrl =
       '${EndPoints.baseUrl}/friends/invite';

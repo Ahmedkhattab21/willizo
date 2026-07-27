@@ -1,34 +1,53 @@
+import 'package:willizo/core/api/end_points.dart';
+
 /// Nested friend user data from API (inside each list item).
 class Friend {
   final String id;
   final String fullName;
   final String email;
   final String? friendId;
+  final String? profilePhoto;
   final String? lastActiveAt;
   final String? currentActivity;
+  final bool isOnline;
 
   Friend({
     required this.id,
     required this.fullName,
     required this.email,
     this.friendId,
+    this.profilePhoto,
     this.lastActiveAt,
     this.currentActivity,
+    this.isOnline = false,
   });
 
   factory Friend.fromJson(Map<String, dynamic> json) {
+    final rawPhoto = json['profile_photo']?.toString();
     return Friend(
       id: json['id']?.toString() ?? '',
       fullName: json['full_name'] ?? '',
       email: json['email'] ?? '',
       friendId: json['friend_id']?.toString(),
+      profilePhoto: _imageUrl(rawPhoto),
       lastActiveAt: json['last_active_at']?.toString(),
       currentActivity: json['current_activity']?.toString(),
+      isOnline: json['is_online'] == true,
     );
   }
 
   bool get isActiveNow =>
       currentActivity != null && currentActivity!.isNotEmpty;
+
+  static String? _imageUrl(String? value) {
+    final rawValue = value?.trim() ?? '';
+    if (rawValue.isEmpty || rawValue == '/storage/') return null;
+    if (rawValue.startsWith('http')) return rawValue;
+    if (rawValue.startsWith('/storage/')) {
+      return '${Uri.parse(EndPoints.baseUrl).origin}$rawValue';
+    }
+    return EndPoints.getImageFromApi(rawValue);
+  }
 }
 
 /// Single item in the friends list (relationship + nested friend).
@@ -52,6 +71,10 @@ class FriendListItem {
   });
 
   factory FriendListItem.fromJson(Map<String, dynamic> json) {
+    final friendJson =
+        json['friend'] as Map<String, dynamic>? ??
+        json['user'] as Map<String, dynamic>? ??
+        {};
     return FriendListItem(
       id: json['id']?.toString() ?? '',
       userId: json['user_id']?.toString() ?? '',
@@ -59,7 +82,7 @@ class FriendListItem {
       status: json['status'] ?? '',
       createdAt: json['created_at']?.toString() ?? '',
       updatedAt: json['updated_at']?.toString() ?? '',
-      friend: Friend.fromJson(json['friend'] as Map<String, dynamic>? ?? {}),
+      friend: Friend.fromJson(friendJson),
     );
   }
 }

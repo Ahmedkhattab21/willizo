@@ -28,8 +28,7 @@ class MealCard extends StatelessWidget {
         ? typeRaw.replaceAll('_', ' ').toUpperCase()
         : 'MEAL';
     final tt = recipe.totalTime;
-    final totalTimeLabel =
-        tt != null && tt > 0 ? '$tt Min' : null;
+    final totalTimeLabel = tt != null && tt > 0 ? '$tt Min' : null;
     return MealCard._(
       mealTypeLabel: mealTypeLabel,
       recipeName: recipe.name.isNotEmpty ? recipe.name : 'Meal',
@@ -97,18 +96,15 @@ class MealCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Column(
-                children: [
-                  Icon(Icons.more_vert, color: Colors.white54),
-                ],
+              _CardMenuButton(
+                iconColor: Colors.white54,
+                items: const ['Quick Look', 'Mark As Complete', 'Change Meal'],
               ),
             ],
           ),
           verticalSpace(14),
           Text(
-            description.isNotEmpty
-                ? description
-                : 'No description',
+            description.isNotEmpty ? description : 'No description',
             style: TextStyles.font12whiteColorColorW400.copyWith(
               fontWeight: FontWeight.w500,
             ),
@@ -150,11 +146,7 @@ class MealCard extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        Icons.access_time,
-                        size: 18.r,
-                        color: Colors.white,
-                      ),
+                      Icon(Icons.access_time, size: 18.r, color: Colors.white),
                       const SizedBox(width: 8),
                       Text(
                         totalTimeLabel!,
@@ -191,6 +183,44 @@ class MealCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _CardMenuButton extends StatelessWidget {
+  final Color iconColor;
+  final List<String> items;
+
+  const _CardMenuButton({required this.iconColor, required this.items});
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<String>(
+      padding: EdgeInsets.zero,
+      icon: Icon(Icons.more_vert, color: iconColor),
+      color: Colors.black,
+      elevation: 0,
+      offset: Offset(-6.w, 26.h),
+      constraints: BoxConstraints(minWidth: 150.w),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+      onSelected: (_) {},
+      itemBuilder: (context) => items
+          .map(
+            (item) => PopupMenuItem<String>(
+              value: item,
+              height: 36.h,
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Text(
+                item,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          )
+          .toList(),
     );
   }
 }

@@ -29,8 +29,7 @@ class ExerciseCard extends StatelessWidget {
         ? plan.category.replaceAll('_', ' ').toUpperCase()
         : 'EXERCISES';
     final du = plan.durationMinutes;
-    final durationLabel =
-        du != null && du > 0 ? '$du Min' : '--';
+    final durationLabel = du != null && du > 0 ? '$du Min' : '--';
     final sched = _formatScheduledTime(workout.scheduledTime);
     return ExerciseCard._(
       topCategoryLabel: top,
@@ -127,17 +126,18 @@ class ExerciseCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                const Column(
-                  children: [
-                    Icon(Icons.more_vert, color: Colors.black54),
+                _CardMenuButton(
+                  iconColor: Colors.black54,
+                  items: const [
+                    'View Details',
+                    'Mark As Complete',
+                    'Skip For Today',
                   ],
                 ),
               ],
             ),
             Text(
-              description.isNotEmpty
-                  ? description
-                  : 'No description',
+              description.isNotEmpty ? description : 'No description',
               style: TextStyles.font12W700.copyWith(
                 fontWeight: FontWeight.w500,
                 height: 1.7,
@@ -173,11 +173,7 @@ class ExerciseCard extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Icon(
-                        Icons.access_time,
-                        size: 18.r,
-                        color: Colors.black,
-                      ),
+                      Icon(Icons.access_time, size: 18.r, color: Colors.black),
                       const SizedBox(width: 8),
                       Text(
                         durationLabel,
@@ -193,6 +189,44 @@ class ExerciseCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _CardMenuButton extends StatelessWidget {
+  final Color iconColor;
+  final List<String> items;
+
+  const _CardMenuButton({required this.iconColor, required this.items});
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<String>(
+      padding: EdgeInsets.zero,
+      icon: Icon(Icons.more_vert, color: iconColor),
+      color: Colors.black,
+      elevation: 0,
+      offset: Offset(-6.w, 26.h),
+      constraints: BoxConstraints(minWidth: 150.w),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+      onSelected: (_) {},
+      itemBuilder: (context) => items
+          .map(
+            (item) => PopupMenuItem<String>(
+              value: item,
+              height: 36.h,
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Text(
+                item,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          )
+          .toList(),
     );
   }
 }

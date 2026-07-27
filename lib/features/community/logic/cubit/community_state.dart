@@ -86,6 +86,35 @@ final class FriendsStatsErrorState extends CommunityState {
   FriendsStatsErrorState(this.failure);
 }
 
+final class FriendRequestsLoadingState extends CommunityState {}
+
+final class FriendRequestsLoadedState extends CommunityState {
+  final List<FriendListItem> requests;
+
+  FriendRequestsLoadedState(this.requests);
+}
+
+final class FriendRequestsErrorState extends CommunityState {
+  final Failure failure;
+  FriendRequestsErrorState(this.failure);
+}
+
+final class FriendRequestActionLoadingState extends CommunityState {
+  final String requestId;
+
+  FriendRequestActionLoadingState(this.requestId);
+}
+
+final class FriendRequestActionErrorState extends CommunityState {
+  final String requestId;
+  final Failure failure;
+
+  FriendRequestActionErrorState({
+    required this.requestId,
+    required this.failure,
+  });
+}
+
 // Top followers suggestions (Suggested tab)
 final class TopFollowersLoadingState extends CommunityState {}
 
