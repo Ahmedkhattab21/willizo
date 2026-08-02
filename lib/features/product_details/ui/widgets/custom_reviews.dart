@@ -13,16 +13,19 @@ class CustomReviews extends StatelessWidget {
   final String productId;
   final double rating;
   final int reviewCount;
+  final Map<int, int> ratingDistribution;
 
   const CustomReviews({
     super.key,
     required this.productId,
     required this.rating,
     required this.reviewCount,
+    this.ratingDistribution = const {},
   });
 
   @override
   Widget build(BuildContext context) {
+    final safeReviewCount = reviewCount <= 0 ? 0 : reviewCount;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.r)),
@@ -47,9 +50,14 @@ class CustomReviews extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(5, (index) {
+              final starValue = index + 1;
               return Icon(
-                Icons.star,
-                color: index < rating.floor()
+                rating >= starValue
+                    ? Icons.star
+                    : rating >= starValue - 0.5
+                    ? Icons.star_half
+                    : Icons.star,
+                color: rating >= starValue - 0.5
                     ? const Color(0xFFFFD700)
                     : Colors.grey,
                 size: 28.sp,
@@ -64,35 +72,22 @@ class CustomReviews extends StatelessWidget {
             ),
           ),
           verticalSpace(24),
-          const ReviewBar(
-            label: "5 stars",
-            percentage: 0.75,
-            percentText: "75%",
-          ),
-          SizedBox(height: 12.h),
-          const ReviewBar(
-            label: "4 stars",
-            percentage: 0.18,
-            percentText: "18%",
-          ),
-          SizedBox(height: 12.h),
-          const ReviewBar(
-            label: "3 stars",
-            percentage: 0.05,
-            percentText: "5%",
-          ),
-          SizedBox(height: 12.h),
-          const ReviewBar(
-            label: "2 stars",
-            percentage: 0.01,
-            percentText: "1%",
-          ),
-          SizedBox(height: 12.h),
-          const ReviewBar(
-            label: "1 stars",
-            percentage: 0.01,
-            percentText: "1%",
-          ),
+          ...List.generate(5, (index) {
+            final star = 5 - index;
+            final count = ratingDistribution[star] ?? 0;
+            final percentage = safeReviewCount == 0
+                ? 0.0
+                : count / safeReviewCount;
+            final percentText = '${(percentage * 100).round()}%';
+            return Padding(
+              padding: EdgeInsets.only(bottom: index == 4 ? 0 : 12.h),
+              child: ReviewBar(
+                label: "$star stars",
+                percentage: percentage,
+                percentText: percentText,
+              ),
+            );
+          }),
           SizedBox(height: 24.h),
           ButtonWidget(
             backGroundColor: AppColors.primaryColor,

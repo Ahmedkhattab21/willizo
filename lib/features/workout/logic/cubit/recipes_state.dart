@@ -25,7 +25,7 @@ final class RecipesState {
       recipes: [],
       tabs: ['All'],
       selectedTabIndex: 0,
-      isPopularGridView: false,
+      isPopularGridView: true,
     );
   }
 
@@ -35,11 +35,15 @@ final class RecipesState {
   }
 
   List<RecipeModel> get featuredRecipes {
-    return _recipesForSelectedCategory.where((recipe) => recipe.isFeatured).toList();
+    return _recipesForSelectedCategory
+        .where((recipe) => recipe.isFeatured)
+        .toList();
   }
 
   List<RecipeModel> get popularRecipes {
-    return _recipesForSelectedCategory.where((recipe) => recipe.isPopular).toList();
+    return _recipesForSelectedCategory
+        .where((recipe) => recipe.isPopular)
+        .toList();
   }
 
   List<RecipeModel> get _recipesForSelectedCategory {
@@ -72,7 +76,9 @@ final class RecipesState {
       tabs: tabs ?? this.tabs,
       selectedTabIndex: selectedTabIndex ?? this.selectedTabIndex,
       isPopularGridView: isPopularGridView ?? this.isPopularGridView,
-      errorMessage: clearErrorMessage ? null : errorMessage ?? this.errorMessage,
+      errorMessage: clearErrorMessage
+          ? null
+          : errorMessage ?? this.errorMessage,
     );
   }
 }

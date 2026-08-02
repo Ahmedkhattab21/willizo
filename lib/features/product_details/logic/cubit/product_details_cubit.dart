@@ -16,6 +16,7 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
   final ProductDetailsRepo _productDetailsRepo;
 
   List<ReviewData> reviewsList = [];
+  RatingSummary? ratingSummary;
 
   Future<void> addProductToWishlist(String productId) async {
     emit(AddProductToWishlistLoadingState());
@@ -74,6 +75,7 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
       (failure) => null, // Handle error if necessary
       (reviewsData) {
         reviewsList = reviewsData.data;
+        ratingSummary = reviewsData.ratingSummary;
         // Emit the same state to trigger UI update with the new list in cubit
         if (state is ProductDetailsLoadedState) {
           emit(

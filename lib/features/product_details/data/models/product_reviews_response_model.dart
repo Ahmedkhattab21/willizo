@@ -1,12 +1,19 @@
 class ProductReviewsResponseModel {
+  final RatingSummary ratingSummary;
   final List<ReviewData> data;
   final Links? links;
   final Meta? meta;
 
-  ProductReviewsResponseModel({required this.data, this.links, this.meta});
+  ProductReviewsResponseModel({
+    required this.ratingSummary,
+    required this.data,
+    this.links,
+    this.meta,
+  });
 
   factory ProductReviewsResponseModel.fromJson(Map<String, dynamic> json) {
     return ProductReviewsResponseModel(
+      ratingSummary: RatingSummary.fromJson(json['rating_summary'] ?? {}),
       data:
           (json['data'] as List?)
               ?.map((e) => ReviewData.fromJson(e))
@@ -15,6 +22,47 @@ class ProductReviewsResponseModel {
       links: json['links'] != null ? Links.fromJson(json['links']) : null,
       meta: json['meta'] != null ? Meta.fromJson(json['meta']) : null,
     );
+  }
+}
+
+class RatingSummary {
+  final double averageRating;
+  final double averageStars;
+  final int totalReviews;
+  final Map<int, int> ratingDistribution;
+
+  RatingSummary({
+    required this.averageRating,
+    required this.averageStars,
+    required this.totalReviews,
+    required this.ratingDistribution,
+  });
+
+  factory RatingSummary.fromJson(Map<String, dynamic> json) {
+    final distribution = json['rating_distribution'];
+    return RatingSummary(
+      averageRating: _toDouble(json['average_rating']),
+      averageStars: _toDouble(json['average_stars']),
+      totalReviews: _toInt(json['total_reviews']),
+      ratingDistribution: {
+        for (var star = 1; star <= 5; star++)
+          star: distribution is Map<String, dynamic>
+              ? _toInt(distribution[star.toString()])
+              : 0,
+      },
+    );
+  }
+
+  static double _toDouble(dynamic value) {
+    if (value is double) return value;
+    if (value is num) return value.toDouble();
+    return double.tryParse(value?.toString() ?? '') ?? 0;
+  }
+
+  static int _toInt(dynamic value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    return int.tryParse(value?.toString() ?? '') ?? 0;
   }
 }
 
@@ -41,14 +89,14 @@ class ReviewData {
 
   factory ReviewData.fromJson(Map<String, dynamic> json) {
     return ReviewData(
-      id: json['id'] ?? '',
-      productId: json['product_id'] ?? '',
-      rating: json['rating'] ?? 0,
-      title: json['title'] ?? '',
-      comment: json['comment'] ?? '',
+      id: json['id']?.toString() ?? '',
+      productId: json['product_id']?.toString() ?? '',
+      rating: RatingSummary._toInt(json['rating']),
+      title: json['title']?.toString() ?? '',
+      comment: json['comment']?.toString() ?? '',
       user: UserReviewData.fromJson(json['user'] ?? {}),
-      createdAt: json['created_at'] ?? '',
-      updatedAt: json['updated_at'] ?? '',
+      createdAt: json['created_at']?.toString() ?? '',
+      updatedAt: json['updated_at']?.toString() ?? '',
     );
   }
 }
@@ -60,7 +108,14 @@ class UserReviewData {
   UserReviewData({required this.id, required this.name});
 
   factory UserReviewData.fromJson(Map<String, dynamic> json) {
-    return UserReviewData(id: json['id'] ?? '', name: json['name'] ?? '');
+    return UserReviewData(
+      id: json['id']?.toString() ?? '',
+      name:
+          json['name']?.toString() ??
+          json['full_name']?.toString() ??
+          json['email']?.toString() ??
+          '',
+    );
   }
 }
 

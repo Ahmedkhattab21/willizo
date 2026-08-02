@@ -486,10 +486,23 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               ),
                             ),
                             verticalSpace(50),
-                            CustomReviews(
-                              productId: product.id,
-                              rating: product.averageRating.toDouble(),
-                              reviewCount: product.reviewCount,
+                            Builder(
+                              builder: (context) {
+                                final cubit = context
+                                    .read<ProductDetailsCubit>();
+                                final summary = cubit.ratingSummary;
+                                return CustomReviews(
+                                  productId: product.id,
+                                  rating:
+                                      summary?.averageStars ??
+                                      product.averageRating.toDouble(),
+                                  reviewCount:
+                                      summary?.totalReviews ??
+                                      product.reviewCount,
+                                  ratingDistribution:
+                                      summary?.ratingDistribution ?? const {},
+                                );
+                              },
                             ),
                             Column(
                               children: context

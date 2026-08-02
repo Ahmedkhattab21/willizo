@@ -44,12 +44,7 @@ class RecipesCubit extends Cubit<RecipesState> {
 
   void selectTab(int index) {
     if (index < 0 || index >= state.tabs.length) return;
-    emit(
-      state.copyWith(
-        selectedTabIndex: index,
-        isPopularGridView: false,
-      ),
-    );
+    emit(state.copyWith(selectedTabIndex: index));
   }
 
   Future<void> retry() async {
@@ -57,11 +52,7 @@ class RecipesCubit extends Cubit<RecipesState> {
   }
 
   void togglePopularLayout() {
-    emit(
-      state.copyWith(
-        isPopularGridView: !state.isPopularGridView,
-      ),
-    );
+    emit(state.copyWith(isPopularGridView: !state.isPopularGridView));
   }
 
   List<String> _buildTabsFromRecipes(List<RecipeModel> recipes) {

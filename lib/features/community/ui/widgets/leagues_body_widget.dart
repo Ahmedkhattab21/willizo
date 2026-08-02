@@ -28,12 +28,30 @@ class _LeaguesBodyState extends State<LeaguesBody> {
 
   @override
   Widget build(BuildContext context) {
+    return PopScope(
+      canPop: !_showJoinLeague && !_showCreateLeague,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        setState(() {
+          _showJoinLeague = false;
+          _showCreateLeague = false;
+        });
+      },
+      child: _buildContent(context),
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
     if (_showJoinLeague) {
       return SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [const JoinLeagueWidget()],
+          children: [
+            _BackButton(onTap: () => setState(() => _showJoinLeague = false)),
+            verticalSpace(18),
+            const JoinLeagueWidget(),
+          ],
         ),
       );
     }
@@ -44,6 +62,8 @@ class _LeaguesBodyState extends State<LeaguesBody> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            _BackButton(onTap: () => setState(() => _showCreateLeague = false)),
+            verticalSpace(18),
             CreateLeagueWidget(
               onCreateLeague: widget.onCreateLeague,
               onSuccess: () => setState(() => _showCreateLeague = false),
@@ -160,6 +180,33 @@ class _LeaguesBodyState extends State<LeaguesBody> {
             verticalSpace(24),
             const InvitationalLeaguesSectionWidget(),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BackButton extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const _BackButton({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(10.r),
+      child: Container(
+        width: 38.w,
+        height: 38.w,
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.primaryColor, width: 1.5),
+          borderRadius: BorderRadius.circular(10.r),
+        ),
+        child: Icon(
+          Icons.arrow_back,
+          color: AppColors.primaryColor,
+          size: 22.r,
         ),
       ),
     );
