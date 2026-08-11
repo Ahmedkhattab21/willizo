@@ -50,7 +50,12 @@ class _LeaguesBodyState extends State<LeaguesBody> {
           children: [
             _BackButton(onTap: () => setState(() => _showJoinLeague = false)),
             verticalSpace(18),
-            const JoinLeagueWidget(),
+            JoinLeagueWidget(
+              onJoinInvitationalLeague: () {
+                if (!mounted) return;
+                setState(() => _showJoinLeague = false);
+              },
+            ),
           ],
         ),
       );

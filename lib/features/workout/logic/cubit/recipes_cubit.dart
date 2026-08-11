@@ -55,6 +55,10 @@ class RecipesCubit extends Cubit<RecipesState> {
     emit(state.copyWith(isPopularGridView: !state.isPopularGridView));
   }
 
+  void updateSearchQuery(String query) {
+    emit(state.copyWith(searchQuery: query));
+  }
+
   List<String> _buildTabsFromRecipes(List<RecipeModel> recipes) {
     final set = <String>{};
     for (final recipe in recipes) {

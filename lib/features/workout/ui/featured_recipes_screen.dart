@@ -6,6 +6,7 @@ import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/features/workout/data/models/recipes_response_model.dart';
 import 'package:willizo/features/workout/logic/cubit/featured_recipes_cubit.dart';
+import 'package:willizo/features/workout/ui/recipe_details_screen.dart';
 import 'package:willizo/features/workout/ui/widgets/recipe_card_widget.dart';
 
 class FeaturedRecipesScreen extends StatelessWidget {
@@ -20,7 +21,9 @@ class FeaturedRecipesScreen extends StatelessWidget {
         iconTheme: const IconThemeData(color: AppColors.whiteColor),
         title: Text(
           'Featured Recipes',
-          style: TextStyles.font18InterW600.copyWith(color: AppColors.whiteColor),
+          style: TextStyles.font18InterW600.copyWith(
+            color: AppColors.whiteColor,
+          ),
         ),
       ),
       body: SafeArea(
@@ -47,8 +50,9 @@ class FeaturedRecipesScreen extends StatelessWidget {
                     ),
                     verticalSpace(10),
                     TextButton(
-                      onPressed: () =>
-                          context.read<FeaturedRecipesCubit>().fetchFeaturedRecipes(),
+                      onPressed: () => context
+                          .read<FeaturedRecipesCubit>()
+                          .fetchFeaturedRecipes(),
                       child: Text(
                         'Retry',
                         style: TextStyles.font14W700.copyWith(
@@ -75,9 +79,8 @@ class FeaturedRecipesScreen extends StatelessWidget {
             return ListView.separated(
               physics: const BouncingScrollPhysics(),
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-              itemBuilder: (context, index) => _FeaturedRecipeItem(
-                recipe: state.recipes[index],
-              ),
+              itemBuilder: (context, index) =>
+                  _FeaturedRecipeItem(recipe: state.recipes[index]),
               separatorBuilder: (_, __) => verticalSpace(14),
               itemCount: state.recipes.length,
             );
@@ -108,6 +111,9 @@ class _FeaturedRecipeItem extends StatelessWidget {
           .take(5)
           .map((ingredient) => '${ingredient.amount} ${ingredient.name}'.trim())
           .toList(),
+      onViewRecipe: () => Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => RecipeDetailsScreen(recipe: recipe)),
+      ),
     );
   }
 

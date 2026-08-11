@@ -18,6 +18,7 @@ class RecipeCard extends StatelessWidget {
   final String? category;
   final List<String> ingredients;
   final bool showIngredients;
+  final VoidCallback? onViewRecipe;
 
   const RecipeCard({
     super.key,
@@ -31,6 +32,7 @@ class RecipeCard extends StatelessWidget {
     this.category,
     this.ingredients = const [],
     this.showIngredients = true,
+    this.onViewRecipe,
   });
 
   @override
@@ -48,6 +50,7 @@ class RecipeCard extends StatelessWidget {
               calories: calories,
               duration: duration,
               rating: rating,
+              onViewRecipe: onViewRecipe,
             )
           : _PopularRecipeContent(
               name: name,
@@ -59,6 +62,7 @@ class RecipeCard extends StatelessWidget {
               category: category ?? 'Breakfast',
               ingredients: ingredients,
               showIngredients: showIngredients,
+              onViewRecipe: onViewRecipe,
             ),
     );
   }
@@ -70,6 +74,7 @@ class _FeaturedRecipeContent extends StatelessWidget {
   final String calories;
   final String duration;
   final String rating;
+  final VoidCallback? onViewRecipe;
 
   const _FeaturedRecipeContent({
     required this.name,
@@ -77,6 +82,7 @@ class _FeaturedRecipeContent extends StatelessWidget {
     required this.calories,
     required this.duration,
     required this.rating,
+    this.onViewRecipe,
   });
 
   @override
@@ -103,7 +109,7 @@ class _FeaturedRecipeContent extends StatelessWidget {
                 rating: rating,
               ),
               verticalSpace(10),
-              _RecipeCtaButton(),
+              _RecipeCtaButton(onTap: onViewRecipe),
             ],
           ),
         ),
@@ -122,6 +128,7 @@ class _PopularRecipeContent extends StatelessWidget {
   final String category;
   final List<String> ingredients;
   final bool showIngredients;
+  final VoidCallback? onViewRecipe;
 
   const _PopularRecipeContent({
     required this.name,
@@ -133,6 +140,7 @@ class _PopularRecipeContent extends StatelessWidget {
     required this.category,
     required this.ingredients,
     required this.showIngredients,
+    this.onViewRecipe,
   });
 
   @override
@@ -246,7 +254,7 @@ class _PopularRecipeContent extends StatelessWidget {
             verticalSpace(10),
           ] else
             verticalSpace(4),
-          _RecipeCtaButton(compact: isCompact),
+          _RecipeCtaButton(compact: isCompact, onTap: onViewRecipe),
         ],
       ),
     );
@@ -411,24 +419,29 @@ class _TopBadge extends StatelessWidget {
 
 class _RecipeCtaButton extends StatelessWidget {
   final bool compact;
+  final VoidCallback? onTap;
 
-  const _RecipeCtaButton({this.compact = false});
+  const _RecipeCtaButton({this.compact = false, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: compact ? 8.h : 10.h),
-      decoration: BoxDecoration(
-        color: AppColors.primaryColor,
-        borderRadius: BorderRadius.circular(10.r),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        'View Recipe',
-        style: TextStyles.font14W700.copyWith(
-          color: AppColors.blackColor,
-          fontSize: compact ? 13.sp : 14.sp,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(10.r),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(vertical: compact ? 8.h : 10.h),
+        decoration: BoxDecoration(
+          color: AppColors.primaryColor,
+          borderRadius: BorderRadius.circular(10.r),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          'View Recipe',
+          style: TextStyles.font14W700.copyWith(
+            color: AppColors.blackColor,
+            fontSize: compact ? 13.sp : 14.sp,
+          ),
         ),
       ),
     );

@@ -8,6 +8,7 @@ final class RecipesState {
   final List<String> tabs;
   final int selectedTabIndex;
   final bool isPopularGridView;
+  final String searchQuery;
   final String? errorMessage;
 
   const RecipesState({
@@ -16,6 +17,7 @@ final class RecipesState {
     required this.tabs,
     required this.selectedTabIndex,
     required this.isPopularGridView,
+    required this.searchQuery,
     this.errorMessage,
   });
 
@@ -26,8 +28,11 @@ final class RecipesState {
       tabs: ['All'],
       selectedTabIndex: 0,
       isPopularGridView: true,
+      searchQuery: '',
     );
   }
+
+  bool get isSearching => searchQuery.trim().isNotEmpty;
 
   String get selectedCategory {
     if (selectedTabIndex < 0 || selectedTabIndex >= tabs.length) return 'All';
@@ -35,14 +40,26 @@ final class RecipesState {
   }
 
   List<RecipeModel> get featuredRecipes {
-    return _recipesForSelectedCategory
-        .where((recipe) => recipe.isFeatured)
-        .toList();
+    return _filteredRecipes.where((recipe) => recipe.isFeatured).toList();
   }
 
   List<RecipeModel> get popularRecipes {
-    return _recipesForSelectedCategory
-        .where((recipe) => recipe.isPopular)
+    return _filteredRecipes.where((recipe) => recipe.isPopular).toList();
+  }
+
+  List<RecipeModel> get searchResults => _filteredRecipes;
+
+  List<RecipeModel> get _filteredRecipes {
+    final query = searchQuery.trim().toLowerCase();
+    final source = _recipesForSelectedCategory;
+    if (query.isEmpty) return source;
+    return source
+        .where(
+          (recipe) =>
+              recipe.name.toLowerCase().contains(query) ||
+              recipe.description.toLowerCase().contains(query) ||
+              recipe.category.toLowerCase().contains(query),
+        )
         .toList();
   }
 
@@ -67,6 +84,7 @@ final class RecipesState {
     List<String>? tabs,
     int? selectedTabIndex,
     bool? isPopularGridView,
+    String? searchQuery,
     String? errorMessage,
     bool clearErrorMessage = false,
   }) {
@@ -76,6 +94,7 @@ final class RecipesState {
       tabs: tabs ?? this.tabs,
       selectedTabIndex: selectedTabIndex ?? this.selectedTabIndex,
       isPopularGridView: isPopularGridView ?? this.isPopularGridView,
+      searchQuery: searchQuery ?? this.searchQuery,
       errorMessage: clearErrorMessage
           ? null
           : errorMessage ?? this.errorMessage,

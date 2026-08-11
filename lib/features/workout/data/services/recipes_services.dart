@@ -44,6 +44,68 @@ class RecipesServices {
     return RecipeModel.listFromJson(jsonDecode(response.body));
   }
 
+  Future<List<RecipeModel>> getFavoriteRecipes() async {
+    final response = await apiConsumer.get(
+      WorkoutApiEndpoints.favoriteRecipes,
+      await _authHeaders(),
+    );
+    _throwIfNotOk(response);
+    return RecipeModel.listFromJson(jsonDecode(response.body));
+  }
+
+  Future<RecipeModel> getRecipeDetails(String slug) async {
+    final response = await apiConsumer.get(
+      WorkoutApiEndpoints.recipeDetails(slug),
+      await _authHeaders(),
+    );
+    _throwIfNotOk(response);
+    final decoded = jsonDecode(response.body);
+    final data = decoded is Map<String, dynamic> && decoded['data'] is Map
+        ? (decoded['data'] as Map).cast<String, dynamic>()
+        : (decoded as Map).cast<String, dynamic>();
+    return RecipeModel.fromJson(data);
+  }
+
+  Future<void> toggleRecipeFavorite(String slug) async {
+    final response = await apiConsumer.post(
+      WorkoutApiEndpoints.recipeFavorite(slug),
+      {},
+      await _authHeaders(),
+    );
+    _throwIfNotOk(response);
+  }
+
+  Future<void> addRecipeToMealPlan({
+    required int recipeId,
+    required String mealType,
+    required String plannedDate,
+  }) async {
+    final response = await apiConsumer.post(WorkoutApiEndpoints.myMealPlans, {
+      'recipe_id': recipeId,
+      'meal_type': mealType,
+      'planned_date': plannedDate,
+    }, await _authHeaders());
+    _throwIfNotOk(response);
+  }
+
+  Future<void> markMealAsCompleted(int mealPlanId) async {
+    final response = await apiConsumer.post(
+      WorkoutApiEndpoints.markMealCompleted(mealPlanId),
+      {},
+      await _authHeaders(),
+    );
+    _throwIfNotOk(response);
+  }
+
+  Future<void> removeFromMealPlan(int mealPlanId) async {
+    final response = await apiConsumer.delete(
+      WorkoutApiEndpoints.removeMealPlan(mealPlanId),
+      null,
+      await _authHeaders(),
+    );
+    _throwIfNotOk(response);
+  }
+
   Future<Map<String, String>> _authHeaders() async {
     return {
       ConstantKeys.appAuthorization:
@@ -57,14 +119,20 @@ class RecipesServices {
       return;
     }
 
+    ServerFailure failure;
     try {
-      throw ServerException(
-        serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),
-      );
+      final decoded = jsonDecode(response.body);
+      failure = decoded is Map<String, dynamic>
+          ? ServerFailure.fromJson(decoded)
+          : ServerFailure(message: decoded.toString());
     } catch (_) {
-      throw const ServerException(
-        serverFailure: ServerFailure(message: 'Unknown error'),
+      failure = ServerFailure(
+        message: response.body.trim().isNotEmpty
+            ? response.body.trim()
+            : response.reasonPhrase ?? 'Unknown error',
       );
     }
+
+    throw ServerException(serverFailure: failure);
   }
 }

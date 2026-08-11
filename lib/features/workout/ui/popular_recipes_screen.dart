@@ -6,6 +6,7 @@ import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/features/workout/data/models/recipes_response_model.dart';
 import 'package:willizo/features/workout/logic/cubit/popular_recipes_cubit.dart';
+import 'package:willizo/features/workout/ui/recipe_details_screen.dart';
 import 'package:willizo/features/workout/ui/widgets/recipe_card_widget.dart';
 
 class PopularRecipesScreen extends StatelessWidget {
@@ -20,7 +21,9 @@ class PopularRecipesScreen extends StatelessWidget {
         iconTheme: const IconThemeData(color: AppColors.whiteColor),
         title: Text(
           'Popular Recipes',
-          style: TextStyles.font18InterW600.copyWith(color: AppColors.whiteColor),
+          style: TextStyles.font18InterW600.copyWith(
+            color: AppColors.whiteColor,
+          ),
         ),
       ),
       body: SafeArea(
@@ -47,8 +50,9 @@ class PopularRecipesScreen extends StatelessWidget {
                     ),
                     verticalSpace(10),
                     TextButton(
-                      onPressed: () =>
-                          context.read<PopularRecipesCubit>().fetchPopularRecipes(),
+                      onPressed: () => context
+                          .read<PopularRecipesCubit>()
+                          .fetchPopularRecipes(),
                       child: Text(
                         'Retry',
                         style: TextStyles.font14W700.copyWith(
@@ -114,6 +118,9 @@ class _PopularGridItem extends StatelessWidget {
           .map((ingredient) => '${ingredient.amount} ${ingredient.name}'.trim())
           .toList(),
       showIngredients: false,
+      onViewRecipe: () => Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => RecipeDetailsScreen(recipe: recipe)),
+      ),
     );
   }
 

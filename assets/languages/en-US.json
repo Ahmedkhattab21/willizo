@@ -1,5 +1,17 @@
 {
   "appName": "",
+  "common": {
+    "retry": "Retry"
+  },
+  "favorites": {
+    "title": "My Favourite",
+    "products": "Products",
+    "meals": "Meals",
+    "emptyProducts": "Your favourite list is empty",
+    "emptyMeals": "No favourite meals yet",
+    "failedMeals": "Failed to load meals",
+    "failedRemoveMeal": "Failed to remove meal from favourites"
+  },
   "home": {
     "searchText": "Find your favorite items"
   }

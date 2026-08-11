@@ -32,4 +32,64 @@ class RecipesRepo {
       return Left(ServerFailure(message: failure.serverFailure.message));
     }
   }
+
+  Future<Either<Failure, List<RecipeModel>>> getFavoriteRecipes() async {
+    try {
+      return Right(await recipesServices.getFavoriteRecipes());
+    } on ServerException catch (failure) {
+      return Left(ServerFailure(message: failure.serverFailure.message));
+    }
+  }
+
+  Future<Either<Failure, RecipeModel>> getRecipeDetails(String slug) async {
+    try {
+      return Right(await recipesServices.getRecipeDetails(slug));
+    } on ServerException catch (failure) {
+      return Left(ServerFailure(message: failure.serverFailure.message));
+    }
+  }
+
+  Future<Either<Failure, void>> toggleRecipeFavorite(String slug) async {
+    try {
+      await recipesServices.toggleRecipeFavorite(slug);
+      return const Right(null);
+    } on ServerException catch (failure) {
+      return Left(ServerFailure(message: failure.serverFailure.message));
+    }
+  }
+
+  Future<Either<Failure, void>> addRecipeToMealPlan({
+    required int recipeId,
+    required String mealType,
+    required String plannedDate,
+  }) async {
+    try {
+      await recipesServices.addRecipeToMealPlan(
+        recipeId: recipeId,
+        mealType: mealType,
+        plannedDate: plannedDate,
+      );
+      return const Right(null);
+    } on ServerException catch (failure) {
+      return Left(ServerFailure(message: failure.serverFailure.message));
+    }
+  }
+
+  Future<Either<Failure, void>> markMealAsCompleted(int mealPlanId) async {
+    try {
+      await recipesServices.markMealAsCompleted(mealPlanId);
+      return const Right(null);
+    } on ServerException catch (failure) {
+      return Left(ServerFailure(message: failure.serverFailure.message));
+    }
+  }
+
+  Future<Either<Failure, void>> removeFromMealPlan(int mealPlanId) async {
+    try {
+      await recipesServices.removeFromMealPlan(mealPlanId);
+      return const Right(null);
+    } on ServerException catch (failure) {
+      return Left(ServerFailure(message: failure.serverFailure.message));
+    }
+  }
 }
