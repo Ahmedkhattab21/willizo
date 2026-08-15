@@ -1,3 +1,5 @@
+import 'package:willizo/core/api/end_points.dart';
+
 class RecipesResponseModel {
   final int currentPage;
   final List<RecipeModel> data;
@@ -99,7 +101,7 @@ class RecipeModel {
       name: _toString(json['name']),
       slug: _toString(json['slug']),
       description: _toString(json['description']),
-      imageUrl: _toString(json['image_url']),
+      imageUrl: _recipeImageUrl(json),
       category: _toString(json['category']),
       totalTime: _toInt(json['total_time']),
       calories: _toInt(json['calories']),
@@ -300,4 +302,54 @@ List<String> _toStringList(dynamic value) {
       .map((e) => e.trim())
       .where((e) => e.isNotEmpty)
       .toList();
+}
+
+String _recipeImageUrl(Map<String, dynamic> json) {
+  final images = json['images'];
+  if (images is List) {
+    Map<dynamic, dynamic>? selectedImage;
+    for (final image in images) {
+      if (image is! Map) continue;
+      selectedImage ??= image;
+      if (_toBool(image['is_primary'])) {
+        selectedImage = image;
+        break;
+      }
+    }
+
+    if (selectedImage != null) {
+      final imageUrl = _normalizeImageUrl(
+        selectedImage['full_url'] ??
+            selectedImage['url'] ??
+            selectedImage['image_url'] ??
+            selectedImage['image_path'] ??
+            selectedImage['path'] ??
+            selectedImage['image'],
+      );
+      if (imageUrl.isNotEmpty) return imageUrl;
+    }
+  }
+
+  return _normalizeImageUrl(
+    json['full_url'] ??
+        json['image_url'] ??
+        json['image_path'] ??
+        json['path'] ??
+        json['image'],
+  );
+}
+
+String _normalizeImageUrl(dynamic value) {
+  final raw = _toString(value).trim();
+  if (raw.isEmpty) return '';
+  if (raw.startsWith('http://') || raw.startsWith('https://')) return raw;
+
+  final origin = Uri.parse(EndPoints.baseUrl).origin;
+  if (raw.startsWith('/')) return '$origin$raw';
+
+  if (raw.startsWith('storage/') || raw.startsWith('images/')) {
+    return '$origin/$raw';
+  }
+
+  return '$origin/storage/$raw';
 }

@@ -144,7 +144,12 @@ class AccountScreen extends StatelessWidget {
                     verticalSpace(16),
                     const _OnboardingSummaryCard(),
                     verticalSpace(28),
-                    const _SectionHeader(title: 'Subscription', showEdit: true),
+                    _SectionHeader(
+                      title: 'Subscription',
+                      showEdit: true,
+                      onEdit: () =>
+                          Navigator.pushNamed(context, Routes.subscribeScreen),
+                    ),
                     verticalSpace(16),
                     const SubscriptionCard(),
                     verticalSpace(28),
