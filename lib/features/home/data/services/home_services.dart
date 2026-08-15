@@ -12,6 +12,7 @@ import 'package:willizo/features/account/data/services/account_api_endpoint.dart
 import 'package:willizo/features/home/data/models/home_model.dart';
 import 'package:willizo/features/home/data/models/my_meal_plans_response_model.dart';
 import 'package:willizo/features/home/data/models/my_workout_plans_response_model.dart';
+import 'package:willizo/features/home/data/models/watch_home_response_model.dart';
 import 'package:willizo/features/home/data/services/home_api_endpoints.dart';
 
 class HomeServices {
@@ -33,6 +34,17 @@ class HomeServices {
     );
     _throwIfNotOk(response);
     return AccountResponseModel.fromJson(
+      jsonDecode(response.body) as Map<String, dynamic>,
+    );
+  }
+
+  Future<WatchHomeResponseModel> getWatchHome() async {
+    final response = await apiConsumer.get(
+      HomeApiEndpoints.watchHome,
+      await _authHeaders(),
+    );
+    _throwIfNotOk(response);
+    return WatchHomeResponseModel.fromJson(
       jsonDecode(response.body) as Map<String, dynamic>,
     );
   }

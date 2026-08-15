@@ -25,8 +25,6 @@ class CartService {
     final refreshToken = await CacheHelper.getSecuredString(
       ConstantKeys.saveRefreshTokenToShared,
     );
-    debugPrint('🛒 [Cart API] Access Token: $token');
-    debugPrint('🛒 [Cart API] Refresh Token: $refreshToken');
     debugPrint('🛒 [Cart API] Calling: ${CartApiEndpoints.cartUrl}');
 
     final response = await apiConsumer.get(CartApiEndpoints.cartUrl, {
@@ -118,16 +116,16 @@ class CartService {
     final token = await CacheHelper.getSecuredString(
       ConstantKeys.saveTokenToShared,
     );
-    debugPrint('🛒 [Checkout Calculate API] Access Token: $token');
-    debugPrint('🛒 [Checkout Calculate API] Calling: ${CartApiEndpoints.checkoutCalculateUrl}');
-    debugPrint('🛒 [Checkout Calculate API] Body: {"address_id": $addressId, "shipping_method": "$shippingMethod"}');
+    debugPrint(
+      '🛒 [Checkout Calculate API] Calling: ${CartApiEndpoints.checkoutCalculateUrl}',
+    );
+    debugPrint(
+      '🛒 [Checkout Calculate API] Body: {"address_id": $addressId, "shipping_method": "$shippingMethod"}',
+    );
 
     final response = await apiConsumer.post(
       CartApiEndpoints.checkoutCalculateUrl,
-      {
-        'address_id': addressId,
-        'shipping_method': shippingMethod,
-      },
+      {'address_id': addressId, 'shipping_method': shippingMethod},
       {
         ConstantKeys.appAuthorization: "${ConstantKeys.appBearer} $token",
         ConstantKeys.contentType: ConstantKeys.applicationJson,
@@ -135,12 +133,16 @@ class CartService {
       },
     );
 
-    debugPrint('🛒 [Checkout Calculate API] Response Status: ${response.statusCode}');
+    debugPrint(
+      '🛒 [Checkout Calculate API] Response Status: ${response.statusCode}',
+    );
     debugPrint('🛒 [Checkout Calculate API] Response Body: ${response.body}');
 
     if (response.statusCode == StatusCode.ok ||
         response.statusCode == StatusCode.created) {
-      return CheckoutCalculationResponseModel.fromJson(jsonDecode(response.body));
+      return CheckoutCalculationResponseModel.fromJson(
+        jsonDecode(response.body),
+      );
     } else {
       throw ServerException(
         serverFailure: ServerFailure.fromJson(jsonDecode(response.body)),

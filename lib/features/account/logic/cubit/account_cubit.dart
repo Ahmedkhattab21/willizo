@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:willizo/core/services/cache_helper.dart';
 import 'package:willizo/core/utils/constant_keys.dart';
+import 'package:willizo/core/services/watch_workout_sync_service.dart';
 import 'package:willizo/features/account/data/models/account_resonse.dart';
 import 'package:willizo/features/account/data/models/update_profile_request_model.dart';
 import 'package:willizo/features/account/data/repo/account_repo.dart';
@@ -92,6 +93,7 @@ class AccountCubit extends Cubit<AccountState> {
   }
 
   Future<void> _clearAuthData() async {
+    await WatchWorkoutSyncService.clearAuthenticationSession();
     await CacheHelper.removeSecureData(ConstantKeys.saveTokenToShared);
     await CacheHelper.removeSecureData(ConstantKeys.saveRefreshTokenToShared);
     await CacheHelper.removeSecureData(ConstantKeys.saveNameToShared);

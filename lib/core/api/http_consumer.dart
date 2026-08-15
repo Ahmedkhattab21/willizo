@@ -10,6 +10,7 @@ import 'package:willizo/core/api/status_code.dart';
 import 'package:willizo/core/api/end_points.dart';
 import 'package:willizo/core/services/cache_helper.dart';
 import 'package:willizo/core/services/services_locator.dart';
+import 'package:willizo/core/services/watch_workout_sync_service.dart';
 import 'package:willizo/core/utils/constant_keys.dart';
 import 'package:willizo/my_app.dart';
 import 'package:http_interceptor/http_interceptor.dart';
@@ -42,6 +43,7 @@ class HttpConsumer implements ApiConsumer {
     await CacheHelper.removeSecureData(ConstantKeys.saveTokenToShared);
     await CacheHelper.removeSecureData(ConstantKeys.saveRefreshTokenToShared);
     await CacheHelper.removeSecureData(ConstantKeys.saveNameToShared);
+    await WatchWorkoutSyncService.clearAuthenticationSession();
 
     // Navigate to sign in screen
     final context = MyApp.navigatorKey.currentContext;
@@ -71,10 +73,6 @@ class HttpConsumer implements ApiConsumer {
       debugPrint(
         '🔐 [Token Refresh] Refresh token found, sending refresh request to: ${EndPoints.refreshTokenUrl}',
       );
-      debugPrint(
-        '🔐 [Token Refresh] Refresh token (first 20 chars): ${refreshToken.length > 20 ? refreshToken.substring(0, 20) + "..." : refreshToken}',
-      );
-
       final plainClient = http.Client();
       final refreshResponse = await plainClient.post(
         Uri.parse(EndPoints.refreshTokenUrl),
@@ -91,10 +89,6 @@ class HttpConsumer implements ApiConsumer {
       debugPrint(
         '🔐 [Token Refresh] Refresh response status: ${refreshResponse.statusCode}',
       );
-      debugPrint(
-        '🔐 [Token Refresh] Refresh response body: ${refreshResponse.body}',
-      );
-
       if (refreshResponse.statusCode == StatusCode.ok ||
           refreshResponse.statusCode == StatusCode.created) {
         final refreshData = RefreshTokenResponseModel.fromJson(
@@ -118,6 +112,12 @@ class HttpConsumer implements ApiConsumer {
           );
           debugPrint('🔐 [Token Refresh] New refresh token saved');
         }
+        await WatchWorkoutSyncService.syncAuthenticationSession(
+          accessToken: refreshData.data?.tokens?.accessToken,
+          refreshToken: refreshData.data?.tokens?.refreshToken,
+          tokenType: refreshData.data?.tokens?.tokenType ?? 'bearer',
+          expiresIn: refreshData.data?.tokens?.expiresIn,
+        );
 
         return true;
       } else {

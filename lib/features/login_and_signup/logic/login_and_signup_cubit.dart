@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:willizo/config/routes/routes.dart';
 import 'package:willizo/core/services/cache_helper.dart';
+import 'package:willizo/core/services/watch_workout_sync_service.dart';
 import 'package:willizo/core/utils/constant_keys.dart';
 import 'package:willizo/features/login_and_signup/data/models/login_request_model.dart';
 import 'package:willizo/features/login_and_signup/data/models/signup_request_model.dart';
@@ -64,6 +65,12 @@ class LoginAndSignup extends Cubit<LoginAndSignupState> {
                   r.data!.tokens!.refreshToken!,
                 );
               }
+              await WatchWorkoutSyncService.syncAuthenticationSession(
+                accessToken: r.data?.tokens?.accessToken,
+                refreshToken: r.data?.tokens?.refreshToken,
+                tokenType: r.data?.tokens?.tokenType ?? 'bearer',
+                expiresIn: r.data?.tokens?.expiresIn,
+              );
               // Save user name if available
               if (r.data?.user?.fullName != null) {
                 await CacheHelper.setSecuredString(
@@ -156,6 +163,12 @@ class LoginAndSignup extends Cubit<LoginAndSignupState> {
                   r.data!.tokens!.refreshToken!,
                 );
               }
+              await WatchWorkoutSyncService.syncAuthenticationSession(
+                accessToken: r.data?.tokens?.accessToken,
+                refreshToken: r.data?.tokens?.refreshToken,
+                tokenType: r.data?.tokens?.tokenType ?? 'bearer',
+                expiresIn: r.data?.tokens?.expiresIn,
+              );
               if (r.data?.user?.fullName != null) {
                 await CacheHelper.setSecuredString(
                   ConstantKeys.saveNameToShared,

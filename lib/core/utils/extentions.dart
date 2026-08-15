@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:willizo/config/routes/routes.dart';
 import 'package:willizo/core/services/cache_helper.dart';
+import 'package:willizo/core/services/watch_workout_sync_service.dart';
 import 'package:willizo/core/utils/constant_keys.dart';
 
 extension NavigationScreens on BuildContext {
@@ -25,6 +26,7 @@ extension NavigationScreens on BuildContext {
   }
 
   Future<void> clearAuthAndOpenSignIn() async {
+    await WatchWorkoutSyncService.clearAuthenticationSession();
     await CacheHelper.removeSecureData(ConstantKeys.saveTokenToShared);
     await CacheHelper.removeSecureData(ConstantKeys.saveRefreshTokenToShared);
     await CacheHelper.removeSecureData(ConstantKeys.saveNameToShared);

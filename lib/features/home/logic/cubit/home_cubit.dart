@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
+import 'package:willizo/core/services/watch_workout_sync_service.dart';
 import 'package:willizo/features/account/data/models/account_resonse.dart';
 import 'package:willizo/features/home/data/models/my_meal_plans_response_model.dart';
 import 'package:willizo/features/home/data/models/my_workout_plans_response_model.dart';
@@ -7,7 +9,9 @@ import 'package:willizo/features/home/data/repo/home_repo.dart';
 part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit(this.homeRepo) : super(HomeState.initial());
+  HomeCubit(this.homeRepo) : super(HomeState.initial()) {
+    WatchWorkoutSyncService.registerRefreshHandler(fetchPlans);
+  }
 
   final HomeRepo homeRepo;
 
@@ -140,6 +144,36 @@ class HomeCubit extends Cubit<HomeState> {
         profileError: state.profileError,
       ),
     );
+
+    if (isToday && defaultTargetPlatform == TargetPlatform.iOS) {
+      var watchWorkouts = workouts;
+      var watchMeals = meals;
+      var canSync =
+          workoutStatus == HomeLoadStatus.success ||
+          mealStatus == HomeLoadStatus.success;
+
+      final watchHomeResult = await homeRepo.getWatchHome();
+      watchHomeResult.fold((_) {}, (watchHome) {
+        if (!watchHome.hasRecognizedHomeData) return;
+        watchWorkouts = watchHome.workouts;
+        watchMeals = watchHome.meals;
+        canSync = true;
+      });
+
+      if (canSync) {
+        await WatchWorkoutSyncService.syncTodayWorkouts(
+          selectedDate: date,
+          workouts: watchWorkouts,
+          meals: watchMeals,
+        );
+      }
+    }
+  }
+
+  @override
+  Future<void> close() {
+    WatchWorkoutSyncService.unregisterRefreshHandler();
+    return super.close();
   }
 
   String _formatDateParam(DateTime date) {

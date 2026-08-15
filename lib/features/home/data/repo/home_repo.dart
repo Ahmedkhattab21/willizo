@@ -5,6 +5,7 @@ import 'package:willizo/features/account/data/models/account_resonse.dart';
 import 'package:willizo/features/home/data/models/home_model.dart';
 import 'package:willizo/features/home/data/models/my_meal_plans_response_model.dart';
 import 'package:willizo/features/home/data/models/my_workout_plans_response_model.dart';
+import 'package:willizo/features/home/data/models/watch_home_response_model.dart';
 import 'package:willizo/features/home/data/services/home_services.dart';
 
 class HomeRepo {
@@ -23,6 +24,14 @@ class HomeRepo {
   Future<Either<Failure, AccountResponseModel>> getProfile() async {
     try {
       return Right(await homeServices.getProfile());
+    } on ServerException catch (failure) {
+      return Left(ServerFailure(message: failure.serverFailure.message));
+    }
+  }
+
+  Future<Either<Failure, WatchHomeResponseModel>> getWatchHome() async {
+    try {
+      return Right(await homeServices.getWatchHome());
     } on ServerException catch (failure) {
       return Left(ServerFailure(message: failure.serverFailure.message));
     }

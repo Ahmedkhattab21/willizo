@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/services/cache_helper.dart';
 import 'core/services/services_locator.dart';
+import 'core/services/watch_workout_sync_service.dart';
 import 'core/utils/app_constant.dart';
 import 'observer.dart';
 
@@ -22,6 +23,8 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
   await ServicesLocator.init();
   await CacheHelper.init();
+  WatchWorkoutSyncService.initialize();
+  await WatchWorkoutSyncService.syncAuthenticationSession();
   // PusherService.initPusher();
 
   ///

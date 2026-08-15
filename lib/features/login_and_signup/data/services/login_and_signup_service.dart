@@ -30,8 +30,6 @@ class LoginAndSignupService {
             "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
       },
     );
-    print(response.statusCode);
-    print(response.body);
     if (response.statusCode == StatusCode.ok ||
         response.statusCode == StatusCode.created) {
       return LoginResponseModel.fromJson(jsonDecode(response.body));
@@ -51,8 +49,6 @@ class LoginAndSignupService {
             "${ConstantKeys.appBearer} ${await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared)}",
       },
     );
-    print(response.statusCode);
-    print(response.body);
     if (response.statusCode == StatusCode.ok ||
         response.statusCode == StatusCode.created) {
       return SignupResponseModel.fromJson(jsonDecode(response.body));
@@ -64,13 +60,12 @@ class LoginAndSignupService {
   }
 
   Future<GetOnboardingStepResponseModel> getOnboardingStatus() async {
-    final token = await CacheHelper.getSecuredString(ConstantKeys.saveTokenToShared);
+    final token = await CacheHelper.getSecuredString(
+      ConstantKeys.saveTokenToShared,
+    );
     final response = await apiConsumer.get(
       LoginAndSignupApiEndPoints.getOnboardingStepUrl,
-      {
-        ConstantKeys.appAuthorization:
-            "${ConstantKeys.appBearer} $token",
-      },
+      {ConstantKeys.appAuthorization: "${ConstantKeys.appBearer} $token"},
     );
     print(response.statusCode);
     print(response.body);
