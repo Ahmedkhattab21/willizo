@@ -28,6 +28,9 @@
 		A1000000000000000000000B /* RestTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001B /* RestTimerView.swift */; };
 		A20000000000000000000001 /* WatchAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* WatchAuthManager.swift */; };
 		A20000000000000000000002 /* WatchAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000012 /* WatchAPIClient.swift */; };
+		A30000000000000000000001 /* WorkoutSessionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000000000000000000011 /* WorkoutSessionsView.swift */; };
+		A40000000000000000000001 /* TodayMealsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40000000000000000000011 /* TodayMealsView.swift */; };
+		A40000000000000000000002 /* MealDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40000000000000000000012 /* MealDetailView.swift */; };
 		A1000000000000000000000C /* Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = A1000000000000000000001C /* Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E3AB2ABB21889E5F047C9236 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6133E1C971F10143C06A5E1D /* Pods_RunnerTests.framework */; };
 		78A318202AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */; };
@@ -110,6 +113,9 @@
 		A1000000000000000000001D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A20000000000000000000011 /* WatchAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAuthManager.swift; sourceTree = "<group>"; };
 		A20000000000000000000012 /* WatchAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAPIClient.swift; sourceTree = "<group>"; };
+		A30000000000000000000011 /* WorkoutSessionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSessionsView.swift; sourceTree = "<group>"; };
+		A40000000000000000000011 /* TodayMealsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayMealsView.swift; sourceTree = "<group>"; };
+		A40000000000000000000012 /* MealDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealDetailView.swift; sourceTree = "<group>"; };
 		B03F18517E722552FB9A9DBE /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		BAF8711B313B8EA2EE420D88 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		EDE4B79F5A320AC8AE6E68EF /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -268,6 +274,9 @@
 				A10000000000000000000019 /* TodayWorkoutView.swift */,
 				A1000000000000000000001A /* CurrentExerciseView.swift */,
 				A1000000000000000000001B /* RestTimerView.swift */,
+				A30000000000000000000011 /* WorkoutSessionsView.swift */,
+				A40000000000000000000011 /* TodayMealsView.swift */,
+				A40000000000000000000012 /* MealDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -573,6 +582,9 @@
 				A1000000000000000000000B /* RestTimerView.swift in Sources */,
 				A20000000000000000000001 /* WatchAuthManager.swift in Sources */,
 				A20000000000000000000002 /* WatchAPIClient.swift in Sources */,
+				A30000000000000000000001 /* WorkoutSessionsView.swift in Sources */,
+				A40000000000000000000001 /* TodayMealsView.swift in Sources */,
+				A40000000000000000000002 /* MealDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

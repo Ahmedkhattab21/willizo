@@ -81,17 +81,7 @@ struct CurrentExerciseView: View {
   }
 
   private var finishedContent: some View {
-    VStack(spacing: 8) {
-      Text("Workout Finished")
-        .font(.headline)
-      Text(viewModel.syncMessage ?? "Result queued")
-        .font(.caption)
-        .foregroundStyle(.secondary)
-        .multilineTextAlignment(.center)
-      Button("Done") {
-        viewModel.resetWorkout()
-      }
-    }
+    WorkoutFinishedView(viewModel: viewModel)
   }
 
   private func metric(title: String, value: String) -> some View {

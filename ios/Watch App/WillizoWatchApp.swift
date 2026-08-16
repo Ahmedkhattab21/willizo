@@ -9,7 +9,7 @@ struct WillizoWatchApp: App {
       NavigationStack {
         switch viewModel.authState {
         case .authenticated:
-          TodayWorkoutView(viewModel: viewModel)
+          AuthenticatedRootView(viewModel: viewModel)
         case .connecting:
           WatchConnectionView(
             title: "Connecting",
@@ -28,6 +28,39 @@ struct WillizoWatchApp: App {
       }
       .toolbar(.hidden, for: .navigationBar)
       .persistentSystemOverlays(.hidden)
+    }
+  }
+}
+
+private struct AuthenticatedRootView: View {
+  @ObservedObject var viewModel: WorkoutViewModel
+  @State private var resumesStoredSession: Bool
+
+  init(viewModel: WorkoutViewModel) {
+    self.viewModel = viewModel
+    _resumesStoredSession = State(initialValue: viewModel.session.status != .idle)
+  }
+
+  var body: some View {
+    if resumesStoredSession {
+      switch viewModel.session.status {
+      case .active, .paused:
+        ActiveWorkoutView(
+          viewModel: viewModel,
+          onBack: { resumesStoredSession = false }
+        )
+      case .resting:
+        CurrentExerciseView(viewModel: viewModel)
+      case .finished:
+        WorkoutFinishedView(
+          viewModel: viewModel,
+          onDone: { resumesStoredSession = false }
+        )
+      case .idle:
+        TodayWorkoutView(viewModel: viewModel)
+      }
+    } else {
+      TodayWorkoutView(viewModel: viewModel)
     }
   }
 }

@@ -5,6 +5,11 @@ final class WatchWorkoutStore {
     static let snapshot = "watch.snapshot"
     static let session = "watch.session"
     static let unsyncedResults = "watch.unsyncedResults"
+    static let workoutPlans = "watch.workoutPlans"
+    static let workoutPlanDetails = "watch.workoutPlanDetails"
+    static let recipes = "watch.recipes"
+    static let recipeDetails = "watch.recipeDetails"
+    static let completionSummaries = "watch.completionSummaries"
   }
 
   private let defaults: UserDefaults
@@ -39,6 +44,11 @@ final class WatchWorkoutStore {
     defaults.removeObject(forKey: Keys.snapshot)
     defaults.removeObject(forKey: Keys.session)
     defaults.removeObject(forKey: Keys.unsyncedResults)
+    defaults.removeObject(forKey: Keys.workoutPlans)
+    defaults.removeObject(forKey: Keys.workoutPlanDetails)
+    defaults.removeObject(forKey: Keys.recipes)
+    defaults.removeObject(forKey: Keys.recipeDetails)
+    defaults.removeObject(forKey: Keys.completionSummaries)
   }
 
   func appendUnsyncedResult(_ result: WorkoutResultPayload) {
@@ -53,6 +63,46 @@ final class WatchWorkoutStore {
 
   func replaceUnsyncedResults(_ results: [WorkoutResultPayload]) {
     encode(results, key: Keys.unsyncedResults)
+  }
+
+  func saveWorkoutPlans(_ plans: [WatchWorkoutPlanSummary]) {
+    encode(plans, key: Keys.workoutPlans)
+  }
+
+  func loadWorkoutPlans() -> [WatchWorkoutPlanSummary] {
+    decode([WatchWorkoutPlanSummary].self, key: Keys.workoutPlans) ?? []
+  }
+
+  func saveWorkoutPlanDetails(_ details: [String: WatchWorkoutPlanDetail]) {
+    encode(details, key: Keys.workoutPlanDetails)
+  }
+
+  func loadWorkoutPlanDetails() -> [String: WatchWorkoutPlanDetail] {
+    decode([String: WatchWorkoutPlanDetail].self, key: Keys.workoutPlanDetails) ?? [:]
+  }
+
+  func saveRecipes(_ recipes: [WatchRecipeSummary]) {
+    encode(recipes, key: Keys.recipes)
+  }
+
+  func loadRecipes() -> [WatchRecipeSummary] {
+    decode([WatchRecipeSummary].self, key: Keys.recipes) ?? []
+  }
+
+  func saveRecipeDetails(_ details: [String: WatchRecipeDetail]) {
+    encode(details, key: Keys.recipeDetails)
+  }
+
+  func loadRecipeDetails() -> [String: WatchRecipeDetail] {
+    decode([String: WatchRecipeDetail].self, key: Keys.recipeDetails) ?? [:]
+  }
+
+  func saveCompletionSummaries(_ summaries: [String: WatchWorkoutCompletionSummary]) {
+    encode(summaries, key: Keys.completionSummaries)
+  }
+
+  func loadCompletionSummaries() -> [String: WatchWorkoutCompletionSummary] {
+    decode([String: WatchWorkoutCompletionSummary].self, key: Keys.completionSummaries) ?? [:]
   }
 
   private func encode<T: Encodable>(_ value: T, key: String) {

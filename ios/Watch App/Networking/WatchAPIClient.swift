@@ -15,6 +15,11 @@ enum WatchAPIError: LocalizedError {
   }
 }
 
+struct CreatedWatchWorkout {
+  let id: Int?
+  let startedAt: Date?
+}
+
 final class WatchAPIClient {
   private let auth: WatchAuthManager
   private let urlSession: URLSession
@@ -42,13 +47,117 @@ final class WatchAPIClient {
     return WatchAPIMapper.snapshot(home: payloads[0], workouts: payloads[1], meals: payloads[2])
   }
 
-  func completeWorkout(id: Int, actualDuration: Int) async throws {
-    _ = try await request(
+  func completeWorkout(id: Int, actualDuration: Int) async throws -> WatchWorkoutCompletionSummary {
+    let response = try await request(
       path: "/watch/workouts/\(id)/complete",
       method: "POST",
       body: ["actual_duration": actualDuration]
     )
+    return completionSummary(from: response)
   }
+
+  func createWorkoutLog(
+    exerciseID: String,
+    value: Int,
+    workoutDate: String
+  ) async throws -> CreatedWatchWorkout {
+    let response = try await request(
+      path: "/watch/workouts",
+      method: "POST",
+      body: [
+        "exercise_id": exerciseID,
+        "value": value,
+        "workout_date": workoutDate,
+        "notes": "Started from Apple Watch"
+      ]
+    )
+    return CreatedWatchWorkout(
+      id: responseID(from: response),
+      startedAt: responseStartedAt(from: response)
+    )
+  }
+
+  func fetchWorkoutPlans() async throws -> [WatchWorkoutPlanSummary] {
+    let baseURL = auth.session?.baseURL ?? "https://willizo.com/api"
+    guard let url = URL(string: normalizedBaseURL(baseURL) + "/watch/workout-plans") else {
+      throw WatchAPIError.invalidURL
+    }
+    var request = URLRequest(url: url)
+    request.httpMethod = "GET"
+    request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+    let (data, response) = try await urlSession.data(for: request)
+    guard let http = response as? HTTPURLResponse else { throw WatchAPIError.invalidResponse }
+    guard (200...299).contains(http.statusCode) else { throw WatchAPIError.server(http.statusCode) }
+    return try JSONDecoder().decode(WorkoutPlansResponse.self, from: data).workoutPlans
+  }
+
+  func fetchWorkoutPlan(slug: String) async throws -> WatchWorkoutPlanDetail {
+    let baseURL = auth.session?.baseURL ?? "https://willizo.com/api"
+    guard let encodedSlug = slug.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
+          let url = URL(string: normalizedBaseURL(baseURL) + "/watch/workout-plans/\(encodedSlug)") else {
+      throw WatchAPIError.invalidURL
+    }
+    var request = URLRequest(url: url)
+    request.httpMethod = "GET"
+    request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+    let (data, response) = try await urlSession.data(for: request)
+    guard let http = response as? HTTPURLResponse else { throw WatchAPIError.invalidResponse }
+    guard (200...299).contains(http.statusCode) else { throw WatchAPIError.server(http.statusCode) }
+    return try JSONDecoder().decode(WorkoutPlanResponse.self, from: data).workoutPlan
+  }
+
+  func fetchLatestExerciseResult(exerciseID: String) async throws -> PreviousSet? {
+    guard let encodedID = exerciseID.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+      throw WatchAPIError.invalidURL
+    }
+    let response = try await request(
+      path: "/watch/workouts/history?limit=1&exercise_id=\(encodedID)"
+    )
+    guard let item = firstHistoryItem(from: response) else { return nil }
+    let exercise = item["exercise"] as? [String: Any]
+    let unit = (exercise?["unit"] as? String ?? item["unit"] as? String ?? "").lowercased()
+    let reps = intValue(item["reps"])
+      ?? (unit == "reps" ? intValue(item["value"]) : nil)
+    let weight = doubleValue(item["weight"])
+      ?? doubleValue(item["weight_kg"])
+      ?? doubleValue(item["previous_weight"])
+    guard reps != nil || weight != nil else { return nil }
+    return PreviousSet(reps: reps, weight: weight)
+  }
+
+  func fetchRecipes() async throws -> [WatchRecipeSummary] {
+    let baseURL = auth.session?.baseURL ?? "https://willizo.com/api"
+    guard let url = URL(string: normalizedBaseURL(baseURL) + "/watch/recipes") else {
+      throw WatchAPIError.invalidURL
+    }
+    var request = URLRequest(url: url)
+    request.httpMethod = "GET"
+    request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+    let (data, response) = try await urlSession.data(for: request)
+    guard let http = response as? HTTPURLResponse else { throw WatchAPIError.invalidResponse }
+    guard (200...299).contains(http.statusCode) else { throw WatchAPIError.server(http.statusCode) }
+    return try JSONDecoder().decode(RecipesResponse.self, from: data).recipes
+  }
+
+  func fetchRecipe(slug: String) async throws -> WatchRecipeDetail {
+    let baseURL = auth.session?.baseURL ?? "https://willizo.com/api"
+    guard let encodedSlug = slug.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
+          let url = URL(string: normalizedBaseURL(baseURL) + "/watch/recipes/\(encodedSlug)") else {
+      throw WatchAPIError.invalidURL
+    }
+    var request = URLRequest(url: url)
+    request.httpMethod = "GET"
+    request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+    let (data, response) = try await urlSession.data(for: request)
+    guard let http = response as? HTTPURLResponse else { throw WatchAPIError.invalidResponse }
+    guard (200...299).contains(http.statusCode) else { throw WatchAPIError.server(http.statusCode) }
+    return try JSONDecoder().decode(RecipeResponse.self, from: data).recipe
+  }
+
 
   private func request(
     path: String,
@@ -122,11 +231,244 @@ final class WatchAPIClient {
   private func normalizedBaseURL(_ value: String) -> String {
     value.hasSuffix("/") ? String(value.dropLast()) : value
   }
+
+  private func responseID(from value: Any) -> Int? {
+    guard let workout = responseWorkout(from: value) else { return nil }
+    if let number = workout["id"] as? NSNumber { return number.intValue }
+    if let string = workout["id"] as? String { return Int(string) }
+    return nil
+  }
+
+  private func completionSummary(from value: Any) -> WatchWorkoutCompletionSummary {
+    guard let root = value as? [String: Any] else { return .empty }
+    let data = root["data"] as? [String: Any] ?? root
+    let workout = data["workout"] as? [String: Any]
+      ?? data["workout_summary"] as? [String: Any]
+      ?? data["summary"] as? [String: Any]
+      ?? data
+    let plan = workout["workout_plan"] as? [String: Any]
+      ?? workout["plan"] as? [String: Any]
+      ?? data["workout_plan"] as? [String: Any]
+      ?? [:]
+    let metrics = workout["metrics"] as? [String: Any]
+      ?? workout["stats"] as? [String: Any]
+      ?? data["metrics"] as? [String: Any]
+      ?? data["stats"] as? [String: Any]
+      ?? [:]
+    let zones = metrics["heart_rate_zones"] as? [String: Any]
+      ?? workout["heart_rate_zones"] as? [String: Any]
+      ?? data["heart_rate_zones"] as? [String: Any]
+      ?? [:]
+    let durationSeconds = firstInt(
+      keys: ["actual_duration_seconds", "duration_seconds"],
+      dictionaries: [metrics, workout, data, root]
+    )
+    let durationMinutes = firstInt(
+      keys: ["actual_duration", "actual_duration_minutes", "duration_minutes"],
+      dictionaries: [metrics, workout, data, root]
+    ) ?? durationSeconds.map { max(($0 + 59) / 60, 1) }
+    let percentValue = firstDouble(
+      keys: ["goal_progress_percent", "progress_percent", "completion_percent"],
+      dictionaries: [metrics, workout, data, root]
+    )
+    let progressValue = firstDouble(
+      keys: ["goal_progress", "progress", "completion_progress"],
+      dictionaries: [metrics, workout, data, root]
+    )
+    let finishedAt = firstString(
+      keys: ["finished_at", "completed_at", "updated_at"],
+      dictionaries: [workout, data, root]
+    ).flatMap(parseAPIDate)
+
+    return WatchWorkoutCompletionSummary(
+      workoutName: firstString(keys: ["name", "workout_name", "title"], dictionaries: [plan, workout]),
+      workoutCategory: firstString(keys: ["category", "workout_type", "type"], dictionaries: [plan, workout]),
+      finishedAt: finishedAt,
+      actualDurationMinutes: durationMinutes,
+      goalProgress: normalizedProgress(percent: percentValue, progress: progressValue),
+      calories: firstInt(
+        keys: ["calories", "total_calories", "calories_burned", "active_calories"],
+        dictionaries: [metrics, workout, data, root]
+      ),
+      calorieGoal: firstInt(
+        keys: ["calorie_goal", "calories_goal", "target_calories"],
+        dictionaries: [metrics, workout, data, root]
+      ),
+      averageHeartRate: firstInt(
+        keys: ["average_heart_rate", "avg_heart_rate", "average_hr", "avg_hr"],
+        dictionaries: [metrics, workout, data, root]
+      ),
+      maxHeartRate: firstInt(
+        keys: ["max_heart_rate", "peak_heart_rate", "max_hr", "peak_hr"],
+        dictionaries: [metrics, workout, data, root]
+      ),
+      distanceKilometers: firstDouble(
+        keys: ["distance_km", "distance_kilometers"],
+        dictionaries: [metrics, workout, data, root]
+      ),
+      averagePower: firstInt(
+        keys: ["average_power", "avg_power", "watts"],
+        dictionaries: [metrics, workout, data, root]
+      ),
+      recoveryMinutes: firstInt(
+        keys: ["recovery_minutes", "recovery_time_minutes"],
+        dictionaries: [metrics, workout, data, root]
+      ),
+      heartRateZones: WatchHeartRateZones(
+        peak: zoneProgress(zones["peak"]),
+        cardio: zoneProgress(zones["cardio"]),
+        fatBurn: zoneProgress(zones["fat_burn"] ?? zones["fatBurn"]),
+        warmUp: zoneProgress(zones["warm_up"] ?? zones["warmup"] ?? zones["warmUp"])
+      ),
+      achievements: completionAchievements(from: workout, data: data, root: root)
+    )
+  }
+
+  private func firstInt(keys: [String], dictionaries: [[String: Any]]) -> Int? {
+    for dictionary in dictionaries {
+      for key in keys {
+        if let value = intValue(dictionary[key]) { return value }
+      }
+    }
+    return nil
+  }
+
+  private func firstDouble(keys: [String], dictionaries: [[String: Any]]) -> Double? {
+    for dictionary in dictionaries {
+      for key in keys {
+        if let value = doubleValue(dictionary[key]) { return value }
+      }
+    }
+    return nil
+  }
+
+  private func firstString(keys: [String], dictionaries: [[String: Any]]) -> String? {
+    for dictionary in dictionaries {
+      for key in keys {
+        if let value = dictionary[key] as? String,
+           !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+          return value
+        }
+      }
+    }
+    return nil
+  }
+
+  private func normalizedProgress(percent: Double?, progress: Double?) -> Double? {
+    guard let raw = percent.map({ $0 / 100 }) ?? progress else { return nil }
+    let normalized = raw > 1 ? raw / 100 : raw
+    return min(max(normalized, 0), 1)
+  }
+
+  private func zoneProgress(_ value: Any?) -> Double? {
+    let raw: Double?
+    if let dictionary = value as? [String: Any] {
+      raw = doubleValue(dictionary["percent"] ?? dictionary["percentage"] ?? dictionary["value"])
+    } else {
+      raw = doubleValue(value)
+    }
+    guard let raw else { return nil }
+    return min(max(raw > 1 ? raw / 100 : raw, 0), 1)
+  }
+
+  private func completionAchievements(
+    from workout: [String: Any],
+    data: [String: Any],
+    root: [String: Any]
+  ) -> [WatchWorkoutAchievement] {
+    let items = workout["achievements"] as? [[String: Any]]
+      ?? data["achievements"] as? [[String: Any]]
+      ?? root["achievements"] as? [[String: Any]]
+      ?? []
+    return items.enumerated().compactMap { index, item in
+      guard let title = firstString(keys: ["title", "name"], dictionaries: [item]) else { return nil }
+      return WatchWorkoutAchievement(
+        id: firstString(keys: ["id", "slug"], dictionaries: [item]) ?? "\(index)-\(title)",
+        title: title,
+        subtitle: firstString(keys: ["subtitle", "description", "message"], dictionaries: [item]),
+        systemImage: firstString(keys: ["system_image", "icon"], dictionaries: [item]) ?? "trophy.fill"
+      )
+    }
+  }
+
+  private func parseAPIDate(_ raw: String) -> Date? {
+    Self.apiTimestampFormatter.date(from: raw)
+      ?? Self.apiTimestampWithoutFractionsFormatter.date(from: raw)
+  }
+
+  private func responseStartedAt(from value: Any) -> Date? {
+    guard let workout = responseWorkout(from: value) else { return nil }
+    guard let raw = workout["started_at"] as? String, !raw.isEmpty else { return nil }
+    return Self.apiTimestampFormatter.date(from: raw)
+      ?? Self.apiTimestampWithoutFractionsFormatter.date(from: raw)
+  }
+
+  private func responseWorkout(from value: Any) -> [String: Any]? {
+    guard let root = value as? [String: Any] else { return nil }
+    let data = root["data"] as? [String: Any] ?? root
+    return data["workout"] as? [String: Any] ?? data
+  }
+
+  private func firstHistoryItem(from value: Any) -> [String: Any]? {
+    if let items = value as? [[String: Any]] { return items.first }
+    guard let root = value as? [String: Any] else { return nil }
+    if let dataItems = root["data"] as? [[String: Any]] { return dataItems.first }
+    let data = root["data"] as? [String: Any] ?? root
+    for key in ["workouts", "history", "items", "data"] {
+      if let items = data[key] as? [[String: Any]] { return items.first }
+    }
+    return nil
+  }
+
+  private func intValue(_ value: Any?) -> Int? {
+    if let number = value as? NSNumber { return number.intValue }
+    if let string = value as? String { return Int(string) }
+    return nil
+  }
+
+  private func doubleValue(_ value: Any?) -> Double? {
+    if let number = value as? NSNumber { return number.doubleValue }
+    if let string = value as? String { return Double(string) }
+    return nil
+  }
+
+  private static let apiTimestampFormatter: ISO8601DateFormatter = {
+    let formatter = ISO8601DateFormatter()
+    formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+    return formatter
+  }()
+
+  private static let apiTimestampWithoutFractionsFormatter = ISO8601DateFormatter()
+}
+
+private struct WorkoutPlansResponse: Decodable {
+  let workoutPlans: [WatchWorkoutPlanSummary]
+
+  enum CodingKeys: String, CodingKey {
+    case workoutPlans = "workout_plans"
+  }
+}
+
+private struct WorkoutPlanResponse: Decodable {
+  let workoutPlan: WatchWorkoutPlanDetail
+
+  enum CodingKeys: String, CodingKey {
+    case workoutPlan = "workout_plan"
+  }
+}
+
+private struct RecipesResponse: Decodable {
+  let recipes: [WatchRecipeSummary]
+}
+
+private struct RecipeResponse: Decodable {
+  let recipe: WatchRecipeDetail
 }
 
 private enum WatchAPIMapper {
   static func snapshot(home: Any, workouts: Any, meals: Any) -> WatchWorkoutSnapshot {
     let homeData = unwrap(home)
+    let summaryData = dictionary(homeData["summary"])
     let workoutItems = array(from: workouts, keys: ["workouts", "today_workouts", "todayWorkouts", "items"])
     let homeWorkoutItems = array(from: homeData, keys: ["workouts", "today_workouts", "todayWorkouts"])
     let workout = (workoutItems.first ?? homeWorkoutItems.first).flatMap(mapWorkout)
@@ -137,6 +479,7 @@ private enum WatchAPIMapper {
       schemaVersion: 1,
       generatedAt: ISO8601DateFormatter().string(from: Date()),
       date: dateString(),
+      summary: summaryData.map(mapHomeSummary),
       workout: workout,
       meals: (mealItems.isEmpty ? homeMealItems : mealItems).compactMap(mapMeal)
     )
@@ -145,17 +488,22 @@ private enum WatchAPIMapper {
   private static func mapWorkout(_ value: Any) -> ScheduledWatchWorkout? {
     guard let item = value as? [String: Any] else { return nil }
     let plan = dictionary(item["workout_plan"] ?? item["workoutPlan"] ?? item["plan"]) ?? item
+    let scheduledWorkoutID = int(item["id"] ?? item["scheduled_workout_id"])
+    let planID = int(plan["id"])
+    let name = string(plan["name"])
+    let slug = string(plan["slug"])
+    guard scheduledWorkoutID > 0, planID > 0, !name.isEmpty, !slug.isEmpty else { return nil }
     let exercises = array(from: plan, keys: ["workout_plan_exercises", "workoutPlanExercises", "exercises"])
       .compactMap(mapExercise)
       .sorted { $0.order < $1.order }
     return ScheduledWatchWorkout(
-      scheduledWorkoutId: int(item["id"] ?? item["scheduled_workout_id"]),
+      scheduledWorkoutId: scheduledWorkoutID,
       scheduledTime: string(item["scheduled_time"] ?? item["scheduledTime"]),
       isCompleted: bool(item["is_completed"] ?? item["isCompleted"]),
       plan: WatchWorkoutPlan(
-        id: int(plan["id"]),
-        name: string(plan["name"]),
-        slug: string(plan["slug"]),
+        id: planID,
+        name: name,
+        slug: slug,
         difficulty: string(plan["difficulty"]),
         category: optionalString(plan["category"]),
         durationMinutes: optionalInt(plan["duration_minutes"] ?? plan["duration"]),
@@ -168,15 +516,24 @@ private enum WatchAPIMapper {
   private static func mapExercise(_ value: Any) -> WatchExercise? {
     guard let item = value as? [String: Any] else { return nil }
     let exercise = dictionary(item["exercise"]) ?? item
+    let exerciseID = string(item["exercise_id"] ?? exercise["id"])
+    let name = string(exercise["name"] ?? item["name"])
+    guard
+      !exerciseID.isEmpty,
+      !name.isEmpty,
+      let sets = optionalInt(item["sets"]),
+      let reps = optionalInt(item["reps"] ?? item["value"]),
+      let restSeconds = optionalInt(item["rest_time"] ?? item["rest_seconds"])
+    else { return nil }
     return WatchExercise(
       id: int(item["id"] ?? exercise["id"]),
-      exerciseId: string(item["exercise_id"] ?? exercise["id"]),
-      name: string(exercise["name"] ?? item["name"]),
-      sets: int(item["sets"]),
-      reps: int(item["reps"] ?? item["value"]),
+      exerciseId: exerciseID,
+      name: name,
+      sets: sets,
+      reps: reps,
       weight: double(item["weight"]),
       previousSet: nil,
-      restSeconds: int(item["rest_time"] ?? item["rest_seconds"] ?? 60),
+      restSeconds: restSeconds,
       order: int(item["order"]),
       unit: string(exercise["unit"]),
       category: optionalString(exercise["category"])
@@ -186,12 +543,29 @@ private enum WatchAPIMapper {
   private static func mapMeal(_ value: Any) -> WatchMeal? {
     guard let item = value as? [String: Any] else { return nil }
     let recipe = dictionary(item["recipe"]) ?? item
+    let id = int(item["id"] ?? recipe["id"])
+    let name = string(recipe["name"] ?? item["name"])
+    guard id > 0, !name.isEmpty else { return nil }
     return WatchMeal(
-      id: int(item["id"] ?? recipe["id"]),
+      id: id,
       mealType: string(item["meal_type"] ?? item["mealType"]),
       name: string(recipe["name"] ?? item["name"]),
       calories: optionalInt(recipe["calories"] ?? item["calories"]),
-      isCompleted: bool(item["is_completed"] ?? item["isCompleted"])
+      isCompleted: bool(item["is_completed"] ?? item["isCompleted"]),
+      scheduledTime: optionalString(
+        item["scheduled_time"] ?? item["scheduledTime"] ?? item["meal_time"] ?? item["time"]
+      )
+    )
+  }
+
+  private static func mapHomeSummary(_ value: [String: Any]) -> WatchHomeSummary {
+    WatchHomeSummary(
+      sessionsCount: optionalInt(value["sessions_count"]),
+      sessionsDurationMinutes: optionalInt(value["sessions_duration_minutes"]),
+      mealsCount: optionalInt(value["meals_count"]),
+      mealsCalories: optionalInt(value["meals_calories"]),
+      consumedCalories: optionalInt(value["consumed_calories"]),
+      dailyCalorieGoal: optionalInt(value["daily_calorie_goal"])
     )
   }
 
