@@ -1,0 +1,14 @@
+/Users/ahmedkhattab/programming/projects/willizo/ios/Watch\ App/WillizoWatchApp.swift
+/Users/ahmedkhattab/programming/projects/willizo/ios/Watch\ App/Models/WatchWorkoutModels.swift
+/Users/ahmedkhattab/programming/projects/willizo/ios/Watch\ App/Services/WatchWorkoutStore.swift
+/Users/ahmedkhattab/programming/projects/willizo/ios/Watch\ App/Services/RestTimerService.swift
+/Users/ahmedkhattab/programming/projects/willizo/ios/Watch\ App/Services/WorkoutViewModel.swift
+/Users/ahmedkhattab/programming/projects/willizo/ios/Watch\ App/WatchConnectivity/PhoneConnectivityService.swift
+/Users/ahmedkhattab/programming/projects/willizo/ios/Watch\ App/Views/TodayWorkoutView.swift
+/Users/ahmedkhattab/programming/projects/willizo/ios/Watch\ App/Views/CurrentExerciseView.swift
+/Users/ahmedkhattab/programming/projects/willizo/ios/Watch\ App/Views/RestTimerView.swift
+/Users/ahmedkhattab/programming/projects/willizo/ios/Watch\ App/Authentication/WatchAuthManager.swift
+/Users/ahmedkhattab/programming/projects/willizo/ios/Watch\ App/Networking/WatchAPIClient.swift
+/Users/ahmedkhattab/programming/projects/willizo/ios/Watch\ App/Views/WorkoutSessionsView.swift
+/Users/ahmedkhattab/programming/projects/willizo/ios/Watch\ App/Views/TodayMealsView.swift
+/Users/ahmedkhattab/programming/projects/willizo/ios/Watch\ App/Views/MealDetailView.swift

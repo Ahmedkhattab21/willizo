@@ -1,0 +1,4 @@
+
+module flutter_contacts.__Swift {
+  exclude header "flutter_contacts-Swift.h"
+}

@@ -1,0 +1,49 @@
+{
+  "" : {
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/Runner-primary.dia",
+    "emit-module-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/Runner-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/Runner-primary-emit-module.dia",
+    "pch" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/Runner-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/Runner-primary.swiftdeps"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/Runner/AppDelegate.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/AppDelegate.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/AppDelegate.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/AppDelegate.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/AppDelegate.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/AppDelegate.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/AppDelegate.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/AppDelegate.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/AppDelegate~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/Runner/WatchCommunication/WatchWorkoutBridge.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/WatchWorkoutBridge.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/WatchWorkoutBridge.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/WatchWorkoutBridge.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/WatchWorkoutBridge.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/WatchWorkoutBridge.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/WatchWorkoutBridge.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/WatchWorkoutBridge.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/WatchWorkoutBridge~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/Runner/WatchCommunication/WatchWorkoutStore.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/WatchWorkoutStore.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/WatchWorkoutStore.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/WatchWorkoutStore.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/WatchWorkoutStore.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/WatchWorkoutStore.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/WatchWorkoutStore.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/WatchWorkoutStore.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/WatchWorkoutStore~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Runner.build/Debug-watchsimulator/Runner.build/Objects-normal/x86_64/GeneratedAssetSymbols~partial.swiftmodule"
+  }
+}

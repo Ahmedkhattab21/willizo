@@ -1,0 +1,5 @@
+
+module flutter_contacts.Swift {
+  header "flutter_contacts-Swift.h"
+  requires objc
+}

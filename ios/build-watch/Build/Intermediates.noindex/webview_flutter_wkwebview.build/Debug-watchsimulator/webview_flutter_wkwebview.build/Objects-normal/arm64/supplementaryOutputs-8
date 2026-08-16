@@ -1,0 +1,37 @@
+{
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/webview_flutter_wkwebview-3.23.0/darwin/webview_flutter_wkwebview/Sources/webview_flutter_wkwebview/WebViewFlutterPlugin.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebViewFlutterPlugin.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebViewFlutterPlugin.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebViewFlutterPlugin.dia",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebViewFlutterPlugin.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebViewFlutterPlugin.swiftdeps"
+  },
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/webview_flutter_wkwebview-3.23.0/darwin/webview_flutter_wkwebview/Sources/webview_flutter_wkwebview/WebViewFlutterWKWebViewExternalAPI.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebViewFlutterWKWebViewExternalAPI.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebViewFlutterWKWebViewExternalAPI.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebViewFlutterWKWebViewExternalAPI.dia",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebViewFlutterWKWebViewExternalAPI.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebViewFlutterWKWebViewExternalAPI.swiftdeps"
+  },
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/webview_flutter_wkwebview-3.23.0/darwin/webview_flutter_wkwebview/Sources/webview_flutter_wkwebview/WebViewProxyAPIDelegate.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebViewProxyAPIDelegate.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebViewProxyAPIDelegate.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebViewProxyAPIDelegate.dia",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebViewProxyAPIDelegate.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebViewProxyAPIDelegate.swiftdeps"
+  },
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/webview_flutter_wkwebview-3.23.0/darwin/webview_flutter_wkwebview/Sources/webview_flutter_wkwebview/WebpagePreferencesProxyAPIDelegate.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebpagePreferencesProxyAPIDelegate.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebpagePreferencesProxyAPIDelegate.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebpagePreferencesProxyAPIDelegate.dia",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebpagePreferencesProxyAPIDelegate.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebpagePreferencesProxyAPIDelegate.swiftdeps"
+  },
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/webview_flutter_wkwebview-3.23.0/darwin/webview_flutter_wkwebview/Sources/webview_flutter_wkwebview/WebsiteDataStoreProxyAPIDelegate.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebsiteDataStoreProxyAPIDelegate.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebsiteDataStoreProxyAPIDelegate.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebsiteDataStoreProxyAPIDelegate.dia",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebsiteDataStoreProxyAPIDelegate.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build-watch/Build/Intermediates.noindex/webview_flutter_wkwebview.build/Debug-watchsimulator/webview_flutter_wkwebview.build/Objects-normal/arm64/WebsiteDataStoreProxyAPIDelegate.swiftdeps"
+  }
+}

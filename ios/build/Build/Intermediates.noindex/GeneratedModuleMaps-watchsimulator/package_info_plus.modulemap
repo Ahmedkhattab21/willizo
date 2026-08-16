@@ -1,0 +1,4 @@
+module package_info_plus {
+umbrella "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/package_info_plus/Sources/package_info_plus/include"
+export *
+}

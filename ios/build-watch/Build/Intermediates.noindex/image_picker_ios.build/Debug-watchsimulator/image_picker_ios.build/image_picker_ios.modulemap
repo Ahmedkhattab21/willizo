@@ -1,0 +1,4 @@
+module image_picker_ios {
+umbrella "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/image_picker_ios/Sources/image_picker_ios/include"
+export *
+}

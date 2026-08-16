@@ -1,0 +1,149 @@
+{
+  "" : {
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/Watch App-primary.dia",
+    "emit-module-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/Watch App-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/Watch App-primary-emit-module.dia",
+    "pch" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/Watch App-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/Watch App-primary.swiftdeps"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/Watch App/Authentication/WatchAuthManager.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchAuthManager.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchAuthManager.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchAuthManager.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchAuthManager.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchAuthManager.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchAuthManager.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchAuthManager.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchAuthManager~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/Watch App/Models/WatchWorkoutModels.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchWorkoutModels.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchWorkoutModels.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchWorkoutModels.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchWorkoutModels.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchWorkoutModels.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchWorkoutModels.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchWorkoutModels.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchWorkoutModels~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/Watch App/Networking/WatchAPIClient.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchAPIClient.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchAPIClient.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchAPIClient.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchAPIClient.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchAPIClient.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchAPIClient.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchAPIClient.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchAPIClient~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/Watch App/Services/RestTimerService.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/RestTimerService.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/RestTimerService.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/RestTimerService.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/RestTimerService.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/RestTimerService.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/RestTimerService.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/RestTimerService.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/RestTimerService~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/Watch App/Services/WatchWorkoutStore.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchWorkoutStore.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchWorkoutStore.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchWorkoutStore.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchWorkoutStore.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchWorkoutStore.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchWorkoutStore.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchWorkoutStore.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WatchWorkoutStore~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/Watch App/Services/WorkoutViewModel.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WorkoutViewModel.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WorkoutViewModel.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WorkoutViewModel.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WorkoutViewModel.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WorkoutViewModel.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WorkoutViewModel.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WorkoutViewModel.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WorkoutViewModel~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/Watch App/Views/CurrentExerciseView.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/CurrentExerciseView.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/CurrentExerciseView.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/CurrentExerciseView.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/CurrentExerciseView.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/CurrentExerciseView.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/CurrentExerciseView.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/CurrentExerciseView.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/CurrentExerciseView~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/Watch App/Views/MealDetailView.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/MealDetailView.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/MealDetailView.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/MealDetailView.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/MealDetailView.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/MealDetailView.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/MealDetailView.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/MealDetailView.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/MealDetailView~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/Watch App/Views/RestTimerView.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/RestTimerView.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/RestTimerView.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/RestTimerView.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/RestTimerView.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/RestTimerView.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/RestTimerView.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/RestTimerView.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/RestTimerView~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/Watch App/Views/TodayMealsView.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/TodayMealsView.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/TodayMealsView.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/TodayMealsView.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/TodayMealsView.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/TodayMealsView.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/TodayMealsView.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/TodayMealsView.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/TodayMealsView~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/Watch App/Views/TodayWorkoutView.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/TodayWorkoutView.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/TodayWorkoutView.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/TodayWorkoutView.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/TodayWorkoutView.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/TodayWorkoutView.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/TodayWorkoutView.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/TodayWorkoutView.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/TodayWorkoutView~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/Watch App/Views/WorkoutSessionsView.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WorkoutSessionsView.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WorkoutSessionsView.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WorkoutSessionsView.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WorkoutSessionsView.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WorkoutSessionsView.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WorkoutSessionsView.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WorkoutSessionsView.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WorkoutSessionsView~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/Watch App/WatchConnectivity/PhoneConnectivityService.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/PhoneConnectivityService.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/PhoneConnectivityService.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/PhoneConnectivityService.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/PhoneConnectivityService.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/PhoneConnectivityService.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/PhoneConnectivityService.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/PhoneConnectivityService.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/PhoneConnectivityService~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/programming/projects/willizo/ios/Watch App/WillizoWatchApp.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WillizoWatchApp.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WillizoWatchApp.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WillizoWatchApp.dia",
+    "index-unit-output-path" : "/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WillizoWatchApp.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WillizoWatchApp.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WillizoWatchApp.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WillizoWatchApp.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Runner.build/Debug-watchsimulator/Watch App.build/Objects-normal/arm64/WillizoWatchApp~partial.swiftmodule"
+  }
+}

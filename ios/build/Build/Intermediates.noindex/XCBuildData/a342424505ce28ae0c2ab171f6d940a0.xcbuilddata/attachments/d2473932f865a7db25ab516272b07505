@@ -1,0 +1,139 @@
+{
+  "" : {
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/flutter_contacts-primary.dia",
+    "emit-module-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/flutter_contacts-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/flutter_contacts-primary-emit-module.dia",
+    "pch" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/flutter_contacts-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/flutter_contacts-primary.swiftdeps"
+  },
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/flutter_contacts-1.1.9+2/ios/Classes/Contact.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Contact.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Contact.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Contact.dia",
+    "index-unit-output-path" : "/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Contact.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Contact.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Contact.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Contact.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Contact~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/flutter_contacts-1.1.9+2/ios/Classes/SwiftFlutterContactsPlugin.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/SwiftFlutterContactsPlugin.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/SwiftFlutterContactsPlugin.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/SwiftFlutterContactsPlugin.dia",
+    "index-unit-output-path" : "/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/SwiftFlutterContactsPlugin.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/SwiftFlutterContactsPlugin.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/SwiftFlutterContactsPlugin.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/SwiftFlutterContactsPlugin.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/SwiftFlutterContactsPlugin~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/flutter_contacts-1.1.9+2/ios/Classes/properties/Account.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Account.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Account.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Account.dia",
+    "index-unit-output-path" : "/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Account.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Account.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Account.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Account.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Account~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/flutter_contacts-1.1.9+2/ios/Classes/properties/Address.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Address.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Address.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Address.dia",
+    "index-unit-output-path" : "/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Address.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Address.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Address.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Address.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Address~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/flutter_contacts-1.1.9+2/ios/Classes/properties/Email.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Email.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Email.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Email.dia",
+    "index-unit-output-path" : "/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Email.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Email.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Email.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Email.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Email~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/flutter_contacts-1.1.9+2/ios/Classes/properties/Event.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Event.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Event.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Event.dia",
+    "index-unit-output-path" : "/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Event.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Event.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Event.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Event.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Event~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/flutter_contacts-1.1.9+2/ios/Classes/properties/Group.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Group.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Group.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Group.dia",
+    "index-unit-output-path" : "/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Group.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Group.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Group.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Group.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Group~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/flutter_contacts-1.1.9+2/ios/Classes/properties/Name.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Name.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Name.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Name.dia",
+    "index-unit-output-path" : "/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Name.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Name.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Name.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Name.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Name~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/flutter_contacts-1.1.9+2/ios/Classes/properties/Note.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Note.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Note.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Note.dia",
+    "index-unit-output-path" : "/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Note.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Note.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Note.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Note.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Note~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/flutter_contacts-1.1.9+2/ios/Classes/properties/Organization.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Organization.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Organization.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Organization.dia",
+    "index-unit-output-path" : "/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Organization.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Organization.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Organization.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Organization.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Organization~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/flutter_contacts-1.1.9+2/ios/Classes/properties/Phone.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Phone.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Phone.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Phone.dia",
+    "index-unit-output-path" : "/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Phone.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Phone.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Phone.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Phone.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Phone~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/flutter_contacts-1.1.9+2/ios/Classes/properties/SocialMedia.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/SocialMedia.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/SocialMedia.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/SocialMedia.dia",
+    "index-unit-output-path" : "/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/SocialMedia.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/SocialMedia.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/SocialMedia.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/SocialMedia.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/SocialMedia~partial.swiftmodule"
+  },
+  "/Users/ahmedkhattab/.pub-cache/hosted/pub.dev/flutter_contacts-1.1.9+2/ios/Classes/properties/Website.swift" : {
+    "const-values" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Website.swiftconstvalues",
+    "dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Website.d",
+    "diagnostics" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Website.dia",
+    "index-unit-output-path" : "/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Website.o",
+    "llvm-bc" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Website.bc",
+    "object" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Website.o",
+    "swift-dependencies" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Website.swiftdeps",
+    "swiftmodule" : "/Users/ahmedkhattab/programming/projects/willizo/ios/build/Build/Intermediates.noindex/Pods.build/Debug-watchsimulator/flutter_contacts.build/Objects-normal/x86_64/Website~partial.swiftmodule"
+  }
+}

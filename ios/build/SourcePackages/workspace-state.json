@@ -1,0 +1,153 @@
+{
+  "object" : {
+    "artifacts" : [
+
+    ],
+    "dependencies" : [
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "image_picker_ios",
+          "kind" : "fileSystem",
+          "location" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/image_picker_ios",
+          "name" : "image_picker_ios"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/image_picker_ios"
+        },
+        "subpath" : "image_picker_ios"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "package_info_plus",
+          "kind" : "fileSystem",
+          "location" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/package_info_plus",
+          "name" : "package_info_plus"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/package_info_plus"
+        },
+        "subpath" : "package_info_plus"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "path_provider_foundation",
+          "kind" : "fileSystem",
+          "location" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/path_provider_foundation",
+          "name" : "path_provider_foundation"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/path_provider_foundation"
+        },
+        "subpath" : "path_provider_foundation"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "share_plus",
+          "kind" : "fileSystem",
+          "location" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/share_plus",
+          "name" : "share_plus"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/share_plus"
+        },
+        "subpath" : "share_plus"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "shared_preferences_foundation",
+          "kind" : "fileSystem",
+          "location" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/shared_preferences_foundation",
+          "name" : "shared_preferences_foundation"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/shared_preferences_foundation"
+        },
+        "subpath" : "shared_preferences_foundation"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "sqflite_darwin",
+          "kind" : "fileSystem",
+          "location" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/sqflite_darwin",
+          "name" : "sqflite_darwin"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/sqflite_darwin"
+        },
+        "subpath" : "sqflite_darwin"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "url_launcher_ios",
+          "kind" : "fileSystem",
+          "location" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/url_launcher_ios",
+          "name" : "url_launcher_ios"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/url_launcher_ios"
+        },
+        "subpath" : "url_launcher_ios"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "video_player_avfoundation",
+          "kind" : "fileSystem",
+          "location" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/video_player_avfoundation",
+          "name" : "video_player_avfoundation"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/video_player_avfoundation"
+        },
+        "subpath" : "video_player_avfoundation"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "wakelock_plus",
+          "kind" : "fileSystem",
+          "location" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/wakelock_plus",
+          "name" : "wakelock_plus"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/wakelock_plus"
+        },
+        "subpath" : "wakelock_plus"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "webview_flutter_wkwebview",
+          "kind" : "fileSystem",
+          "location" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/webview_flutter_wkwebview",
+          "name" : "webview_flutter_wkwebview"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/webview_flutter_wkwebview"
+        },
+        "subpath" : "webview_flutter_wkwebview"
+      }
+    ],
+    "prebuilts" : [
+
+    ]
+  },
+  "version" : 7
+}

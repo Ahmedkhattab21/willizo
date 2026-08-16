@@ -1,0 +1,4 @@
+module wakelock_plus {
+umbrella "/Users/ahmedkhattab/programming/projects/willizo/ios/Flutter/ephemeral/Packages/.packages/wakelock_plus/Sources/wakelock_plus/include"
+export *
+}

@@ -1,0 +1,10 @@
+framework module flutter_contacts {
+  umbrella header "flutter_contacts-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module flutter_contacts.__Swift {
+  exclude header "flutter_contacts-Swift.h"
+}
