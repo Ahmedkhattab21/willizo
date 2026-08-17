@@ -25,6 +25,8 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
   List<MemberModel> _members = const [];
   bool _loading = true;
   bool _sendingInvite = false;
+  bool _showEmailInvite = false;
+  bool _showShareInvite = false;
   String? _error;
 
   SubscriptionRepo get _repo => getIt<SubscriptionRepo>();
@@ -86,6 +88,10 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_loading && _error == null && _subscription == null) {
+      return const ChangePlanScreen(chooseMode: true);
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFF0F0F0F),
       body: SafeArea(
@@ -104,18 +110,6 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
                       )
                     : _error != null
                     ? _ErrorView(message: _error!, onRetry: _load)
-                    : _subscription == null
-                    ? _NoSubscriptionView(
-                        onViewPlans: () async {
-                          final updated = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const ChangePlanScreen(),
-                            ),
-                          );
-                          if (updated == true) _load();
-                        },
-                      )
                     : SingleChildScrollView(
                         physics: const AlwaysScrollableScrollPhysics(),
                         padding: EdgeInsets.fromLTRB(18.w, 20.h, 18.w, 32.h),
@@ -133,13 +127,51 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
                             verticalSpace(24),
                             _SectionTitle('Add New Members'),
                             verticalSpace(12),
-                            _InviteSection(
-                              controller: _emailController,
-                              isLoading: _sendingInvite,
-                              onSend: _sendInvitation,
-                            ),
-                            verticalSpace(12),
-                            _ShareInviteSection(),
+                            if (!_showEmailInvite && !_showShareInvite) ...[
+                              _PrimaryButton(
+                                label: 'Invite by Email',
+                                icon: Icons.add,
+                                onTap: () => setState(() {
+                                  _showEmailInvite = true;
+                                  _showShareInvite = false;
+                                }),
+                                rounded: true,
+                              ),
+                              verticalSpace(10),
+                              _OutlineActionButton(
+                                label: 'Share Invite Link',
+                                icon: Icons.link,
+                                onTap: () => setState(() {
+                                  _showShareInvite = true;
+                                  _showEmailInvite = false;
+                                }),
+                              ),
+                            ],
+                            if (_showEmailInvite)
+                              _InviteSection(
+                                controller: _emailController,
+                                isLoading: _sendingInvite,
+                                onSend: _sendInvitation,
+                                onClose: () =>
+                                    setState(() => _showEmailInvite = false),
+                              ),
+                            if (_showShareInvite)
+                              _ShareInviteSection(
+                                onClose: () =>
+                                    setState(() => _showShareInvite = false),
+                              ),
+                            if (_showEmailInvite || _showShareInvite)
+                              Padding(
+                                padding: EdgeInsets.only(top: 10.h),
+                                child: _OutlineActionButton(
+                                  label: 'Back',
+                                  icon: Icons.keyboard_arrow_up,
+                                  onTap: () => setState(() {
+                                    _showEmailInvite = false;
+                                    _showShareInvite = false;
+                                  }),
+                                ),
+                              ),
                             verticalSpace(24),
                             _SectionTitle('Plan Settings'),
                             verticalSpace(8),
@@ -212,56 +244,6 @@ class _SubscriptionTopBar extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _NoSubscriptionView extends StatelessWidget {
-  final VoidCallback onViewPlans;
-
-  const _NoSubscriptionView({required this.onViewPlans});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      padding: EdgeInsets.fromLTRB(18.w, 22.h, 18.w, 32.h),
-      children: [
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(18.r),
-          decoration: BoxDecoration(
-            color: AppColors.greyColor27,
-            borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(color: AppColors.primaryColor),
-          ),
-          child: Column(
-            children: [
-              CircleAvatar(
-                radius: 28.r,
-                backgroundColor: AppColors.primaryColor,
-                child: Icon(
-                  Icons.workspace_premium,
-                  color: AppColors.blackColor,
-                ),
-              ),
-              verticalSpace(16),
-              Text(
-                'No active subscription',
-                style: TextStyles.font16WhiteColorW600,
-              ),
-              verticalSpace(8),
-              Text(
-                'Choose one of the available plans to start your subscription.',
-                textAlign: TextAlign.center,
-                style: TextStyles.font12greyColorColor79W400,
-              ),
-              verticalSpace(18),
-              _PrimaryButton(label: 'View Plans', onTap: onViewPlans),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }
@@ -448,11 +430,13 @@ class _InviteSection extends StatelessWidget {
   final TextEditingController controller;
   final bool isLoading;
   final VoidCallback onSend;
+  final VoidCallback onClose;
 
   const _InviteSection({
     required this.controller,
     required this.isLoading,
     required this.onSend,
+    required this.onClose,
   });
 
   @override
@@ -460,6 +444,7 @@ class _InviteSection extends StatelessWidget {
     return _OutlinedPanel(
       icon: Icons.email_outlined,
       title: 'Send Invitation',
+      onClose: onClose,
       child: Column(
         children: [
           TextField(
@@ -482,12 +467,16 @@ class _InviteSection extends StatelessWidget {
 
 class _ShareInviteSection extends StatelessWidget {
   final String inviteLink = 'https://willizo.com/invite';
+  final VoidCallback onClose;
+
+  const _ShareInviteSection({required this.onClose});
 
   @override
   Widget build(BuildContext context) {
     return _OutlinedPanel(
       icon: Icons.reply_rounded,
       title: 'Share Invitation Link',
+      onClose: onClose,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -625,11 +614,13 @@ class _OutlinedPanel extends StatelessWidget {
   final IconData icon;
   final String title;
   final Widget child;
+  final VoidCallback onClose;
 
   const _OutlinedPanel({
     required this.icon,
     required this.title,
     required this.child,
+    required this.onClose,
   });
 
   @override
@@ -649,7 +640,17 @@ class _OutlinedPanel extends StatelessWidget {
             children: [
               Icon(icon, color: AppColors.primaryColor, size: 18.r),
               horizontalSpace(8),
-              Text(title, style: TextStyles.font14WhiteColorW500),
+              Expanded(
+                child: Text(title, style: TextStyles.font14WhiteColorW500),
+              ),
+              InkWell(
+                onTap: onClose,
+                child: Icon(
+                  Icons.close,
+                  color: AppColors.greyColorCA,
+                  size: 18.r,
+                ),
+              ),
             ],
           ),
           verticalSpace(12),
@@ -664,6 +665,7 @@ class _PrimaryButton extends StatelessWidget {
   final String label;
   final IconData? icon;
   final bool isLoading;
+  final bool rounded;
   final VoidCallback onTap;
 
   const _PrimaryButton({
@@ -671,6 +673,7 @@ class _PrimaryButton extends StatelessWidget {
     required this.onTap,
     this.icon,
     this.isLoading = false,
+    this.rounded = false,
   });
 
   @override
@@ -696,7 +699,40 @@ class _PrimaryButton extends StatelessWidget {
           foregroundColor: AppColors.blackColor,
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.r),
+            borderRadius: BorderRadius.circular(rounded ? 24.r : 8.r),
+          ),
+          textStyle: TextStyles.font14BlackColorW700,
+        ),
+      ),
+    );
+  }
+}
+
+class _OutlineActionButton extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const _OutlineActionButton({
+    required this.label,
+    required this.icon,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 44.h,
+      child: OutlinedButton.icon(
+        onPressed: onTap,
+        icon: Icon(icon, size: 16.r),
+        label: Text(label),
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.primaryColor,
+          side: const BorderSide(color: AppColors.primaryColor),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24.r),
           ),
           textStyle: TextStyles.font14BlackColorW700,
         ),

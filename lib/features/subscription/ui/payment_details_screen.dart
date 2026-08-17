@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:willizo/core/services/services_locator.dart';
 import 'package:willizo/core/utils/app_colors_white_theme.dart';
 import 'package:willizo/core/utils/app_constant.dart';
 import 'package:willizo/core/utils/spacing.dart';
 import 'package:willizo/core/utils/styles.dart';
 import 'package:willizo/features/subscription/data/models/subscription_models.dart';
-import 'package:willizo/features/subscription/data/repo/subscription_repo.dart';
 
 class PaymentDetailsScreen extends StatefulWidget {
   final SubscriptionPaymentModel payment;
@@ -24,16 +22,13 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
   Future<void> _shareReceipt() async {
     if (_sharing) return;
     setState(() => _sharing = true);
-    final result = await getIt<SubscriptionRepo>().shareReceipt(
-      widget.payment.id,
-      '',
+    await Share.share(
+      'Receipt #${widget.payment.transactionId}\n'
+      'Plan: ${widget.payment.planName}\n'
+      'Amount: \$${widget.payment.amount.toStringAsFixed(2)}',
     );
     if (!mounted) return;
     setState(() => _sharing = false);
-    result.fold(
-      (_) => Share.share('Receipt #${widget.payment.transactionId}'),
-      (message) => AppConstant.toast(message, AppColors.primaryColor),
-    );
   }
 
   @override

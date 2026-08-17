@@ -9,7 +9,9 @@ import 'package:willizo/features/subscription/data/models/subscription_models.da
 import 'package:willizo/features/subscription/data/repo/subscription_repo.dart';
 
 class ChangePlanScreen extends StatefulWidget {
-  const ChangePlanScreen({super.key});
+  final bool chooseMode;
+
+  const ChangePlanScreen({super.key, this.chooseMode = false});
 
   @override
   State<ChangePlanScreen> createState() => _ChangePlanScreenState();
@@ -70,7 +72,9 @@ class _ChangePlanScreenState extends State<ChangePlanScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0F0F0F),
-      appBar: _SubAppBar(title: 'Change Plan'),
+      appBar: _SubAppBar(
+        title: widget.chooseMode ? 'Choose Your Plan' : 'Change Plan',
+      ),
       body: RefreshIndicator(
         color: AppColors.primaryColor,
         onRefresh: _load,
@@ -83,8 +87,10 @@ class _ChangePlanScreenState extends State<ChangePlanScreen> {
             : ListView(
                 padding: EdgeInsets.fromLTRB(18.w, 18.h, 18.w, 32.h),
                 children: [
-                  _CurrentPlanCard(subscription: _subscription),
-                  verticalSpace(18),
+                  if (_subscription != null && !widget.chooseMode) ...[
+                    _CurrentPlanCard(subscription: _subscription),
+                    verticalSpace(18),
+                  ],
                   Text(
                     'Available Plans',
                     style: TextStyles.font16WhiteColorW600,
@@ -95,6 +101,7 @@ class _ChangePlanScreenState extends State<ChangePlanScreen> {
                       padding: EdgeInsets.only(bottom: 14.h),
                       child: _PlanOptionCard(
                         plan: plan,
+                        chooseMode: widget.chooseMode,
                         isCurrent:
                             plan.isCurrent ||
                             plan.id == _subscription?.plan.id ||
@@ -104,6 +111,10 @@ class _ChangePlanScreenState extends State<ChangePlanScreen> {
                       ),
                     ),
                   ),
+                  if (_plans.isNotEmpty) ...[
+                    verticalSpace(4),
+                    const _PlanNoteCard(),
+                  ],
                 ],
               ),
       ),
@@ -113,12 +124,14 @@ class _ChangePlanScreenState extends State<ChangePlanScreen> {
 
 class _PlanOptionCard extends StatelessWidget {
   final PlanModel plan;
+  final bool chooseMode;
   final bool isCurrent;
   final bool isLoading;
   final VoidCallback onTap;
 
   const _PlanOptionCard({
     required this.plan,
+    required this.chooseMode,
     required this.isCurrent,
     required this.isLoading,
     required this.onTap,
@@ -126,12 +139,14 @@ class _PlanOptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final highlighted = plan.isBestOffer;
+    final highlighted =
+        plan.isBestOffer || plan.name.toLowerCase().contains('ultimate');
+    final disabledBenefits = _disabledBenefits(plan);
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: highlighted ? AppColors.primaryColor : AppColors.greyColor2727,
-        borderRadius: BorderRadius.circular(14.r),
+        color: highlighted ? AppColors.primaryColor : const Color(0xFF242424),
+        borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,6 +185,14 @@ class _PlanOptionCard extends StatelessWidget {
               color: highlighted ? AppColors.blackColor : AppColors.whiteColor,
             ),
           ),
+          Text(
+            '/${plan.interval}',
+            style: TextStyles.font10InterW400.copyWith(
+              color: highlighted
+                  ? AppColors.blackColor.withValues(alpha: 0.75)
+                  : AppColors.greyColorColor80,
+            ),
+          ),
           verticalSpace(12),
           ..._benefits(plan).map(
             (item) => Padding(
@@ -191,6 +214,25 @@ class _PlanOptionCard extends StatelessWidget {
                         color: highlighted
                             ? AppColors.blackColor
                             : AppColors.greyColorD1,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          ...disabledBenefits.map(
+            (item) => Padding(
+              padding: EdgeInsets.only(bottom: 8.h),
+              child: Row(
+                children: [
+                  Icon(Icons.close, color: AppColors.greyColor75, size: 15.r),
+                  horizontalSpace(8),
+                  Expanded(
+                    child: Text(
+                      item,
+                      style: TextStyles.font12InterWhiteW400.copyWith(
+                        color: AppColors.greyColor75,
                       ),
                     ),
                   ),
@@ -226,7 +268,15 @@ class _PlanOptionCard extends StatelessWidget {
                       height: 16.r,
                       child: const CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : Text(isCurrent ? 'Current Plan' : 'Choose Plan'),
+                  : Text(
+                      isCurrent
+                          ? 'Current Plan'
+                          : highlighted
+                          ? (chooseMode
+                                ? 'Choose Ultimate Plan'
+                                : 'Switch to Ultimate')
+                          : 'Choose ${plan.name} Plan',
+                    ),
             ),
           ),
         ],
@@ -239,9 +289,24 @@ class _PlanOptionCard extends StatelessWidget {
     return const [
       'Access to main gym area',
       'Basic fitness assessment',
-      'Group classes per week',
+      '2 group classes per week',
+    ];
+  }
+
+  List<String> _disabledBenefits(PlanModel plan) {
+    if (plan.benefits.isNotEmpty || plan.isBestOffer) return const [];
+    final name = plan.name.toLowerCase();
+    if (name.contains('basic')) {
+      return const [
+        'Personal training sessions',
+        'Nutrition consultation',
+        'Access to premium classes',
+      ];
+    }
+    return const [
       'Personal training sessions',
       'Nutrition consultation',
+      'Access to premium classes',
     ];
   }
 }
@@ -262,11 +327,52 @@ class _CurrentPlanCard extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(12.r),
       ),
-      child: Text(
-        '${subscription!.plan.name}\n\$${subscription!.plan.price.toStringAsFixed(2)}/month',
-        style: TextStyles.font16WhiteColorW600.copyWith(
-          color: AppColors.blackColor,
-        ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              '${subscription!.plan.name}\n\$${subscription!.plan.price.toStringAsFixed(2)}/${subscription!.plan.interval}',
+              style: TextStyles.font16WhiteColorW600.copyWith(
+                color: AppColors.blackColor,
+              ),
+            ),
+          ),
+          CircleAvatar(
+            backgroundColor: AppColors.whiteColor.withValues(alpha: 0.75),
+            child: Icon(Icons.groups, color: AppColors.blackColor),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PlanNoteCard extends StatelessWidget {
+  const _PlanNoteCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(12.r),
+      decoration: BoxDecoration(
+        color: const Color(0xFF151515),
+        borderRadius: BorderRadius.circular(10.r),
+        border: Border.all(color: AppColors.greyColor3d),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.info_outline, color: AppColors.greyColorCA, size: 16.r),
+          horizontalSpace(8),
+          Expanded(
+            child: Text(
+              'Note: Family plan members must be removed before downgrading to an individual plan.',
+              style: TextStyles.font10InterW400.copyWith(
+                color: AppColors.greyColorCA,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
