@@ -20,8 +20,6 @@
     "overrides" : {
       "commandLine" : {
         "table" : {
-          "CODE_SIGNING_ALLOWED" : "NO",
-          "CONFIGURATION_BUILD_DIR" : "/tmp/willizo-watch-build-final",
           "SDKROOT" : "watchsimulator26.2"
         }
       },
