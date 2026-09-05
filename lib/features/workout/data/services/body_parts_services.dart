@@ -7,6 +7,7 @@ import 'package:willizo/core/exceptions/exceptions.dart';
 import 'package:willizo/core/exceptions/failure.dart';
 import 'package:willizo/core/services/cache_helper.dart';
 import 'package:willizo/core/utils/constant_keys.dart';
+import 'package:willizo/features/workout/data/models/body_part_exercises_response_model.dart';
 import 'package:willizo/features/workout/data/models/body_parts_response_model.dart';
 import 'package:willizo/features/workout/data/services/workout_api_endpoints.dart';
 
@@ -22,6 +23,19 @@ class BodyPartsServices {
     );
     _throwIfNotOk(response);
     return BodyPartsResponseModel.fromJson(
+      jsonDecode(response.body) as Map<String, dynamic>,
+    );
+  }
+
+  Future<BodyPartExercisesResponseModel> getBodyPartExercises(
+    String slug,
+  ) async {
+    final response = await apiConsumer.get(
+      WorkoutApiEndpoints.bodyPartExercises(slug),
+      await _authHeaders(),
+    );
+    _throwIfNotOk(response);
+    return BodyPartExercisesResponseModel.fromJson(
       jsonDecode(response.body) as Map<String, dynamic>,
     );
   }

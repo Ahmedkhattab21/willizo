@@ -9,6 +9,9 @@ class WorkoutApiEndpoints {
   static const String myMealPlans = '${EndPoints.baseUrl}/my-meal-plans';
   static const String bodyParts = '${EndPoints.baseUrl}/body-parts';
 
+  static String bodyPartExercises(String slug) =>
+      '${EndPoints.baseUrl}/body-parts/$slug/exercises';
+
   static String recipeDetails(String slug) =>
       '${EndPoints.baseUrl}/recipes/$slug';
 

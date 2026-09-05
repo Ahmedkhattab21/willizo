@@ -20,6 +20,21 @@ class BodyPartIconMapper {
 
   static String assetForMuscle(String icon) {
     switch (icon) {
+      case 'chest-bench':
+      case 'push-ups':
+      case 'pull-ups':
+        return ImageAsset.dumbleFillIcon;
+      case 'squat':
+        return ImageAsset.squatsIcon;
+      case 'plank':
+        return ImageAsset.plankIcon;
+      case 'overhead-press':
+        return ImageAsset.overheadPressIcon;
+      case 'bicep-curl':
+      case 'tricep-dip':
+      case 'burpees':
+      case 'climbers':
+        return ImageAsset.coloredDoumble;
       case 'chest':
       case 'back':
       case 'lats':

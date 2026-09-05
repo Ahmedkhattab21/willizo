@@ -75,3 +75,4 @@ Future<void> checkUserType() async {
     userType = null;
   }
 }
+

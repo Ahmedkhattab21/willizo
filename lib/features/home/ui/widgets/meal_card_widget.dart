@@ -55,7 +55,7 @@ class MealCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: AppColors.kCardBlueStart.withOpacity(0.16),
+            color: AppColors.kCardBlueStart.withValues(alpha: 0.16),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -199,28 +199,42 @@ class _CardMenuButton extends StatelessWidget {
       padding: EdgeInsets.zero,
       icon: Icon(Icons.more_vert, color: iconColor),
       color: Colors.black,
-      elevation: 0,
-      offset: Offset(-6.w, 26.h),
-      constraints: BoxConstraints(minWidth: 150.w),
+      elevation: 8,
+      offset: Offset(-4.w, 28.h),
+      constraints: BoxConstraints(minWidth: 150.w, maxWidth: 154.w),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
       onSelected: (_) {},
-      itemBuilder: (context) => items
-          .map(
-            (item) => PopupMenuItem<String>(
-              value: item,
-              height: 36.h,
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: Text(
-                item,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w500,
-                ),
+      itemBuilder: (context) => List.generate(items.length, (index) {
+        final item = items[index];
+        return PopupMenuItem<String>(
+          value: item,
+          height: 36.h,
+          padding: EdgeInsets.zero,
+          child: Container(
+            width: double.infinity,
+            height: 36.h,
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            decoration: BoxDecoration(
+              color: index == 0 ? const Color(0xFF545454) : Colors.black,
+              borderRadius: BorderRadius.vertical(
+                top: index == 0 ? Radius.circular(8.r) : Radius.zero,
+                bottom: index == items.length - 1
+                    ? Radius.circular(8.r)
+                    : Radius.zero,
               ),
             ),
-          )
-          .toList(),
+            child: Text(
+              item,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        );
+      }),
     );
   }
 }
